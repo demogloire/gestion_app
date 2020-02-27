@@ -10963,6 +10963,12 @@ button.bg-dark:focus
     margin-bottom: 3rem !important;
 }
 
+.mb-4,
+.my-4
+{
+    margin-bottom: 4rem !important;
+}
+
 .ml-3,
 .mx-3
 {

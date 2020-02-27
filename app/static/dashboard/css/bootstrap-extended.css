@@ -1463,7 +1463,7 @@ select.form-control
 }
 .navbar-header.navbar-header-menu-dark
 {
-    background: #2c303b;
+    background: #129e25;
 }
 .navbar-header.navbar-header-menu-dark .brand-text
 {
@@ -1827,7 +1827,7 @@ select.form-control
 }
 .navbar-semi-dark .navbar-nav .active.nav-link
 {
-    background-color: rgba(0, 0, 0, .03);
+    background-color: rgba(53, 32, 30, 0.03);
 }
 .navbar-semi-dark .navbar-nav .disabled.nav-link
 {

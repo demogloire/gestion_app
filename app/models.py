@@ -1,4 +1,11 @@
-from . import db
+from app import db, login_manager
+from datetime import datetime
+from flask_login import UserMixin, current_user
+from sqlalchemy.orm import backref
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class Produit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,6 +24,7 @@ class Categorie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom_categorie = db.Column(db.Text)
     produits = db.relationship('Produit', backref='produit_categorie', lazy='dynamic')
+    articles_associ=db.Column(db.Integer, default=0)
     produitboutiques = db.relationship('Produitboutique', backref='produitboutique_categorie', lazy='dynamic')
     
 class Fournisseur(db.Model):
@@ -97,7 +105,7 @@ class Stockage(db.Model):
     valeur = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    produitboutique_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=False)
+    produitboutique_id = db.Column(db.Integer, db.ForeignKey('produitboutique.id'), nullable=False)
 
 class Commande(db.Model):
     id = db.Column(db.Integer, primary_key=True)
