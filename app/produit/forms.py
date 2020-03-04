@@ -6,9 +6,15 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 from ..models import Categorie
 
-class CategorieForm(FlaskForm):
-    nom=StringField('Nom', validators=[DataRequired("Completer nom"),  Length(min=4, max=60, 
+class ProduitJForm(FlaskForm):
+    code_produit=StringField('Nom', validators=[DataRequired("Completer nom"),  Length(min=4, max=60, 
                     message="Veuillez respecter la longeur de 4 à 60")])
+    nom_produit=StringField('Nom', validators=[DataRequired("Completer nom"),  Length(min=4, max=60, 
+                    message="Veuillez respecter la longeur de 4 à 60")])
+    description=TextAreaField('Contenu', validators=[DataRequired("Description du produit")])
+    prix_achat = DecimalField('Prix achat', validators=[DataRequired("Le prix d'achat")])
+    prix_vente = DecimalField('Prix vente', validators=[DataRequired("Le prix de vente")])
+
 
     submit= SubmitField('Enregister')
 
@@ -18,6 +24,9 @@ class CategorieForm(FlaskForm):
         if categorisation:
             raise ValidationError("Cette catégorie existe déjà")
 
+
+
+""" 
 class CategorieEditerForm(FlaskForm):
     nom=StringField('Nom', validators=[DataRequired("Completer nom"),  Length(min=4, max=60, 
                     message="Veuillez respecter la longeur de 4 à 60")])
@@ -29,3 +38,4 @@ class CategorieEditerForm(FlaskForm):
         if categorisation:
             raise ValidationError("Cette catégorie existe déjà")
 
+ """

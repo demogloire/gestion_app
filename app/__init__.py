@@ -37,6 +37,10 @@ def create_app(config_name):
     from .categorie import categorie as categorie_blueprint
     app.register_blueprint(categorie_blueprint)
 
+    #Produit 
+    from .produit import produit as produit_blueprint
+    app.register_blueprint(produit_blueprint)
+
 
 
     return app

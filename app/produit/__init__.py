@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-categorie = Blueprint('categorie','__name__',url_prefix='/categorie')
+produit = Blueprint('produit','__name__',url_prefix='/produit')
 
 from . import routes
