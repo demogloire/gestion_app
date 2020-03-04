@@ -9,6 +9,8 @@ def load_user(user_id):
 
 class Produit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    code_produit = db.Column(db.String(128))
+    nom_produit = db.Column(db.String(128))
     description = db.Column(db.Text)
     prix_achat = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     prix_vente = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
@@ -88,6 +90,8 @@ class Client(db.Model):
 
 class Produitboutique(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    code_produit = db.Column(db.String(128))
+    nom_produit = db.Column(db.String(128))
     description = db.Column(db.Text)
     prix_achat = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     prix_vente = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
