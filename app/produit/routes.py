@@ -1,13 +1,14 @@
 from flask import render_template, flash, url_for, redirect, request
 from .. import db
 from ..models import Produit 
-#from app.categorie.forms import CategorieForm, CategorieEditerForm
+from app.produit.forms import ProduitJForm
+from app.utility.utility import save_picture, codeproduit
 from flask_login import login_user, current_user, logout_user, login_required
 
 from . import produit
 
 @produit.route('/ajouter_produit', methods=['GET','POST'])
-def ajouter_produit():
+def ajouterproduit():
     #Les catagories de livre
     title="Ajouter un produit"
 
@@ -16,16 +17,38 @@ def ajouter_produit():
     #     return redirect(url_for('main.homepage'))
 
     #Declaration du formulaire
-    #form=CategorieForm()
+    form=ProduitJForm()
 
     if form.validate_on_submit():
-        categorie_ajout=Categorie(nom_categorie=form.nom.data.capitalize())
-        db.session.add(categorie_ajout)
-        db.session.commit()
-        flash('Ajout de la catégorie ({}) avec succès'.format(form.nom.data.capitalize()),'success')
-        return redirect(url_for('categorie.index'))
+        categorie_id=form.categorie.data.id
+        code_produit="{}{}".format(codeproduit(),categorie_id) #Code produit total
+        #Vérification des informations sur les emballages        
+        if form.emballage.data == "Box" or form.emballage.data == "Carton":
+            nbr_contenu=int(form.nombre_contenu.data)
+            if nbr_contenu < 2 :
+                flash("Le nombre des élements du {} doit être supieur à 1 ".format(form.emballage.data),'danger')
+                return redirect(url_for('produit.ajouterproduit'))
+        #Vérification de l'image upload sur le produit
+        if form.avatar.data:
+            avatar_produit= save_picture(form.avatar.data) #reduction de la taille de l'image
+            produit=Produit(code_produit=code_produit, nom_produit=form.nom_produit.data.capitalize(), description=form.description.data,
+                            prix_achat=form.prix_achat.data, prix_vente=form.prix_vente.data, prix_achat_g=form.prix_achat_g.data, 
+                            prix_vente_g=form.prix_vente_g.data, avatar=avatar_produit, emballage=form.emballage.data,nombre_contenu=form.nombre_contenu.data, 
+                            categorie_id=categorie_id)
+            db.session.add(produit)
+            db.session.commit()
+            flash("Ajout d'un produit ({}) avec succès".format(form.nom_produit.data.capitalize()),'success')
+            #return redirect(url_for('categorie.index'))
+        else:
+            produit=Produit(code_produit=code_produit, nom_produit=form.nom_produit.data.capitalize(), description=form.description.data,
+                            prix_achat=form.prix_achat.data, prix_achat_g=form.prix_achat_g.data, prix_vente_g=form.prix_vente_g.data, prix_vente=form.prix_vente.data, 
+                            emballage=form.emballage.data,nombre_contenu=form.nombre_contenu.data, categorie_id=categorie_id)
 
-    return render_template('produit/ajouterp.html', title=title)
+            db.session.add(produit)
+            db.session.commit()
+            flash("Ajout d'un produit ({}) avec succès".format(form.nom_produit.data.capitalize()),'success')
+
+    return render_template('produit/ajouterp.html', title=title, form=form)
 
 
 
