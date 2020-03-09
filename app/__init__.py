@@ -41,6 +41,10 @@ def create_app(config_name):
     from .produit import produit as produit_blueprint
     app.register_blueprint(produit_blueprint)
 
+    #Fournisseur
+    from .fournisseur import fournisseur as fournisseur_blueprint
+    app.register_blueprint(fournisseur_blueprint)
+
 
 
     return app

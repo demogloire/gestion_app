@@ -27,14 +27,14 @@ class Produit(db.Model):
 
 class Categorie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nom_categorie = db.Column(db.Text)
+    nom_categorie = db.Column(db.String(128))
     produits = db.relationship('Produit', backref='produit_categorie', lazy='dynamic')
     articles_associ=db.Column(db.Integer, default=0)
     produitboutiques = db.relationship('Produitboutique', backref='produitboutique_categorie', lazy='dynamic')
     
 class Fournisseur(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nom_fourn = db.Column(db.Text)
+    nom_fourn = db.Column(db.String(128))
     tel_fourn = db.Column(db.String(128))
     email = db.Column(db.String(128))
     adresse = db.Column(db.String(128))

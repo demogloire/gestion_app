@@ -15,11 +15,10 @@ def save_picture(form_picture):
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/produit', picture_fn)
-    output_sz = (100,100)
+    output_sz = (240,180)
     i= Image.open(form_picture)
     i.thumbnail(output_sz)
     i.save(picture_path)
-
     return picture_fn
 
 def codeproduit():
