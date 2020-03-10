@@ -72,6 +72,8 @@ class Depot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom_depot = db.Column(db.Text)
     stocks = db.relationship('Stock', backref='stock_depot', lazy='dynamic')
+    users = db.relationship('User', backref='user_depot', lazy='dynamic')
+
 
 class Boutique(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -80,6 +82,7 @@ class Boutique(db.Model):
     produitboutiques = db.relationship('Produitboutique', backref='produitboutique_boutique', lazy='dynamic')
     comptedepenses = db.relationship('Comptedepense', backref='comptedepense_boutique', lazy='dynamic')
     clients = db.relationship('Client', backref='client_boutique', lazy='dynamic')
+    users = db.relationship('User', backref='user_boutique', lazy='dynamic')
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -195,6 +198,9 @@ class User(db.Model):
     password_onhash = db.Column(db.String(128))
     statut=db.Column(db.Boolean, default=False)
     avatar=db.Column(db.String(128), default='user.png')
+    role = db.Column(db.String(128))
+    depot_id = db.Column(db.Integer, db.ForeignKey('depot.id'))
+    boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'))
     comptes = db.relationship('Comptes', backref='compte_user', lazy='dynamic')
     comptedepenses = db.relationship('Comptedepense', backref='comptedepense_user', lazy='dynamic')
     factures = db.relationship('Facture', backref='facture_user', lazy='dynamic')

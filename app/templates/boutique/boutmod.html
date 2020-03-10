@@ -33,15 +33,15 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Modification de la catégorie</h3>
+                <h3 class="content-header-title">Modifier boutique</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url_for('categorie.index')}}">Catégorie</a>
+                            <li class="breadcrumb-item"><a href="{{url_for('boutique.index')}}">Boutique</a>
                             </li>
-                            <li class="breadcrumb-item active">Modification de la catégorie
+                            <li class="breadcrumb-item active">Modifier boutique
                             </li>
                         </ol>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="col-lg-8 col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Les catégories de vos articles</h4>
+                                <h4 class="card-title">Modifier la boutique</h4>
                             </div>
                             <div class="card-block">
                                 <div class="card-body">
@@ -98,16 +98,16 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>Nom de la catégorie</label>
-                                                    {% if form.nom.errors %}
-                                                    {{ form.nom(class="form-control input-lg is-invalid")}}
+                                                    <label>Nom de la boutique</label>
+                                                    {% if form.nom_boutique.errors %}
+                                                    {{ form.nom_boutique(class="form-control input-lg is-invalid")}}
                                                     <div class="invalid-feedback">
-                                                        {% for error in form.nom.errors %}
+                                                        {% for error in form.nom_boutique.errors %}
                                                             <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.nom(class="form-control input-lg")}}
+                                                    {{ form.nom_boutique(class="form-control input-lg")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -115,8 +115,8 @@
                                         </div>
                                         
                                             <div class="text-center mb-1">
-                                                <button class="btn btn-success btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
-                                                    <i class="la la-folder-o"></i> Modifier
+                                                <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
+                                                    <i class="la la-edit"></i> Modifier boutique
                                                 </button>
                                                     
                                             </div>

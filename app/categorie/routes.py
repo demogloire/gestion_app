@@ -106,7 +106,7 @@ def editer_categorie(cat_id):
         return redirect(url_for('categorie.index'))
     #Validation d'enregistrement
     if form.validate_on_submit():
-        cate_edit.nom_categorie=form.nom.data
+        cate_edit.nom_categorie=form.nom.data.capitalize()
         db.session.commit()
         flash("Modification avec succès",'success')
         return redirect(url_for('categorie.index'))

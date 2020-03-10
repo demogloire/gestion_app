@@ -30,14 +30,21 @@ class FournisseurForm(FlaskForm):
         else:
             raise ValidationError("La forme du numéro de téléphone est ex: 002439999999999")
 
-class CategorieEditerForm(FlaskForm):
-    nom=StringField('Nom', validators=[DataRequired("Completer nom"),  Length(min=4, max=60, 
+class FournisseurMAJForm(FlaskForm):
+    nom_fourn=StringField('Nom du fournisseur', validators=[DataRequired("Completer nom"),  Length(min=4, max=60, 
                     message="Veuillez respecter la longeur de 4 à 60")])
-    submit= SubmitField('Modifier')
-
-    #Foction de la verification d'unique existencce dans la base des données
-    def validate_nom(self, nom):
-        categorisation= Categorie.query.filter_by(nom_categorie=nom.data.capitalize()).first()
-        if categorisation:
-            raise ValidationError("Cette catégorie existe déjà")
-
+    tel_fourn=StringField('N° numero téléphone', validators=[DataRequired("Completer le numéro de téléphone")])
+    email= StringField('Email', validators=[DataRequired('Veuillez completer votre email'), Email('Votre email est incorrect')])
+    adresse= StringField('Adresse', validators=[DataRequired("Veuillez completer l'adresse du founisseur ")])
+    
+    submit= SubmitField('Enregister')
+    
+    #Foction de la verification du némero de téléphone
+    def validate_tel_fourn(self, tel_fourn):
+        tel=tel_fourn.data
+        ver='^(00|\+[1-9] )[1-9]'
+        result = re.match(ver, tel)
+        if result:
+            pass
+        else:
+            raise ValidationError("La forme du numéro de téléphone est ex: 002439999999999")

@@ -32,15 +32,15 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Carnet de fournisseur</h3>
+                <h3 class="content-header-title">Listes des boutiques</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url_for('fournisseur.index')}}">Les fournisseurs</a>
+                            <li class="breadcrumb-item"><a href="{{url_for('boutique.index')}}">Boutique</a>
                             </li>
-                            <li class="breadcrumb-item active">Carnet des founisseurs
+                            <li class="breadcrumb-item active">Listes des boutiques
                             </li>
                         </ol>
                     </div>
@@ -51,8 +51,8 @@
 
             <div class="basic-inputs">
                 <div class="row match-height">
-                    <div class="col-lg-1 col-md-2"></div>
-                    <div class="col-lg-10 col-md-8">
+                    <div class="col-lg-2 col-md-2"></div>
+                    <div class="col-lg-8 col-md-8">
                         <div class="card">
                             <div class="card-block">
                                 <div class="card-body">
@@ -92,7 +92,7 @@
 
                                     <div class="card" style="zoom: 1;">
                                         <div class="card-header">
-                                            <h4 class="card-title">Listes des fournisseurs</h4>
+                                            <h4 class="card-title">Listes des boutiques</h4>
                                             <a class="heading-elements-toggle"><i
                                                     class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
@@ -106,9 +106,9 @@
                                         <div class="card-content collapse show">
                                             <div class="card-body">
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{url_for('fournisseur.ajouterfounisseur')}} "
-                                                        class="btn btn-danger"> <i class="la la-user-plus"></i> Ajouter fournisseur
-                                                        </a>
+                                                    <a href="{{url_for('boutique.ajouterboutique')}} "
+                                                        class="btn btn-info"><i  class="la la-square-o"></i> Ajouter
+                                                        boutique</a>
                                                 </div>
 
 
@@ -118,11 +118,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">#</th>
-                                                            <th scope="col">Nom</th>
-                                                            <th scope="col">Téléphone</th>
-                                                            <th scope="col">E-mail</th>
-                                                            <th scope="col">Adresse physique</th>
-                                                            <th scope="col">Action</th>
+                                                            <th scope="col">Boutique</th>
+                                                            <th class="text-center">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -131,12 +128,9 @@
                                                         {% for liste in listes%}
                                                         <tr>
                                                             <th scope="row">{{loop.index}} </th>
-                                                            <td>{{liste.nom_fourn}} </td>
-                                                            <td>{{liste.tel_fourn}} </td>
-                                                            <td>{{liste.email}} </td>
-                                                            <td>{{liste.adresse}} </td>
-                                                            <td>
-                                                                <a class="dropdown-item" href="{{url_for('fournisseur.editer_fournisseur', frnss_id=liste.id)}}"> <i class="la la-edit"></i></a>
+                                                            <td>{{liste.nom_boutique}} </td>
+                                                            <td class="text-center">
+                                                                <a href="{{url_for('boutique.editer_boutique', bout_id=liste.id)}}"><i class="la la-edit"></i></a>
                                                             </td>
                                                         </tr>
                                                         {% endfor %}
@@ -151,14 +145,44 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-1 col-md-2"></div>
+                    <div class="col-lg-2 col-md-2"></div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal2" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                <h4 class="modal-title">Modal without Overlay</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>This modal has no overlay.</p>
+                                <p><strong>Note:</strong> You cannot click outside of this modal to close it.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+
+
 </div>
+
+
+
+
+
+
 
 {% endblock  %}
 

@@ -45,6 +45,14 @@ def create_app(config_name):
     from .fournisseur import fournisseur as fournisseur_blueprint
     app.register_blueprint(fournisseur_blueprint)
 
+    #Depot
+    from .depot import depot as depot_blueprint
+    app.register_blueprint(depot_blueprint)
+
+    #boutique
+    from .boutique import boutique as boutique_blueprint
+    app.register_blueprint(boutique_blueprint)
+
 
 
     return app
