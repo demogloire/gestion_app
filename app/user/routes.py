@@ -1,39 +1,74 @@
 from flask import render_template, flash, url_for, redirect, request, session
 from .. import db, bcrypt
-from ..models import User
-from app.user.forms import AjoutUserForm, EditerUserForm, PassuserForm, AjoutAdminiForm
-#from app.pack_fonction.fonction import username, passwordString, id_unique, autorisation_admin, admin_user, uplaod_cloudinary_file, passworduser
+from ..models import User, Boutique, Depot
+from app.user.forms import AjoutUserForm
+from app.user.utility import save_picture, verification_de_role
 from flask_login import login_user, current_user, login_required
+
 
 from . import user
 
-""" Ajout des administrateur"""
-
-@user.route('/ajouter-administrateur.echo', methods=['GET','POST'])
-def ajouteruserad():
+""" Ajout utilisateur"""
+@user.route('/ajouter_utilisateur', methods=['GET','POST'])
+def ajouterutilisateur():
    #Un utilisateur
-   form=AjoutAdminiForm()
+   form=AjoutUserForm()
    #Titre de l'onglet
-   title="Administrateur"
+   title="Les utilisateurs"
+   #Vérification du droit général
+   droit_general_boutique=Boutique.query.filter_by(nom_boutique='Aucun').first()
+   droit_general_depot=Depot.query.filter_by(nom_depot='Aucun').first()
+   if droit_general_boutique is None and droit_general_depot is None :
+      boutique=Boutique(nom_boutique='Aucun')
+      depot=Depot(nom_depot='Aucun')
+      db.session.add(depot)
+      db.session.add(boutique)
+      db.session.commit()
+
+      
    #Envoi de formulaire par la methode POST
    if form.validate_on_submit():
-      #Ajout de droit d'administrateur
-      aj_droit=Droit(nom="Administrateur", statut=True)
-      db.session.add(aj_droit)
-
-      password_user=passwordString()
+      password_user=form.password.data
       password_hash=bcrypt.generate_password_hash(password_user).decode('utf-8') #génération du password Hacher
-      username_utilisateur=username(form.prenom.data,form.post_nom.data, id_unique()) #Gneration du nom de l'utilsiateur unique
-      #Enregistrement d'un utilisateur
-      user_nv=User(nom=form.nom.data.upper(), post_nom=form.post_nom.data.upper(), prenom=form.prenom.data.capitalize(),\
-      adress=form.adress.data, tel=form.tel.data, username=username_utilisateur, email=form.email.data,\
-      password=password_hash, password_onhash=password_user, droit_id=aj_droit.id, statut=True)
-      db.session.add(user_nv)
-      db.session.commit()
-      flash("Connectez-vous avec {}-{} ".format(password_user, username_utilisateur), "success")
-      return redirect(url_for('auth.login'))
-      
-   return render_template('user/ajuserad.html', form=form, title=title)
+
+      id_boutique=None
+      id_depot=None
+
+      #Verification d'association boutique
+      if form.depot_users.data.nom_depot=="Aucun":
+         pass
+      else:
+         id_depot=form.depot_users.data.id
+
+      #Vérification d'association du boutique
+      if form.boutique_users.data.nom_boutique=="Aucun":
+         pass
+      else:
+         id_boutique=form.boutique_users.data.id
+
+      ver_role=verification_de_role(form.role.data,form.boutique_users.data.nom_boutique,form.depot_users.data.nom_depot)
+      if ver_role is None:
+         return redirect(url_for('user.ajouterutilisateur'))
+      else:
+         pass
+         
+      if form.avatar.data:
+         avatar_user=save_picture(form.avatar.data) #reduction de la taille de l'image
+         #Enregistrement d'un utilisateur
+         user_nv=User(nom=form.nom.data.upper(), post_nom=form.post_nom.data.upper(), prenom=form.prenom.data.capitalize(),\
+         adress=form.adress.data, tel=form.tel.data, email=form.email.data,\
+         password=password_hash, password_onhash=form.password.data, depot_id=id_depot,\
+         boutique_id=id_boutique,avatar=avatar_user,role=form.role.data,statut=True)
+         db.session.add(user_nv)
+         db.session.commit()
+      else:
+         user_nv=User(nom=form.nom.data.upper(), post_nom=form.post_nom.data.upper(), prenom=form.prenom.data.capitalize(),\
+         adress=form.adress.data, tel=form.tel.data, email=form.email.data,\
+         password=password_hash, password_onhash=form.password.data, depot_id=id_depot,\
+         boutique_id=id_boutique,role=form.role.data,statut=True)
+         db.session.add(user_nv)
+         db.session.commit()
+   return render_template('user/utilisateur.html', form=form, title=title)
 
 
 

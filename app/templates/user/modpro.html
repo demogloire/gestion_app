@@ -1,0 +1,329 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+
+<script src=" {{ url_for('static', filename='summnernote/jquer.js')}} "></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='summnernote/summernote-lite.css')}} ">
+<script src="{{ url_for('static', filename='summnernote/summernote-lite.js')}}"></script>
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Ajouter produit</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">Produits</a>
+                            </li>
+                            <li class="breadcrumb-item active">Ajouter produit
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Le produit</h4>
+                            </div>
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <form action="" method="POST" enctype="multipart/form-data">
+                                        {{ form.csrf_token }}
+                                        {% with messages= get_flashed_messages(with_categories=true) %}
+                                        {% if messages  %}
+                                        {% for category, message in messages %}
+                                        {%if category!="danger"%}
+                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                            role="alert">
+                                            <span class="alert-icon">
+                                                <i class="ft-thumbs-up"></i>
+                                            </span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>{{ message }}!</strong>
+
+                                        </div>
+                                        {%else%}
+                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                            role="alert">
+                                            <span class="alert-icon">
+                                                <i class="ft-thumbs-down"></i>
+                                            </span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>{{ message }}!</strong>
+
+                                        </div>
+                                        {%endif%}
+
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% endwith %}
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Nom du produit</label>
+                                                    {% if form.nom_produit.errors %}
+                                                    {{ form.nom_produit(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.nom_produit.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.nom_produit(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Description du produit</label>
+                                                    {% if form.description.errors %}
+                                                    {{ form.description(id="summernote")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.description.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.description(id="summernote")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Prix d'achat detaille</label>
+                                                    {% if form.prix_achat.errors %}
+                                                    {{ form.prix_achat(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.prix_achat.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.prix_achat(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Prix de vente detaille</label>
+                                                    {% if form.prix_vente.errors %}
+                                                    {{ form.prix_vente(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.prix_vente.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.prix_vente(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Prix d'achat en gros</label>
+                                                    {% if form.prix_achat_g.errors %}
+                                                    {{ form.prix_achat_g(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.prix_achat_g.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.prix_achat_g(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Prix de vente en gros</label>
+                                                    {% if form.prix_vente_g.errors %}
+                                                    {{ form.prix_vente_g(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.prix_vente_g.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.prix_vente_g(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Emballage</label>
+                                                    {% if form.emballage.errors %}
+                                                    {{ form.emballage(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.emballage.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.emballage(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Nombre de pièce de l'emballage</label>
+                                                    {% if form.nombre_contenu.errors %}
+                                                    {{ form.nombre_contenu(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.nombre_contenu.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.nombre_contenu(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                
+                                                <div class="form-group">
+                                                <div class="file-field">
+                                                    <br>
+                                                    <div class="btn btn-danger btn-md float-left">
+                                                    <span>Image produit</span>
+                                                    {% if form.avatar.errors %}
+                                                    {{ form.avatar()}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.avatar.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.avatar()}}
+                                                    {% endif %}
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Catégorie du produit</label>
+                                                    {% if form.categorie.errors %}
+                                                    {{ form.categorie(class="form-control input-lg is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.categorie.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.categorie(class="form-control input-lg")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center mb-1">
+                                            <button class="btn btn-warning btn-min-width mr-1 mb-1" id="submit"
+                                                name="submit" type="submit">
+                                                <i class="la la-archive"></i> Modifier produit
+                                            </button>
+
+                                        </div>
+
+
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+{% endblock  %}
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+
+<script>
+    $('#summernote').summernote({
+       height: 300,                 // set editor height
+       minHeight: null,             // set minimum height of editor
+       maxHeight: null,             // set maximum height of editor
+       focus: true                  // set focus to editable area after initializing summernote
+   });
+</script>
+
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
+
+{% endblock  %}

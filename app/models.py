@@ -70,14 +70,14 @@ class Stock(db.Model):
 
 class Depot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nom_depot = db.Column(db.Text)
+    nom_depot = db.Column(db.String(128))
     stocks = db.relationship('Stock', backref='stock_depot', lazy='dynamic')
     users = db.relationship('User', backref='user_depot', lazy='dynamic')
 
 
 class Boutique(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nom_boutique = db.Column(db.Text)
+    nom_boutique = db.Column(db.String(128))
     factures = db.relationship('Facture', backref='facture_boutique', lazy='dynamic')
     produitboutiques = db.relationship('Produitboutique', backref='produitboutique_boutique', lazy='dynamic')
     comptedepenses = db.relationship('Comptedepense', backref='comptedepense_boutique', lazy='dynamic')
@@ -86,7 +86,7 @@ class Boutique(db.Model):
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nom_client = db.Column(db.Text)
+    nom_client = db.Column(db.String(128))
     tel_client = db.Column(db.String(128))
     email = db.Column(db.String(128))
     adresse = db.Column(db.String(128))
@@ -185,14 +185,13 @@ class Comptes(db.Model):
     operations = db.relationship('Operation', backref='operation_compte', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(128))
     post_nom = db.Column(db.String(128))
     prenom= db.Column(db.String(128))
     adress = db.Column(db.String(128))
     tel = db.Column(db.String(128))
-    username = db.Column(db.String(128))
     email = db.Column(db.String(128))
     password = db.Column(db.String(128))
     password_onhash = db.Column(db.String(128))

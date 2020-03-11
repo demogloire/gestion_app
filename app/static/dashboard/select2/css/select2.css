@@ -2,8 +2,10 @@
   box-sizing: border-box;
   display: inline-block;
   margin: 0;
+  width: auto;
   position: relative;
   vertical-align: middle; }
+
   .select2-container .select2-selection--single {
     box-sizing: border-box;
     cursor: pointer;
@@ -154,7 +156,7 @@
       margin-top: -2px;
       position: absolute;
       top: 50%;
-      width: 0; }
+      width: auto; }
 
 .select2-container--default[dir="rtl"] .select2-selection--single .select2-selection__clear {
   float: left; }
@@ -482,3 +484,4 @@
 
 .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #5897fb; }
+

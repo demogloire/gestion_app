@@ -1,14 +1,18 @@
 import os
-from flask import Flask 
+from flask import Flask, render_template
+from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from flask_migrate import Migrate
 import flask_sijax
-from flask_login import LoginManager
-
+#Importation des configuration de l'application sur le developpement de l'application
 from config import app_config
 
+
+
 db = SQLAlchemy()
-login_manager= LoginManager()
+login_manager = LoginManager()
+bcrypt = Bcrypt()
 
 
 path = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
@@ -27,7 +31,15 @@ def create_app(config_name):
     # enregistrement des extension 
     db.init_app(app)
     migrate = Migrate(app, db)
+    bcrypt.init_app(app)
     login_manager.init_app(app)
+    #wtf_tinymce.init_app(app)
+    
+
+    login_manager.login_message = "Veuillez vous connecté"
+    login_manager.login_view = "auth.login"
+    login_manager.login_message_category ='danger'
+    #SimpleMDE(app)
 
     # enregistrement des blueprint
     from . import authentification
@@ -52,6 +64,10 @@ def create_app(config_name):
     #boutique
     from .boutique import boutique as boutique_blueprint
     app.register_blueprint(boutique_blueprint)
+
+    #boutique
+    from .user import user as user_blueprint
+    app.register_blueprint(user_blueprint)
 
 
 
