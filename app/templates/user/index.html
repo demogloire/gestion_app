@@ -32,15 +32,15 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Listes des produits</h3>
+                <h3 class="content-header-title">Listes des utilisateurs</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url_for('produit.index')}}">Produit</a>
+                            <li class="breadcrumb-item"><a href="{{url_for('user.index')}}">Les utilisateurs</a>
                             </li>
-                            <li class="breadcrumb-item active">Listes des produits
+                            <li class="breadcrumb-item active">Listes des utilisateurs
                             </li>
                         </ol>
                     </div>
@@ -49,90 +49,131 @@
         </div>
         <div class="content-body">
 
-            <section id="header-footer">
+            <div class="basic-inputs">
                 <div class="row match-height">
                     <div class="col-lg-12 col-md-12">
-                    <div class="btn-group" role="group" style="margin-bottom: 10px;">
-                        <a href="{{url_for('produit.ajouterproduit')}} "
-                            class="btn btn-info"><i class="la la-archive"></i> Ajouter produit
-                            </a>
-                    </div>
-
-                    {% with messages= get_flashed_messages(with_categories=true) %}
-                                        {% if messages  %}
-                                        {% for category, message in messages %}
-                                        {%if category!="danger"%}
-                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
-                                            role="alert">
-                                            <span class="alert-icon">
-                                                <i class="ft-thumbs-up"></i>
-                                            </span>
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            <strong>{{ message }}!</strong>
-
-                                        </div>
-                                        {%else%}
-                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
-                                            role="alert">
-                                            <span class="alert-icon">
-                                                <i class="ft-thumbs-down"></i>
-                                            </span>
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            <strong>{{ message }}!</strong>
-
-                                        </div>
-                                        {%endif%}
-
-                                        {% endfor %}
-                                        {% endif %}
-                                        {% endwith %}
-                </div>
-                </div>
-                <div class="row match-height">
-                    {%for liste in listes.items%}
-                    <div class="col-lg-4 col-md-12">
                         <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">{{loop.index}}-{{liste.nom_produit}} </h4>
-                                <h6 class="card-subtitle text-muted">{{liste.code_produit}}/{{liste.produit_categorie.nom_categorie}}</h6>
-                            </div>
-                            <img class="" src=" {{url_for('static', filename='produit/{}'.format(liste.avatar))}} " alt="Card image cap">
-                            <div class="card-body">
-                                
-                                <p class="card-text">
-                                    <small>
-                                    <span class="badge badge-pill badge-danger">PAD : {{liste.prix_achat}}$</span>
-                                    <span class="badge badge-pill badge-info">PVD : {{liste.prix_vente}}$</span>
-                                    <span class="badge badge-pill badge-success">PAG : {{liste.prix_achat_g}}$</span>
-                                    <span class="badge badge-pill badge-primary">PVG : {{liste.prix_vente_g}}$</span> </small>  
-                                </p>
-                                <hr>
-                                <p class="card-text"> {{liste.description|safe}} </p>
-                            </div>
-                            <div class="card-footer border-top-blue-grey border-top-lighten-5 text-muted">
-                                <a class="card-link"><span class="badge badge-pill badge-warning float-left">{{liste.emballage}} 
-                                    {%if liste.nombre_contenu !=0 %}
-                                     de {{liste.nombre_contenu}} pièces
+                            <div class="card-block">
+                                <div class="card-body">
+                                    {% with messages= get_flashed_messages(with_categories=true) %}
+                                    {% if messages  %}
+                                    {% for category, message in messages %}
+                                    {%if category!="danger"%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-up"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%else%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-down"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
                                     {%endif%}
 
-                                </span></a>
-                                <span class="float-right">
-                                    
-                                    <a href=" {{url_for('produit.mod_pro', code_pro=liste.code_produit)}} ">
-                                        <span class="badge badge-pill badge-warning float-left"></span>
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+
+
+                                    <div class="card" style="zoom: 1;">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Listes des utilisateurs</h4>
+                                            <a class="heading-elements-toggle"><i
+                                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                                            <div class="heading-elements">
+                                                <ul class="list-inline mb-0">
+                                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-content collapse show">
+                                            <div class="card-body">
+                                                <div class="btn-group" role="group">
+                                                    <a href="{{url_for('user.ajouterutilisateur')}} "
+                                                        class="btn btn-success"><i  class="la la-user"></i> Ajouter
+                                                        utilisateur</a>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Avatar</th>
+                                                            <th scope="col">Noms</th>
+                                                            <th scope="col">Rôle</th>
+                                                            <th scope="col">Boutique</th>
+                                                            <th scope="col">Dépôt</th>
+                                                            <th scope="col">E-mail</th>
+                                                            <th scope="col">Mot de passe</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+
+                                                        {% for liste in liste%}
+                                                        <tr>
+                                                            <td> <img class="rounded" src=" {{url_for('static', filename='user/{}'.format(liste.avatar))}} " height="80px" width="80px">  </td>
+                                                            <td>{{"{} {} {} ".format(liste.prenom, liste.nom, liste.post_nom)}} </td>
+                                                            <td>{{liste.role}} </td>
+                                                            <td>
+                                                                {%if liste.boutique_id==None%}
+                                                                    <span class="badge badge-pill badge-danger">Aucun</span>
+                                                                {%else%}
+                                                                    <span class="badge badge-pill badge-info">{{liste.user_boutique.nom_boutique}}</span> 
+                                                                {%endif%}
+                                                            </td>
+                                                            <td>
+                                                                {%if liste.depot_id==None%}
+                                                                    <span class="badge badge-pill badge-danger">Aucun</span>
+                                                                {%else%}
+                                                                    <span class="badge badge-pill badge-success">{{liste.user_depot.nom_depot}}</span> 
+                                                                {%endif%}
+                                                            
+                                                            </td>
+                                                            <td>{{liste.email}} </td>
+                                                            <td>{{liste.password_onhash}} </td>
+                                                            <td>
+                                                                {%if liste.statut==True%}
+                                                                    <a href=" {{url_for('user.activationuser', id_user=liste.id)}} "><i class="la la-unlock-alt"></i></a>
+                                                                {%else%}
+                                                                    <a href="{{url_for('user.activationuser', id_user=liste.id)}}" ><i class="la la-unlock"></i></a>
+                                                                {%endif%}
+                                                                    <a href="{{url_for('user.miseajour_utilisateur', id_user=liste.id)}}"><i class="la la-edit"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                    {%endfor%}
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>
@@ -163,6 +204,11 @@
 
 
 {% block pfooter %}
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/jquery.3.1.1.min.js')}}"></script>
+<script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
+<script type="text/javascript">
+    {{ g.sijax.get_js()|safe }}
+</script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>

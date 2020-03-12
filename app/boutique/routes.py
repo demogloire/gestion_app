@@ -7,6 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from . import boutique
 
 @boutique.route('/ajouter_boutique', methods=['GET','POST'])
+@login_required
 def ajouterboutique():
     #Boutique 
     title="Ajouter une boutique"
@@ -29,6 +30,7 @@ def ajouterboutique():
 
 
 @boutique.route('/')
+@login_required
 def index():
     #Les boutiques
     title="Liste | Boutique"
@@ -39,7 +41,7 @@ def index():
 
 
 @boutique.route('/<int:bout_id>/boutique', methods=['GET','POST'])
-#@login_required
+@login_required
 def editer_boutique(bout_id):
 
     # #Verification de l'authentification

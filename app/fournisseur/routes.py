@@ -7,6 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from . import fournisseur
 
 @fournisseur.route('/ajouter_fournisseur', methods=['GET','POST'])
+@login_required
 def ajouterfounisseur():
     #Les catagories de livre
     title="Fournisseur | Lambda Gestion"
@@ -29,6 +30,7 @@ def ajouterfounisseur():
 
 
 @fournisseur.route('/')
+@login_required
 def index():
     #Les forunisseurs de l'entreprise
     title="Fournisseur | Lambda Gestion"
@@ -42,7 +44,7 @@ def index():
 
 
 @fournisseur.route('/<int:frnss_id>/fournisseur', methods=['GET','POST'])
-#@login_required
+@login_required
 def editer_fournisseur(frnss_id):
 
     # #Verification de l'authentification

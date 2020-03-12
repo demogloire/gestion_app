@@ -7,6 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from . import categorie
 
 @categorie.route('/ajouter_categorie', methods=['GET','POST'])
+@login_required
 def ajouter_categorie():
     #Les catagories de livre
     title="Ajouter une catégorie"
@@ -30,6 +31,7 @@ def ajouter_categorie():
 
 
 @categorie.route('/categories')
+@login_required
 def index():
     #Les catagories des articles
     title="Liste | Catégorie"
@@ -39,55 +41,8 @@ def index():
     return render_template('categorie/index.html', title=title, listes=list_cate)
 
 
-
-# @categorie.route('/toutes_categorie')
-# @login_required
-# def toutes_categorie():
-
-#     #Verification de l'authentification
-#     if current_user.admin==False:
-#         return redirect(url_for('main.homepage'))
-
-#     #Les catagories de livre
-#     title="Les categories"
-#      #Liste des rubriques
-#     list_cate=Categorie.query.all()
- 
-#     return render_template('categorie/toutecategories.html', title=title, categories=list_cate)
-
-# #-------------------Statut de la categorie------------------------------
-
-# @categorie.route('/status_categorie/<int:cat_id>')
-# @login_required
-# def status_categorie(cat_id):
-
-#     #Verification de l'authentification
-#     if current_user.admin==False:
-#         return redirect(url_for('main.homepage'))
-
-#     #Les catagories de livre
-#     title="Les categories"
-#     #Verification de l'existence de Rubirque
-#     cate_mo=Categorie.query.filter_by(id=cat_id).first_or_404()
-#     if cate_mo is None:
-#         flash("Veuillez respecté la procedure",'danger')
-#         return redirect(url_for('categorie.toutes_categorie'))
-#     else:#Changement du statut
-#         if cate_mo.status == 1:
-#             cate_mo.status = 0
-#             db.session.commit()
-#             flash("La categorie est désactivée sur la plateforme",'success')
-#             return redirect(url_for('categorie.toutes_categorie'))
-#         elif cate_mo.status == 0:
-#             cate_mo.status = 1
-#             db.session.commit()
-#             flash("La categorie est activée sur la plateforme",'success')
-#             return redirect(url_for('categorie.toutes_categorie'))
-#     return render_template('categorie/toutecategories.html', title=title)
-# #-----------------------------------------------Editer categorie---------------------
-
 @categorie.route('/<int:cat_id>/categorie', methods=['GET','POST'])
-#@login_required
+@login_required
 def editer_categorie(cat_id):
 
     # #Verification de l'authentification
@@ -117,7 +72,7 @@ def editer_categorie(cat_id):
 
 
 @categorie.route('/<int:cat_id>/association', methods=['GET','POST'])
-#@login_required
+@login_required
 def association_categorie(cat_id):
 
     # #Verification de l'authentification

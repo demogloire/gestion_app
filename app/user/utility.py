@@ -35,7 +35,7 @@ def codeproduit():
 
 
 def verification_de_role(role, droit_b, droit_d):
-    ver=None
+    ver="Faux"
     ver_b="Ok"
     if role=="Gérant" or role=="Associé":
         if droit_b !="Aucun" or droit_d !="Aucun":
@@ -43,14 +43,14 @@ def verification_de_role(role, droit_b, droit_d):
             return ver
         else:
             return ver_b
-    if role=="Vendeur":
-        if droit_b =="Aucun" and droit_d !="Aucun":
+    if role == "Vendeur":
+        if droit_b=="Aucun" and droit_d!="Aucun":
             flash("Le vendeur est associé à une boutiqe","danger")
             return ver
         else:
             return ver_b
-    if role=="Magasinier":
-        if droit_b !="Aucun" and droit_d =="Aucun":
+    if role == "Magasinier":
+        if droit_b!="Aucun" and droit_d=="Aucun":
             flash("Magasinier est associé à un dépôt","danger")
             return ver
         else:

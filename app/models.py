@@ -58,6 +58,8 @@ class Stock(db.Model):
     quantite = db.Column(db.Integer)
     valeur = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     date = db.Column(db.Date)
+    disponible = db.Column(db.Integer)
+    valeur_dispo = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     stockage = db.Column(db.Boolean, default=False)
     transfert = db.Column(db.Boolean, default=False)
     erreur = db.Column(db.Boolean, default=False)

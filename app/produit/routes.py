@@ -8,6 +8,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from . import produit
 
 @produit.route('/ajouter_produit', methods=['GET','POST'])
+@login_required
 def ajouterproduit():
     #Les catagories de livre
     title="Ajouter un produit"
@@ -63,6 +64,7 @@ def ajouterproduit():
 
 
 @produit.route('/produit/<string:code_pro>', methods=['GET','POST'])
+@login_required
 def mod_pro(code_pro):
     #Les catagories de livre
     title="Modifification | Lambda Gestion"
@@ -138,6 +140,7 @@ def mod_pro(code_pro):
 
 
 @produit.route('/')
+@login_required
 def index():
     #Les produits 
     title="Produits | Lambda Gestion"
