@@ -65,13 +65,17 @@ def create_app(config_name):
     from .boutique import boutique as boutique_blueprint
     app.register_blueprint(boutique_blueprint)
 
-    #boutique
+    #Utilisateur
     from .user import user as user_blueprint
     app.register_blueprint(user_blueprint)
 
-    #boutique
+    #Dashboard
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    #Dashboard
+    from .stock import stock as stock_blueprint
+    app.register_blueprint(stock_blueprint)
 
 
 

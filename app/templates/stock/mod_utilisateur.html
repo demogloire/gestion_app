@@ -1,0 +1,388 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+
+<script src=" {{ url_for('static', filename='summnernote/jquer.js')}} "></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='summnernote/summernote-lite.css')}} ">
+<script src="{{ url_for('static', filename='summnernote/summernote-lite.js')}}"></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.css')}} ">
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Modification</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href=" {{url_for('produit.index')}} ">Utilisateur</a>
+                            </li>
+                            <li class="breadcrumb-item active"> {{prenom}}
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-2 col-md-2"></div>
+                    <div class="col-lg-8 col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title pull-left">Les informations de l'utilisateur</h4>
+                                <span class="pull-right"> <a class="btn btn-md btn-success" data-toggle="modal"  data-target=".bs-example-modal-lg">Modifier mot de passe</a></span>
+                            </div>
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <form action="" method="POST" enctype="multipart/form-data">
+                                        {{ form.csrf_token }}
+                                        {% with messages= get_flashed_messages(with_categories=true) %}
+                                        {% if messages  %}
+                                        {% for category, message in messages %}
+                                        {%if category!="danger"%}
+                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                            role="alert">
+                                            <span class="alert-icon">
+                                                <i class="ft-thumbs-up"></i>
+                                            </span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>{{ message }}!</strong>
+
+                                        </div>
+                                        {%else%}
+                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                            role="alert">
+                                            <span class="alert-icon">
+                                                <i class="ft-thumbs-down"></i>
+                                            </span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>{{ message }}!</strong>
+
+                                        </div>
+                                        {%endif%}
+
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% endwith %}
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Prénom</label>
+                                                    {% if form.prenom.errors %}
+                                                    {{ form.prenom(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.prenom.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.prenom(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Nom</label>
+                                                    {% if form.nom.errors %}
+                                                    {{ form.nom(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.nom.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.nom(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Post-nom</label>
+                                                    {% if form.post_nom.errors %}
+                                                    {{ form.post_nom(class="form-control input-sm is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.post_nom.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.post_nom(class="form-control input-sm")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Téléphone</label>
+                                                    {% if form.tel.errors %}
+                                                    {{ form.tel(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.tel.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.tel(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>E-mail</label>
+                                                    {% if form.email.errors %}
+                                                    {{ form.email(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.email.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.email(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Adresse physique</label>
+                                                    {% if form.adress.errors %}
+                                                    {{ form.adress(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.adress.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.adress(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Rôle</label>
+                                                    {% if form.role.errors %}
+                                                    {{ form.role(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.role.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.role(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Boutique</label>
+                                                    {% if form.boutique_users.errors %}
+                                                    {{ form.boutique_users()}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.boutique_users.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.boutique_users(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Dépôt</label>
+                                                    {% if form.depot_users.errors %}
+                                                    {{ form.depot_users(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.depot_users.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.depot_users(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label><small>Avatar de l'utilisateur</small></label><br>
+                                                    {% if form.avatar.errors %}
+                                                    {{ form.avatar()}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.avatar.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.avatar()}}
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center mb-1">
+                                            <button class="btn btn-success btn-min-width mr-1 mb-1" id="submit"
+                                                name="submit" type="submit">
+                                                <i class="la la-edit"></i> Modification utilisateur
+                                            </button>
+                                        </div>
+
+
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+{% endblock  %}
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"  id="onload">
+
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          
+          <h4 class="modal-title text-left"><i class="fa fa-exclamation-circle"></i>Modifier mot de passe</h4>
+        </div>
+        <div class="modal-body">
+            <form action="" method="POST">
+                {{ form_pass.csrf_token }}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Mot de passe</label>
+                            {% if form_pass.password.errors %}
+                            {{ form_pass.password(class="form-control input-md is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form_pass.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form_pass.password(class="form-control input-md")}}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Répéter mot de passe</label>
+                            {% if form_pass.confirm_password.errors %}
+                            {{ form_pass.confirm_password(class="form-control input-md is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form_pass.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form_pass.confirm_password(class="form-control input-md")}}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="text-center">
+                    <button class="btn btn-success btn-min-width mr-1 mb-1" id="submit"
+                        name="submit" type="submit">
+                        <i class="la la-edit"></i> Modification mot de passe
+                    </button>
+                </div>
+            </form>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript"
+    src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+
+{% endblock  %}

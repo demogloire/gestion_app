@@ -29,3 +29,10 @@ def login():
          flash("Mot de passe incorrect",'danger') 
 
    return render_template('authentification/login.html', form=form)
+
+
+#Déconnexion sur la plateforme
+@bp.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))

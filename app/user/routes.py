@@ -142,10 +142,6 @@ def miseajour_utilisateur(id_user):
 
       ver_role=verification_de_role(form.role.data,form.boutique_users.data.nom_boutique,form.depot_users.data.nom_depot)
 
-      print("--------------------", ver_role)
-      print("--------------------", form.boutique_users.data.nom_boutique)
-      print("--------------------", form.depot_users.data.nom_depot)
-
       if ver_role == "Faux":
          return redirect(url_for('user.miseajour_utilisateur', id_user=id_user))
       else:
@@ -204,6 +200,7 @@ def miseajour_utilisateur(id_user):
             user_profil.tel=form.tel.data
             user_profil.boutique_id=id_boutique
             user_profil.depot_id=id_depot
+            user_profil.email=form.email.data
             user_profil.role=form.role.data
             db.session.commit()
             flash("Vous avez modifié les informations de {} ".format(form.nom.data.upper()),'success')
