@@ -41,7 +41,7 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Stockage des dépôts</h3>
+                <h3 class="content-header-title">Transfert vers boutique</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
@@ -49,7 +49,7 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{url_for('depot.index')}}">Dépot</a>
                             </li>
-                            <li class="breadcrumb-item active">Stockage des marchandises
+                            <li class="breadcrumb-item active">Transfert de produit
                             </li>
                         </ol>
                     </div>
@@ -64,7 +64,7 @@
                     <div class="col-lg-8 col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Les informations sur l'achat de marchandise</h4>
+                                <h4 class="card-title">Les informations de transfert vers la boutique</h4>
                             </div>
                             <div class="card-block">
                                 <div class="card-body">
@@ -121,23 +121,6 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Fournisseur</label>
-                                                    {% if form.fournissseur_stock.errors %}
-                                                    {{ form.fournissseur_stock(class="input-md is-invalid")}}
-                                                    <div class="invalid-feedback">
-                                                        {% for error in form.fournissseur_stock.errors %}
-                                                            <span>{{ error }}</span>
-                                                        {% endfor %}
-                                                    </div>
-                                                    {% else %}
-                                                    {{ form.fournissseur_stock(class="input-md")}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
                                                     <label>Quatité:<small>La quantité en fonction d'emballage (Ex. nombre de carton)</small> </label>
                                                     {% if form.quantite.errors %}
                                                     {{ form.quantite(class="form-control input-md is-invalid")}}
@@ -151,6 +134,8 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Prix d'achat</label>
@@ -166,8 +151,6 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Date d'opération</label>
@@ -183,6 +166,23 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Boutique</label>
+                                                    {% if form.boutiques_cherch.errors %}
+                                                    {{ form.boutiques_cherch(class="input-md")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.boutiques_cherch.errors %}
+                                                            <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.boutiques_cherch(class="input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Effectuer par:</label>
@@ -193,10 +193,10 @@
                                         
                                             <div class="text-center mb-1">
                                                 <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
-                                                    <i class="la la-barcode"></i> Stocker
+                                                    <i class="la la-barcode"></i> Transfert vers boutique
                                                 </button>
                                              
-                                                <a href="{{url_for('stock.index')}} " class="btn btn-min-width mr-1 mb-1 btn-danger"><i class="la la-close"></i>Terminer</a>
+                                                <a href=" {{url_for('stock.index')}}  " class="btn btn-min-width mr-1 mb-1 btn-danger"><i class="la la-close"></i>Terminer</a>
                                                 
                                                     
                                             </div>

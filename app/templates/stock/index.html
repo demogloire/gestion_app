@@ -32,15 +32,15 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Listes des utilisateurs</h3>
+                <h3 class="content-header-title">Stock disponible</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url_for('user.index')}}">Les utilisateurs</a>
+                            <li class="breadcrumb-item"><a href="{{url_for('stock.index')}}"> {{current_user.user_depot.nom_depot}}  </a>
                             </li>
-                            <li class="breadcrumb-item active">Listes des utilisateurs
+                            <li class="breadcrumb-item active">Fiche de stock
                             </li>
                         </ol>
                     </div>
@@ -91,7 +91,7 @@
 
                                     <div class="card" style="zoom: 1;">
                                         <div class="card-header">
-                                            <h4 class="card-title">Listes des utilisateurs</h4>
+                                            <h4 class="card-title">Fiche de stock du dépôt: {{current_user.user_depot.nom_depot}}  </h4>
                                             <a class="heading-elements-toggle"><i
                                                     class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
@@ -105,9 +105,9 @@
                                         <div class="card-content collapse show">
                                             <div class="card-body">
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{url_for('user.ajouterutilisateur')}} "
-                                                        class="btn btn-success"><i  class="la la-user"></i> Ajouter
-                                                        utilisateur</a>
+                                                    <a href="{{url_for('stock.stockagedepot')}} "
+                                                        class="btn btn-info"><i  class="la la-barcode"></i> Stocker
+                                                        </a>
                                                 </div>
 
 
@@ -116,53 +116,75 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Date</th>
                                                             <th scope="col">Avatar</th>
-                                                            <th scope="col">Noms</th>
-                                                            <th scope="col">Rôle</th>
-                                                            <th scope="col">Boutique</th>
-                                                            <th scope="col">Dépôt</th>
-                                                            <th scope="col">E-mail</th>
-                                                            <th scope="col">Mot de passe</th>
-                                                            <th scope="col">Action</th>
+                                                            <th scope="col">Produit</th>
+                                                            <th scope="col">Qté</th>
+                                                            <th scope="col">P.U</th>
+                                                            <th scope="col">PT</th>
+                                                            <th scope="col">Qté dispo.</th>
+                                                            <th scope="col">PT dispo.</th>
+                                                            <th scope="col">Pr cpte.</th>
+                                                            <th scope="col">Fsseur</th>
+                                                            <th scope="col">Op.</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
 
 
-                                                        {% for liste in liste%}
+                                                       {% for liste in listes.items%}
                                                         <tr>
-                                                            <td> <img class="rounded" src=" {{url_for('static', filename='user/{}'.format(liste.avatar))}} " height="80px" width="80px">  </td>
-                                                            <td>{{"{} {} {} ".format(liste.prenom, liste.nom, liste.post_nom)}} </td>
-                                                            <td>{{liste.role}} </td>
-                                                            <td>
-                                                                {%if liste.boutique_id==None%}
-                                                                    <span class="badge badge-pill badge-danger">Aucun</span>
-                                                                {%else%}
-                                                                    <span class="badge badge-pill badge-info">{{liste.user_boutique.nom_boutique}}</span> 
+                                                            <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
+                                                            <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
+                                                            <td> {{liste.stock_produit.nom_produit}}  </td>
+                                                            <td>{{liste.quantite }}  </td>
+                                                            <td>{{liste.prix_unit }}  </td>
+                                                            <td>{{liste.valeur }}  </td>
+                                                            <td>{{liste.disponible }}  </td>
+                                                            <td>{{liste.valeur_dispo }}  </td>
+                                                            <td>{%if liste.stockage==True %}  
+                                                                <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
+                                                                {%elif liste.transfert==True %} 
+                                                                <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
+                                                                {%elif liste.erreur==True %} 
+                                                                <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
                                                                 {%endif%}
                                                             </td>
                                                             <td>
-                                                                {%if liste.depot_id==None%}
-                                                                    <span class="badge badge-pill badge-danger">Aucun</span>
-                                                                {%else%}
-                                                                    <span class="badge badge-pill badge-success">{{liste.user_depot.nom_depot}}</span> 
+                                                                {%if liste.stockage==True %} 
+                                                                <span class="badge badge-pill badge-success"> {{liste.stock_fournisseur.nom_fourn}}</span>
+                                                                {%else%} 
+                                                                <span class="badge badge-pill badge-success"> Aucun</span>
                                                                 {%endif%}
-                                                            
                                                             </td>
-                                                            <td>{{liste.email}} </td>
-                                                            <td>{{liste.password_onhash}} </td>
                                                             <td>
-                                                                {%if liste.statut==True%}
-                                                                    <a href=" {{url_for('user.activationuser', id_user=liste.id)}} "><i class="la la-unlock-alt"></i></a>
-                                                                {%else%}
-                                                                    <a href="{{url_for('user.activationuser', id_user=liste.id)}}" ><i class="la la-unlock"></i></a>
+                                                                {%if liste.stockage==True %}  
+                                                                <span class="badge badge-pill badge-danger">S</span>
+                                                                {%elif liste.transfert==True %} 
+                                                                <span class="badge badge-pill badge-info">T</span>
+                                                                {%elif liste.erreur==True %} 
+                                                                <span class="badge badge-pill badge-warning">E</span>
                                                                 {%endif%}
-                                                                    <a href="{{url_for('user.miseajour_utilisateur', id_user=liste.id)}}"><i class="la la-edit"></i></a>
                                                             </td>
                                                         </tr>
-                                                        {% endfor %}
+                                                        {% endfor %} 
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                            <div class="text-center">
+                                                {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                {% if page_num %}
+                                                    {% if listes.page==page_num %}
+                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
+                                                                              
+                                                    {% else %}
+                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
+                                                                              
+                                                    {% endif %}
+                                                {% else %}
+                                                  ...
+                                                {% endif %}
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
@@ -174,6 +196,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -204,11 +227,6 @@
 
 
 {% block pfooter %}
-<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/jquery.3.1.1.min.js')}}"></script>
-<script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
-<script type="text/javascript">
-    {{ g.sijax.get_js()|safe }}
-</script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>

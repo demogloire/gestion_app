@@ -30,7 +30,7 @@ def ajouter_categorie():
 
 
 
-@categorie.route('/categories')
+@categorie.route('/')
 @login_required
 def index():
     #Les catagories des articles

@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Length,Email, EqualTo, ValidationEr
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 
-from ..models import Fournisseur, Produit
+from ..models import Fournisseur, Produit, Boutique
 
 
 def rech_produit():
@@ -13,6 +13,9 @@ def rech_produit():
 
 def rech_fournisseur():
     return Fournisseur.query.all()
+
+def rech_boutique():
+    return Boutique.query.all()
 
 class StockageForm(FlaskForm):
     quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
@@ -33,6 +36,49 @@ class StockageForm(FlaskForm):
         quantite_o=quantite.data
         if quantite_o < 0:
             raise ValidationError("Quantité doit être superieure à Zero")
+
+
+class StockageErreurForm(FlaskForm):
+    quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
+    prix_d= DecimalField('prix')
+    date_op= StringField('Date', validators=[DataRequired("Completer la date")])
+    produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=False)
+
+
+    submit = SubmitField('Erreur Stockage')
+
+    #Foction de la verification d'unique existenace dans la base des données
+    def validate_prix_d(self, prix_d):
+        prix_dachat=prix_d.data
+        if prix_dachat < 0:
+            raise ValidationError("Le prix d'achat doit être superieure à Zero")
+    
+    def validate_quantite(self, quantite):
+        quantite_o=quantite.data
+        if quantite_o < 0:
+            raise ValidationError("Quantité doit être superieure à Zero")
+
+class BoutiqueRechForm(FlaskForm):
+    quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
+    prix_d= DecimalField('prix')
+    date_op= StringField('Date', validators=[DataRequired("Completer la date")])
+    boutiques_cherch= QuerySelectField(query_factory=rech_boutique, get_label='nom_boutique', allow_blank=False)
+    produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=False)
+
+
+    submit = SubmitField('Tranfert boutique')
+
+    #Foction de la verification d'unique existenace dans la base des données
+    def validate_prix_d(self, prix_d):
+        prix_dachat=prix_d.data
+        if prix_dachat < 0:
+            raise ValidationError("Le prix d'achat doit être superieure à Zero")
+    
+    def validate_quantite(self, quantite):
+        quantite_o=quantite.data
+        if quantite_o < 0:
+            raise ValidationError("Quantité doit être superieure à Zero")
+
 
 
 

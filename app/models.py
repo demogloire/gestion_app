@@ -21,7 +21,6 @@ class Produit(db.Model):
     nombre_contenu=db.Column(db.Integer)
     categorie_id = db.Column(db.Integer, db.ForeignKey('categorie.id'), nullable=False)
     stocks = db.relationship('Stock', backref='stock_produit', lazy='dynamic')
-    stockages = db.relationship('Stockage', backref='stockage_produit', lazy='dynamic')
     ventes = db.relationship('Vente', backref='vente_produit', lazy='dynamic')
     produitboutiques = db.relationship('Produitboutique', backref='produitboutique_produit', lazy='dynamic')
 
@@ -67,9 +66,12 @@ class Stock(db.Model):
     facture_annule = db.Column(db.Boolean, default=False)
     produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'))
     depot_id = db.Column(db.Integer, db.ForeignKey('depot.id'))
+    boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     fournisseur_id = db.Column(db.Integer, db.ForeignKey('fournisseur.id'))
     produitboutique_id = db.Column(db.Integer, db.ForeignKey('produitboutique.id'))
+    solde = db.Column(db.Boolean, default=False)
+
 
 class Depot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -86,6 +88,7 @@ class Boutique(db.Model):
     comptedepenses = db.relationship('Comptedepense', backref='comptedepense_boutique', lazy='dynamic')
     clients = db.relationship('Client', backref='client_boutique', lazy='dynamic')
     users = db.relationship('User', backref='user_boutique', lazy='dynamic')
+    stocks = db.relationship('Stock', backref='stock_boutique', lazy='dynamic')
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -104,22 +107,15 @@ class Produitboutique(db.Model):
     description = db.Column(db.Text)
     prix_achat = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     prix_vente = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
+    prix_achat_g = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
+    prix_vente_g = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
     nombre_contenu=db.Column(db.Integer)
     avatar = db.Column(db.String(128))
     emballage = db.Column(db.String(128))
     stocks = db.relationship('Stock', backref='stock_produitboutique', lazy='dynamic')
-    stockages = db.relationship('Stockage', backref='stockage_produitboutique', lazy='dynamic')
     boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'), nullable=False)
     categorie_id = db.Column(db.Integer, db.ForeignKey('categorie.id'), nullable=False)
     produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=False)
-
-class Stockage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    quantite = db.Column(db.Integer)
-    valeur = db.Column(db.DECIMAL(precision=10, scale=2, asdecimal=False))
-    produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    produitboutique_id = db.Column(db.Integer, db.ForeignKey('produitboutique.id'), nullable=False)
 
 class Commande(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -206,7 +202,6 @@ class User(UserMixin, db.Model):
     comptes = db.relationship('Comptes', backref='compte_user', lazy='dynamic')
     comptedepenses = db.relationship('Comptedepense', backref='comptedepense_user', lazy='dynamic')
     factures = db.relationship('Facture', backref='facture_user', lazy='dynamic')
-    stockages = db.relationship('Stockage', backref='stockage_user', lazy='dynamic')
     stocks = db.relationship('Stock', backref='stock_user', lazy='dynamic')
     
 

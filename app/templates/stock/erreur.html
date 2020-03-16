@@ -49,7 +49,7 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{url_for('depot.index')}}">Dépot</a>
                             </li>
-                            <li class="breadcrumb-item active">Stockage des marchandises
+                            <li class="breadcrumb-item active">Erreur de stockage 
                             </li>
                         </ol>
                     </div>
@@ -64,7 +64,7 @@
                     <div class="col-lg-8 col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Les informations sur l'achat de marchandise</h4>
+                                <h4 class="card-title">Les informations sur le produit </h4>
                             </div>
                             <div class="card-block">
                                 <div class="card-body">
@@ -121,23 +121,6 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Fournisseur</label>
-                                                    {% if form.fournissseur_stock.errors %}
-                                                    {{ form.fournissseur_stock(class="input-md is-invalid")}}
-                                                    <div class="invalid-feedback">
-                                                        {% for error in form.fournissseur_stock.errors %}
-                                                            <span>{{ error }}</span>
-                                                        {% endfor %}
-                                                    </div>
-                                                    {% else %}
-                                                    {{ form.fournissseur_stock(class="input-md")}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
                                                     <label>Quatité:<small>La quantité en fonction d'emballage (Ex. nombre de carton)</small> </label>
                                                     {% if form.quantite.errors %}
                                                     {{ form.quantite(class="form-control input-md is-invalid")}}
@@ -151,6 +134,8 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Prix d'achat</label>
@@ -166,34 +151,28 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Date d'opération</label>
-                                                    {% if form.date_op.errors %}
-                                                    {{ form.date_op(class="form-control input-md", id="datepicker")}}
-                                                    <div class="invalid-feedback">
-                                                        {% for error in form.date_op.errors %}
-                                                            <span>{{ error }}</span>
-                                                        {% endfor %}
+                                                
+                                                    <div class="form-group">
+                                                        <label>Date d'opération</label>
+                                                        {% if form.date_op.errors %}
+                                                        {{ form.date_op(class="form-control input-md", id="datepicker")}}
+                                                        <div class="invalid-feedback">
+                                                            {% for error in form.date_op.errors %}
+                                                                <span>{{ error }}</span>
+                                                            {% endfor %}
+                                                        </div>
+                                                        {% else %}
+                                                        {{ form.date_op(class="form-control input-md", id="datepicker" )}}
+                                                        {% endif %}
                                                     </div>
-                                                    {% else %}
-                                                    {{ form.date_op(class="form-control input-md", id="datepicker" )}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Effectuer par:</label>
-                                                    <input type="text" class="form-control input-md" value="{{current_user.prenom}}" readonly>
-                                                </div>
+                                                
                                             </div>
                                         </div>
-                                        
+
                                             <div class="text-center mb-1">
-                                                <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
-                                                    <i class="la la-barcode"></i> Stocker
+                                                <button class="btn btn-danger btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
+                                                    <i class="la la-barcode"></i> Erreur de stockage 
                                                 </button>
                                              
                                                 <a href="{{url_for('stock.index')}} " class="btn btn-min-width mr-1 mb-1 btn-danger"><i class="la la-close"></i>Terminer</a>
