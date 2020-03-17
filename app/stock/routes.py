@@ -4,6 +4,7 @@ from ..models import User, Boutique, Depot, Stock, Produit, Produitboutique
 from app.stock.forms import StockageForm, StockageErreurForm, BoutiqueRechForm
 from app.stock.utility import save_picture, verification_de_role
 from flask_login import login_user, current_user, login_required
+from sqlalchemy import func
 
 
 from . import stock
@@ -48,6 +49,7 @@ def stockagedepot():
       #Verification de la dernière stock
       qte_disponible=None
       valeur_disponible=None
+      solde_active=True
       stock_disponible=Stock.query.filter_by(produit_id=produit_id.id, depot_id=current_user.user_depot.id).order_by(Stock.id.desc()).first()
       if stock_disponible is None:
          qte_disponible=quantite #Quantité disponible pour le premier stockage du produit dans le dépot
@@ -56,10 +58,12 @@ def stockagedepot():
          qte_disponible=stock_disponible.disponible + quantite
          valeur_disponible_act_op=float(prix_achat*quantite)
          valeur_disponible=float(valeur_disponible_act_op + stock_disponible.valeur_dispo)
+         stock_disponible.solde=False
+         db.session.commit()
 
       #Enregistrement des quantité de stockage de produit
       stockage=Stock(quantite=quantite, valeur=val_op, date=date_operation, prix_unit=prix_achat, disponible=qte_disponible, valeur_dispo=valeur_disponible,
-                     stockage=True, produit_id=produit_id.id, depot_id=current_user.user_depot.id, stock_user=current_user, fournisseur_id=form.fournissseur_stock.data.id)
+                     stockage=True, produit_id=produit_id.id, depot_id=current_user.user_depot.id, stock_user=current_user, fournisseur_id=form.fournissseur_stock.data.id, solde=solde_active)
       db.session.add(stockage)
       db.session.commit()
       #Détermination de l'emballage
@@ -116,14 +120,18 @@ def erreurstockagedepot():
       qte_disponible=None
       valeur_disponible=None
       stock_disponible=Stock.query.filter_by(produit_id=produit_id.id, depot_id=current_user.user_depot.id).order_by(Stock.id.desc()).first()
-
+      solde_disponible=True #Mise à jour du stock disponbible
       if stock_disponible is not None:
          if stock_disponible.disponible > quantite and stock_disponible.valeur_dispo > val_op:
             qte_disponible= stock_disponible.disponible - quantite #Quantité de soustraction dans le stock
             valeur_disponible= stock_disponible.valeur_dispo - val_op # Valeur de la quantité de soustraction dans le stock
+            #Change de Solde
+            stock_disponible.solde=False
+            db.session.commit()
+
             #Enregistrement des quantité de stockage de produit
             stockage=Stock(quantite=quantite, valeur=val_op, date=date_operation, prix_unit=prix_achat, disponible=qte_disponible, valeur_dispo=valeur_disponible,
-                           erreur=True, produit_id=produit_id.id, depot_id=current_user.user_depot.id, stock_user=current_user)
+                           erreur=True, produit_id=produit_id.id, depot_id=current_user.user_depot.id, stock_user=current_user, solde=solde_disponible)
             db.session.add(stockage)
             db.session.commit()
             #Détermination de l'emballage
@@ -212,14 +220,17 @@ def transfertboutique():
       qte_disponible=None
       valeur_disponible=None
       stock_disponible=Stock.query.filter_by(produit_id=produit_id.id, depot_id=current_user.user_depot.id).order_by(Stock.id.desc()).first()
-
+      stock_disponible_solde=True
       if stock_disponible is not None:
          if stock_disponible.disponible > quantite and stock_disponible.valeur_dispo > val_op:
             qte_disponible= stock_disponible.disponible - quantite #Quantité de soustraction dans le stock
             valeur_disponible= stock_disponible.valeur_dispo - val_op # Valeur de la quantité de soustraction dans le stock
+            #Change de Solde
+            stock_disponible.solde=False
+            db.session.commit()
             #Transfert de la quantité
             stockage=Stock(quantite=quantite, valeur=val_op, date=date_operation, prix_unit=prix_achat, disponible=qte_disponible, valeur_dispo=valeur_disponible,
-                           transfert=True, produit_id=produit_id.id, depot_id=current_user.user_depot.id, stock_user=current_user,boutique_id=boutique_id )
+                           transfert=True, solde=stock_disponible_solde, produit_id=produit_id.id, depot_id=current_user.user_depot.id, stock_user=current_user,boutique_id=boutique_id )
             db.session.add(stockage)
             db.session.commit()
             #Reception de la quantité
@@ -243,19 +254,24 @@ def transfertboutique():
 
             #La vérification des informations
             stock_disponible_boutique=Stock.query.filter_by(produitboutique_id=id_produit_boutique, boutique_id=boutique_id).order_by(Stock.id.desc()).first()
+            solde_boutique=True
             if stock_disponible_boutique is None:
                qte_disponible_boutique=qte_nouvelle_boutique 
                valeur_disponible_boutique=float(prix_nouvelle_boutique*qte_nouvelle_boutique)
             else:
                qte_disponible_boutique=stock_disponible_boutique.quantite + qte_nouvelle_boutique
                valeur_disponible_boutique=float(stock_disponible_boutique.valeur_dispo + val_con)
+               #Mise à jour de la quantité d
+               stock_disponible_boutique.solde=False
+               db.session.commit()
             #Recuperation des informations sur le produit apres enregistrements
+            #Change de Solde
             
 
             stockage_boutique=Stock(quantite=qte_nouvelle_boutique, valeur=val_con, date=date_operation, prix_unit=prix_nouvelle_boutique, 
                            disponible=qte_disponible_boutique, 
                            valeur_dispo=valeur_disponible_boutique, stockage=True, produit_id=produit_id.id, boutique_id=boutique_id, 
-                           stock_user=current_user, produitboutique_id=id_produit_boutique)
+                           stock_user=current_user, produitboutique_id=id_produit_boutique, solde=solde_boutique)
             db.session.add(stockage_boutique)
             db.session.commit()
 
@@ -295,7 +311,19 @@ def index():
     
     #Stock disponible
     page= request.args.get('page', 1, type=int)
-    list_stock=Stock.query.filter_by(depot_id=current_user.user_depot.id).order_by(Stock.id.asc()).paginate(page=page, per_page=50)
+    list_stock=Stock.query.filter_by(depot_id=current_user.user_depot.id).order_by(Stock.id.desc()).paginate(page=page, per_page=50)
 
-    return render_template('stock/index.html', title=title, listes=list_stock)
+    stock_graphe=Stock.query.filter(Stock.depot_id==current_user.user_depot.id, Stock.solde==True ).all()
+    produit_dispo=[] #
+    serie_produit=[] #Tableau valeur vendue
+
+    for stock_pro in stock_graphe:
+      i=stock_pro.disponible
+      b=stock_pro.stock_produit.code_produit
+      serie_produit.insert(0,i)
+      produit_dispo.insert(0,b)
+           
+   
+
+    return render_template('stock/index.html', title=title, listes=list_stock, label=produit_dispo, series=serie_produit)
 

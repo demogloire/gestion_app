@@ -104,13 +104,32 @@
                                         </div>
                                         <div class="card-content collapse show">
                                             <div class="card-body">
-                                                <div class="btn-group" role="group">
-                                                    <a href="{{url_for('stock.stockagedepot')}} "
-                                                        class="btn btn-info"><i  class="la la-barcode"></i> Stocker
+                                                <div class="mb-2">
+                                                    <!-- <div class="btn-group" role="group"> -->
+                                                        <a href="{{url_for('stock.index')}} "
+                                                        class="btn btn-info"><i  class="la la-barcode"></i> Stockage
                                                         </a>
+                                                    <a href="{{url_for('stock.stockagedepot')}} "
+                                                        class="btn btn-warning"><i  class="la la-arrows-h"></i> Transferts
+                                                    </a>
+                                                    <a href="{{url_for('stock.stockagedepot')}} "
+                                                        class="btn btn-success"><i  class="la la-search"></i> Recherche
+                                                    </a>
+                                                    
+                                                <!-- </div> -->
                                                 </div>
-
-
+                                                
+                                                <div>
+                                                    <a href="{{url_for('stock.stockagedepot')}} "
+                                                    class="btn  btn-sm btn-light"><i  class="la la-barcode"></i> Stocker
+                                                    </a>
+                                                    <a href="{{url_for('stock.erreurstockagedepot')}} "
+                                                        class="btn btn-sm btn-secondary"><i  class="la la-close"></i> Erreur de stockage
+                                                    </a>
+                                                </div>
+                                                <div class="height-400">
+                                                    <canvas id="column-chart"></canvas>
+                                                </div>
                                             </div>
                                             <div class="table-responsive">
                                                 <table class="table table-striped">
@@ -133,14 +152,15 @@
 
 
                                                        {% for liste in listes.items%}
-                                                        <tr>
+                                                       {%if liste.solde==True%}
+                                                        <tr class="bg-warning">
                                                             <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
                                                             <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
                                                             <td> {{liste.stock_produit.nom_produit}}  </td>
-                                                            <td>{{liste.quantite }}  </td>
+                                                            <td>{{liste.quantite }}  {{liste.stock_produit.emballage }}</td>
                                                             <td>{{liste.prix_unit }}  </td>
                                                             <td>{{liste.valeur }}  </td>
-                                                            <td>{{liste.disponible }}  </td>
+                                                            <td>{{liste.disponible }}  {{liste.stock_produit.emballage }}</td>
                                                             <td>{{liste.valeur_dispo }}  </td>
                                                             <td>{%if liste.stockage==True %}  
                                                                 <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
@@ -167,6 +187,42 @@
                                                                 {%endif%}
                                                             </td>
                                                         </tr>
+                                                        {%else%}
+                                                        <tr>
+                                                            <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
+                                                            <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
+                                                            <td> {{liste.stock_produit.nom_produit}}  </td>
+                                                            <td>{{liste.quantite }} {{liste.stock_produit.emballage }}</td>
+                                                            <td>{{liste.prix_unit }}  </td>
+                                                            <td>{{liste.valeur }}  </td>
+                                                            <td>{{liste.disponible }}  {{liste.stock_produit.emballage }}</td>
+                                                            <td>{{liste.valeur_dispo }}  </td>
+                                                            <td>{%if liste.stockage==True %}  
+                                                                <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
+                                                                {%elif liste.transfert==True %} 
+                                                                <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
+                                                                {%elif liste.erreur==True %} 
+                                                                <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
+                                                                {%endif%}
+                                                            </td>
+                                                            <td>
+                                                                {%if liste.stockage==True %} 
+                                                                <span class="badge badge-pill badge-success"> {{liste.stock_fournisseur.nom_fourn}}</span>
+                                                                {%else%} 
+                                                                <span class="badge badge-pill badge-success"> Aucun</span>
+                                                                {%endif%}
+                                                            </td>
+                                                            <td>
+                                                                {%if liste.stockage==True %}  
+                                                                <span class="badge badge-pill badge-danger">S</span>
+                                                                {%elif liste.transfert==True %} 
+                                                                <span class="badge badge-pill badge-info">T</span>
+                                                                {%elif liste.erreur==True %} 
+                                                                <span class="badge badge-pill badge-warning">E</span>
+                                                                {%endif%}
+                                                            </td>
+                                                        </tr>
+                                                        {%endif%}
                                                         {% endfor %} 
                                                     </tbody>
                                                 </table>
@@ -229,6 +285,82 @@
 {% block pfooter %}
 
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script>
+    $(window).on("load", function(){
+
+//Get the context of the Chart canvas element we want to select
+var ctx = $("#column-chart");
+
+// Chart Options
+var chartOptions = {
+    // Elements options apply to all of the options unless overridden in a dataset
+    // In this case, we are setting the border of each bar to be 2px wide and green
+    elements: {
+        rectangle: {
+            borderWidth: 2,
+            borderColor: 'rgb(0, 255, 0)',
+            borderSkipped: 'bottom'
+        }
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    responsiveAnimationDuration:500,
+    legend: {
+        position: 'top',
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+            }
+        }],
+        yAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+            }
+        }]
+    },
+};
+
+// Chart Data
+var chartData = {
+    labels: [{% for item in label %}"{{item}}",{% endfor %}],
+    datasets: [{
+        label: "Les produits",
+        data: [{% for item in series %}{{item}},{% endfor %}],
+
+        backgroundColor: "#28D094",
+        hoverBackgroundColor: "rgba(40,208,148,.9)",
+        borderColor: "transparent"
+    },]
+};
+
+var config = {
+    type: 'bar',
+
+    // Chart Options
+    options : chartOptions,
+
+    data : chartData
+};
+
+// Create the chart
+var lineChart = new Chart(ctx, config);
+});
+</script>
+
+
 {% endblock  %}
