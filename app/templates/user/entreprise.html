@@ -1,0 +1,251 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+
+<script src=" {{ url_for('static', filename='summnernote/jquer.js')}} "></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='summnernote/summernote-lite.css')}} ">
+<script src="{{ url_for('static', filename='summnernote/summernote-lite.js')}}"></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.css')}} ">
+
+{% endblock  %}
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-body">
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-2 col-md-2"></div>
+                    <div class="col-lg-8 col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Les informations de l'entreprise</h4>
+                            </div>
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <form action="" method="POST" enctype="multipart/form-data">
+                                        {{ form.csrf_token }}
+                                        {% with messages= get_flashed_messages(with_categories=true) %}
+                                        {% if messages  %}
+                                        {% for category, message in messages %}
+                                        {%if category!="danger"%}
+                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                            role="alert">
+                                            <span class="alert-icon">
+                                                <i class="ft-thumbs-up"></i>
+                                            </span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>{{ message }}!</strong>
+
+                                        </div>
+                                        {%else%}
+                                        <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                            role="alert">
+                                            <span class="alert-icon">
+                                                <i class="ft-thumbs-down"></i>
+                                            </span>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>{{ message }}!</strong>
+
+                                        </div>
+                                        {%endif%}
+
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% endwith %}
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Dénomination de l'entreprise</label>
+                                                    {% if form.denomination.errors %}
+                                                    {{ form.denomination(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.denomination.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.denomination(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Personnalité juridique</label>
+                                                    {% if form.personalite.errors %}
+                                                    {{ form.personalite(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.personalite.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.personalite(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Adresse</label>
+                                                    {% if form.adresse.errors %}
+                                                    {{ form.adresse(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.adresse.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.adresse(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Siège social</label>
+                                                    {% if form.siege_social.errors %}
+                                                    {{ form.siege_social(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.siege_social.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.siege_social(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Téléphone</label>
+                                                    {% if form.telephone.errors %}
+                                                    {{ form.telephone(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.telephone.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.telephone(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>E-mail</label>
+                                                    {% if form.email.errors %}
+                                                    {{ form.email(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.email.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.email(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Fax</label>
+                                                    {% if form.fax.errors %}
+                                                    {{ form.fax(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.fax.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.fax(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Logo entreprise</label><br>
+                                                    {% if form.avatar.errors %}
+                                                    {{ form.avatar()}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.avatar.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.avatar()}}
+                                                    {% endif %}
+                                                                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="text-center mb-1">
+                                            <button class="btn btn-light btn-min-width mr-1 mb-1" id="submit"
+                                                name="submit" type="submit">
+                                                <i class="la la-institution"></i> Entreprise
+                                            </button>
+                                        </div>
+
+
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+{% endblock  %}
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+
+{% endblock  %}

@@ -1,0 +1,414 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+
+<script src=" {{ url_for('static', filename='summnernote/jquer.js')}} "></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='summnernote/summernote-lite.css')}} ">
+<script src="{{ url_for('static', filename='summnernote/summernote-lite.js')}}"></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='datepicker/datepicker.css')}} ">
+<script src=" {{ url_for('static', filename='JsBarcode.all.min.js')}} "></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<script src=" {{ url_for('static', filename='JsBarcode.all.min.js')}} "></script>
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Vente en dette</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href=""> {{current_user.user_boutique.nom_boutique}} </a>
+                            </li>
+                            <li class="breadcrumb-item active">Payement facture
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-1 col-md-1"></div>
+                                        <div class="col-lg-10 col-md-10">
+                                            <span>
+                                                <h4 class="card-title">Information de la facture</h4>
+                                            </span>
+                                            <span>
+                                                <a href="" data-toggle="modal" data-target="#agence" class="btn btn-md btn-info"> <i class="la la-money"></i> Payer la facture</a>
+                                                <a href=" {{url_for('vente.payement_facture_total', facture=facture_d.id)}} " class="btn btn-md btn-warning"> <i class="la la-money"></i> Payer la totalité</a>
+                                            </span> <br><br>
+                                            <span>
+
+                                                {%if facture_d.dette==True and facture_d.type_vente==True %}
+                                                <a href="{{url_for('vente.voir_facture_gros_paye',facture=facture_d.id)}}" target="_blank" class="btn btn-sm btn-success"> <i class="la la-print"></i></a>
+                                                {%elif facture_d.dette==True and facture_d.type_vente==False %}
+                                                <a href="{{url_for('vente.voir_facture_imp',facture=facture_d.id)}}" target="_blank" class="btn btn-sm btn-success"> <i class="la la-print"></i></a>
+                                                {%endif%}
+                                                <a href=" {{url_for('vente.finfacture')}} " class="btn btn-sm btn-danger"> <i class="la la-close"></i> Clôture la facture</a>
+                                            </span>
+                                            <br><br>
+                                            <div class="box-shadow--6dp">
+                                                <div class="card ">
+                                                    {% with messages= get_flashed_messages(with_categories=true) %}
+                                                    {% if messages  %}
+                                                    {% for category, message in messages %}
+                                                    {%if category!="danger"%}
+                                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                                        role="alert">
+                                                        <span class="alert-icon">
+                                                            <i class="ft-thumbs-up"></i>
+                                                        </span>
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <strong>{{ message }}!</strong>
+    
+                                                    </div>
+                                                    {%else%}
+                                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                                        role="alert">
+                                                        <span class="alert-icon">
+                                                            <i class="ft-thumbs-down"></i>
+                                                        </span>
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <strong>{{ message }}!</strong>
+    
+                                                    </div>
+                                                    {%endif%}
+    
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                    {% endwith %}
+    
+                                                    <div class="card-header">
+                                                        <svg id="barcode"></svg><br>
+                                                        Facture: {{facture_d.code_facture}}  <br>
+                                                        Date: <strong>{{facture_d.date.strftime('%d/%m/%Y')}}</strong>
+                                                        <span class="float-right"> <strong>Statut:</strong> 
+                                                            {%if facture_d.cash==1 %}
+                                                                Cash
+                                                            {%elif facture_d.dette==1 %}
+                                                                Crédit
+                                                            {%elif facture_d.annule==1 %}
+                                                                Annulée
+                                                            {%elif facture_d.vente_acompte==1 %}
+                                                                Vente à decouvert
+                                                            {%endif%}
+                                                        </span>
+    
+                                                    </div>
+                                                    <div class="card-body">
+    
+                                                        <div class="row mb-4">
+                                                            <div class="col-sm-6">
+                                                                <h6 class="mb-3">De:</h6>
+                                                                <div>
+                                                                    <strong>
+                                                                        {%if current_user.user_entreprise !=None %}
+                                                                        {{current_user.user_entreprise.denomination}} 
+                                                                        {%endif%} 
+                                                                    </strong>
+                                                                </div>
+                                                                <div>{%if current_user.user_entreprise !=None %}
+                                                                    {{current_user.user_entreprise.adresse}} 
+                                                                    {%endif%} 
+                                                                </div>
+                                                                <div>{%if current_user.user_entreprise !=None %}
+                                                                    {{current_user.user_entreprise.siege_social}} 
+                                                                    {%endif%} 
+                                                                </div>
+                                                                <div>{%if current_user.user_entreprise !=None %}
+                                                                    Phone:{{current_user.user_entreprise.telephone}} 
+                                                                    {%endif%} 
+                                                                </div>
+                                                                <div>{%if current_user.user_entreprise !=None %}
+                                                                    E-mail:{{current_user.user_entreprise.email}} 
+                                                                    {%endif%} 
+                                                                </div>
+                                                                <div>{%if current_user.user_entreprise !=None %}
+                                                                    {{current_user.user_entreprise.personalite}} 
+                                                                    {%endif%} 
+                                                                </div>
+                                                            </div>
+    
+                                                            <div class="col-sm-6">
+                                                                <h6 class="mb-3"> A:</h6>
+                                                                <div>
+                                                                    <strong>{{facture_d.facture_client.nom_client}}</strong>
+                                                                </div>
+                                                                <div>
+                                                                    {%if facture_d.facture_client.adresse!=None%}
+                                                                        {{facture_d.facture_client.adresse}}
+                                                                    {%endif%}
+                                                                </div>
+                                                                <div>
+                                                                    {%if facture_d.facture_client.email!=None%}
+                                                                        {{facture_d.facture_client.email}}
+                                                                    {%endif%}
+
+                                                                </div>
+                                                                <div>
+                                                                    {%if facture_d.facture_client.tel_client!=None%}
+                                                                        {{facture_d.facture_client.tel_client}}
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
+    
+    
+    
+                                                        </div>
+    
+                                                        <div class="table-responsive-sm">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="center">#</th>
+                                                                        <th></th>
+                                                                        <th>Description</th>
+                                                                        <th class="right">Qté</th>
+                                                                        <th class="center">P.U</th>
+                                                                        <th class="right">Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {%for facture in facture_encours%}
+                                                                    <tr>
+                                                                        <td class="center">{{loop.index}}  </td>
+                                                                        <td class="left strong">   
+                                                                        </td>
+                                                                        <td class="left">{{facture.vente_produitboutique.nom_produit}}</td>
+                                                                        <td class="right">{{ facture.quantite|round(2)}} </td>
+                                                                        <td class="center"> ${{ facture.prix_unitaire|round(2)}}</td>
+                                                                        <td class="right">${{ facture.montant|round(2)}}</td>
+                                                                    </tr>
+                                                                    
+                                                                    {%endfor%}
+                                                                    <tr>
+                                                                        <td colspan="6">Payement de la facture</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="center">#</td>
+                                                                        <td class="left strong">   
+                                                                        </td>
+                                                                        <td class="left">Date</td>
+                                                                        <td class="right">Code </td>
+                                                                        <td class="center"> Description</td>
+                                                                        <td class="right">Montant</td>
+                                                                    </tr>
+
+                                                                    {%for payement in payements%}
+                                                                    <tr>
+                                                                        <td class="center">{{loop.index}}  </td>
+                                                                        <td class="center"> </td>
+                                                                        <td class="left strong">{{payement.date.strftime('%d/%m/%Y')}}  </td>
+                                                                        <td class="left">{{ payement.code_payement }}</td>
+                                                                        <td class="right">{{ payement.denomination }} </td>
+                                                                        <td class="right">${{ payement.montant|round(2)}}</td>
+                                                                    </tr>
+                                                                    {%endfor%}
+                                                                    
+
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-sm-5">
+    
+                                                            </div>
+                                                            
+                                                            <div class="col-lg-4 col-sm-5 ml-auto">
+                                                                <table class="table table-clear">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="left">
+                                                                                <strong>Sous-total</strong>
+                                                                            </td>
+                                                                            <td class="right">${{ (nbr_tot_dette) |round(2) }} </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="left">
+                                                                                <strong>Payement</strong>
+                                                                            </td>
+                                                                            <td class="right">${{ nbr_tot_payer |round(2) }}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="left">
+                                                                                <strong>Reduction</strong>
+                                                                            </td>
+                                                                            <td class="right">$0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="left">
+                                                                                <strong>TVA</strong>
+                                                                            </td>
+                                                                            <td class="right">$0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="left">
+                                                                                <strong>Total</strong>
+                                                                            </td>
+                                                                            <td class="right">
+                                                                                <strong>${{ facture_d.montant|round(2)}}</strong>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+    
+                                                            </div>
+    
+                                                        </div>
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-lg-1 col-md-1"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade " id="agence" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-md modal-center">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="text-center"><h4 class="modal-title">Payement de la facture
+                </h4></span>
+                
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="form-group d-flex">
+                      {% if form.payement_facture.errors %}
+                      {{ form.payement_facture(class="form-control is-invalid", placeholder="Le montant à payer")}}
+                      <i class="form-group__bar"></i>
+                      <div class="invalid-feedback">
+                        {% for error in form.payement_facture.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                      {% else %}
+                      {{ form.payement_facture(class="form-control", placeholder="Le montant à payer")}}
+                      <i class="form-group__bar"></i>
+                      {% endif %}
+                      <button type="submit" name="submit" class="btn btn-success text-white px-4"><i class="la la-money"></i> Payer</button>
+                    </div>
+                  </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock  %}
+
+{% block footer %} 
+{% include'elements/include_style/footer.html'%}
+
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript"
+    src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='datepicker/datepicker.js')}}"></script>
+
+<script>
+    JsBarcode("#barcode", "{{facture_d.code_facture}}",{
+        height: 40,
+        background: "#dddddd",
+        displayValue: false
+    });
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4',
+        icons: {
+            rightIcon: '<i class="la la-calendar"></i>'
+        },
+        format: 'dd-mm-yyyy'
+    });
+</script>
+
+<script>
+    $("#prix").hide();
+    $("#cl2").hide();
+    $(function () {
+        $("#cl1").click(function () {
+            $("#cl1").hide();
+            $("#cl2").show();
+            $("#prix").show();
+        });
+
+        $("#cl2").click(function () {
+            $("#cl2").hide();
+            $("#cl1").show();
+            $("#prix").hide();
+        });
+    });
+</script>
+
+{% endblock  %}

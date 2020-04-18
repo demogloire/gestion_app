@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+import re
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, Length,Email, EqualTo, ValidationError
@@ -20,7 +21,7 @@ def rech_boutique():
 class StockageForm(FlaskForm):
     quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
     prix_d= DecimalField('prix')
-    date_op= StringField('Date', validators=[DataRequired("Completer la date")])
+    date_op= StringField('Date', validators=[DataRequired("Completer la date"),  Length(min=10, max=200, message="Format 02-02-2020")])
     produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=False)
     fournissseur_stock= QuerySelectField(query_factory=rech_fournisseur, get_label='nom_fourn', allow_blank=False)
 
@@ -41,7 +42,7 @@ class StockageForm(FlaskForm):
 class StockageErreurForm(FlaskForm):
     quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
     prix_d= DecimalField('prix')
-    date_op= StringField('Date', validators=[DataRequired("Completer la date")])
+    date_op= StringField('Date', validators=[DataRequired("Completer la date"), Length(min=10, max=200, message="Format 02-02-2020")])
     produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=False)
 
 
@@ -61,7 +62,7 @@ class StockageErreurForm(FlaskForm):
 class BoutiqueRechForm(FlaskForm):
     quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
     prix_d= DecimalField('prix')
-    date_op= StringField('Date', validators=[DataRequired("Completer la date")])
+    date_op= StringField('Date', validators=[DataRequired("Completer la date"),  Length(min=10, max=200, message="Format 02-02-2020")])
     boutiques_cherch= QuerySelectField(query_factory=rech_boutique, get_label='nom_boutique', allow_blank=False)
     produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=False)
 
@@ -80,25 +81,51 @@ class BoutiqueRechForm(FlaskForm):
             raise ValidationError("Quantité doit être superieure à Zero")
 
 
+class AnneeTransForm(FlaskForm):
+    date_annee_recherche= StringField("Date", validators=[DataRequired("La date svp"), Length(min=10, max=200, message="Format 02-02-2020")])
+    boutiques_cherch= QuerySelectField(query_factory=rech_boutique, get_label='nom_boutique', allow_blank=True)
+    produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=True)
+    submit_rap = SubmitField('Chercher')
+
+    def validate_boutiques_cherch(self, boutiques_cherch):
+        d=boutiques_cherch.data
+        if d is None:
+            boutiques_cherch.data=0
+
+    def validate_produit_stock(self, produit_stock):
+        d=produit_stock.data
+        if d is None:
+            produit_stock.data=0
+
+    def validate_date_annee_recherche(self, date_annee_recherche):
+        date=date_annee_recherche.data
+        result = re.findall(r"[\d]{1,2}/[\d]{1,2}/[\d]{4}", date)
+        if result:
+            pass
+        else:
+            raise ValidationError("La date doit respectée cette format jj-mm-aaaa")
 
 
+class MensuelTransForm(FlaskForm):
+    date_annee_recherche= StringField("Date", validators=[DataRequired("La date svp"), Length(min=10, max=200, message="Format 02-02-2020")])
+    produit_stock= QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=True)
+    submit_rap = SubmitField('Chercher')
 
-# class EditUserForm(FlaskForm):
-#     nom= StringField('Nom', validators=[DataRequired("Completer le nom"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
-#     post_nom= StringField('Post-Nom', validators=[DataRequired("Completer le post-nom"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
-#     prenom= StringField('Prénom', validators=[DataRequired("Completer le prenom"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
-#     adress= StringField('Adresse', validators=[DataRequired("Completer l'adresse"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
-#     tel= StringField('Adresse', validators=[DataRequired("Completer le téléphone"),  Length(min=10, max=13, message="Veuillez respecté les caractères")])
-#     email= StringField('Email', validators=[DataRequired('Veuillez completer votre email'), Email('Votre email est incorrect')])
-#     boutique_users= QuerySelectField(query_factory=rech_boutique, get_label='nom_boutique', allow_blank=False)
-#     avatar = FileField("Image",validators=[FileAllowed(['jpg','png'],'Seul jpg et png sont autorisés')])
-#     role= SelectField('Rôle',choices=[('Gérant', 'Gérant'), ('Magasinier', 'Magasinier'), ('Vendeur', 'Vendeur'), ('Associé', 'Associé') ])
-#     depot_users= QuerySelectField(query_factory=rech_depot, get_label='nom_depot', allow_blank=False)
+    def validate_boutiques_cherch(self, boutiques_cherch):
+        d=boutiques_cherch.data
+        if d is None:
+            boutiques_cherch.data=0
 
-#     submit = SubmitField('Ajouter user')
+    def validate_produit_stock(self, produit_stock):
+        d=produit_stock.data
+        if d is None:
+            produit_stock.data=0
 
-# class PassuserForm(FlaskForm):
-#     password= PasswordField('Mot de passe', validators=[DataRequired('Veuillez completer votre mot de passe')])
-#     confirm_password= PasswordField('Confirmer mot de passe', validators=[DataRequired('Veuillez completer votre mot de passe'), EqualTo('password',message="Les mots des passes ne pas conforment")])
-#     submit = SubmitField('Changer mot de passe')
+    def validate_date_annee_recherche(self, date_annee_recherche):
+        date=date_annee_recherche.data
+        result = re.findall(r"[\d]{1,2}/[\d]{1,2}/[\d]{4}", date)
+        if result:
+            pass
+        else:
+            raise ValidationError("La date doit respectée cette format jj-mm-aaaa")
 

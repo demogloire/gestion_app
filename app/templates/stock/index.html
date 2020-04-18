@@ -7,6 +7,7 @@
     href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
 <link rel="stylesheet" type="text/css"
     href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
 
 {% endblock  %}
@@ -109,10 +110,10 @@
                                                         <a href="{{url_for('stock.index')}} "
                                                         class="btn btn-info"><i  class="la la-barcode"></i> Stockage
                                                         </a>
-                                                    <a href="{{url_for('stock.stockagedepot')}} "
+                                                    <a href="{{url_for('stock.transfert_depot')}} "
                                                         class="btn btn-warning"><i  class="la la-arrows-h"></i> Transferts
                                                     </a>
-                                                    <a href="{{url_for('stock.stockagedepot')}} "
+                                                    <a href="{{url_for('stock.stock_de_depot')}} "
                                                         class="btn btn-success"><i  class="la la-search"></i> Recherche
                                                     </a>
                                                     
@@ -144,7 +145,7 @@
                                                             <th scope="col">Qté dispo.</th>
                                                             <th scope="col">PT dispo.</th>
                                                             <th scope="col">Pr cpte.</th>
-                                                            <th scope="col">Fsseur</th>
+                                                            <th scope="col"><span class="badge-success">Fss</span> - <span class="badge-info">Par</span></th>
                                                             <th scope="col">Op.</th>
                                                         </tr>
                                                     </thead>
@@ -153,15 +154,49 @@
 
                                                        {% for liste in listes.items%}
                                                        {%if liste.solde==True%}
-                                                        <tr class="bg-warning">
-                                                            <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
+                                                        <tr class="bg-light">
+                                                            <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
                                                             <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
                                                             <td> {{liste.stock_produit.nom_produit}}  </td>
-                                                            <td>{{liste.quantite }}  {{liste.stock_produit.emballage }}</td>
-                                                            <td>{{liste.prix_unit }}  </td>
-                                                            <td>{{liste.valeur }}  </td>
-                                                            <td>{{liste.disponible }}  {{liste.stock_produit.emballage }}</td>
-                                                            <td>{{liste.valeur_dispo }}  </td>
+                                                            <td>{{liste.quantite }}  
+                                                                {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                    {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                    {%else%}
+                                                                        Pièce
+                                                                    {%endif%}
+                                                                {%else%}
+                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                    {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%endif%}
+                                                                {%endif%}
+
+                                                            </td>
+                                                            <td>${{ liste.prix_unit  |round(2)}} </td>
+                                                            <td>${{ liste.valeur  |round(2)}} </td>
+                                                            <td>{{liste.disponible }}  
+                                                                {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                    {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                    {%else%}
+                                                                        Pièce
+                                                                    {%endif%}
+                                                                {%else%}
+                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                    {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%endif%}
+                                                                {%endif%}
+                                                                </td>
+
+                                                            <td>${{ liste.valeur_dispo |round(2)}}</td>
                                                             <td>{%if liste.stockage==True %}  
                                                                 <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
                                                                 {%elif liste.transfert==True %} 
@@ -173,8 +208,8 @@
                                                             <td>
                                                                 {%if liste.stockage==True %} 
                                                                 <span class="badge badge-pill badge-success"> {{liste.stock_fournisseur.nom_fourn}}</span>
-                                                                {%else%} 
-                                                                <span class="badge badge-pill badge-success"> Aucun</span>
+                                                                {%else%}
+                                                                <span class="badge badge-pill badge-info"> {{liste.stock_user.prenom}}</span>
                                                                 {%endif%}
                                                             </td>
                                                             <td>
@@ -189,14 +224,48 @@
                                                         </tr>
                                                         {%else%}
                                                         <tr>
-                                                            <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
+                                                            <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
                                                             <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
                                                             <td> {{liste.stock_produit.nom_produit}}  </td>
-                                                            <td>{{liste.quantite }} {{liste.stock_produit.emballage }}</td>
-                                                            <td>{{liste.prix_unit }}  </td>
-                                                            <td>{{liste.valeur }}  </td>
-                                                            <td>{{liste.disponible }}  {{liste.stock_produit.emballage }}</td>
-                                                            <td>{{liste.valeur_dispo }}  </td>
+                                                            <td>{{liste.quantite }}  
+                                                                {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                    {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                    {%else%}
+                                                                        Pièce
+                                                                    {%endif%}
+                                                                {%else%}
+                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                    {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%endif%}
+                                                                {%endif%}
+
+                                                            </td>
+                                                            <td>${{ liste.prix_unit  |round(2)}} </td>
+                                                            <td>${{ liste.valeur  |round(2)}} </td>
+                                                            <td>{{liste.disponible }}  
+                                                                {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                    {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                    {%else%}
+                                                                        Pièce
+                                                                    {%endif%}
+                                                                {%else%}
+                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                    {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%endif%}
+                                                                {%endif%}
+                                                                </td>
+
+                                                            <td>${{ liste.valeur_dispo |round(2)}}</td>
                                                             <td>{%if liste.stockage==True %}  
                                                                 <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
                                                                 {%elif liste.transfert==True %} 
@@ -208,8 +277,8 @@
                                                             <td>
                                                                 {%if liste.stockage==True %} 
                                                                 <span class="badge badge-pill badge-success"> {{liste.stock_fournisseur.nom_fourn}}</span>
-                                                                {%else%} 
-                                                                <span class="badge badge-pill badge-success"> Aucun</span>
+                                                                {%else%}
+                                                                <span class="badge badge-pill badge-info"> {{liste.stock_user.prenom}}</span>
                                                                 {%endif%}
                                                             </td>
                                                             <td>

@@ -17,6 +17,11 @@ def login():
    if current_user.is_authenticated:
       return redirect(url_for('main.index'))
 
+   ## Vérification de l'existence d'au moins un administrateur
+   ver_admini_existe= User.query.filter_by(statut=True, role="Gérant").first()
+   if ver_admini_existe is None:
+      return redirect(url_for('user.superajouterutilisateur'))
+
    form=LoginForm()
    #Verifiation de la connexion à l'envoie du formulaire
    if form.validate_on_submit():

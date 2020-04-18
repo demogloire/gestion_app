@@ -1,0 +1,351 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Vente cash</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('vente.cash')}}"> {{current_user.user_boutique.nom_boutique}}  </a>
+                            </li>
+                            <li class="breadcrumb-item active">Vente cash
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    {% with messages= get_flashed_messages(with_categories=true) %}
+                                    {% if messages  %}
+                                    {% for category, message in messages %}
+                                    {%if category!="danger"%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-up"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%else%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-down"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%endif%}
+
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+
+
+                                    <div class="card" style="zoom: 1;">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Vente cash de la boutique: {{current_user.user_boutique.nom_boutique}}  </h4>
+                                            <a class="heading-elements-toggle"><i
+                                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                                            <div class="heading-elements">
+                                                <ul class="list-inline mb-0">
+                                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-content collapse show">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <!-- <div class="btn-group" role="group"> -->
+                                                    <a href="{{url_for('vente.index')}} "
+                                                        class="btn btn-primary"><i  class="la la-shopping-cart"></i>Toutes les ventes
+                                                    </a>
+
+                                                    <a href="{{url_for('vente.cash')}} "
+                                                        class="btn btn-success"><i  class="la la-shopping-cart"></i> Cash
+                                                    </a>
+                                                    <a href="{{url_for('vente.dette')}} "
+                                                        class="btn btn-danger"><i  class="la la-cart-plus"></i> Dette
+                                                    </a>
+                                                    <a href="{{url_for('stock.stock_de_depot')}} "
+                                                        class="btn btn-dark"><i  class="la la-cart-arrow-down"></i> Acompte
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <fieldset class="scheduler-border">
+                                                <legend class="scheduler-border">Vente en cash:</legend>
+                                                <div>
+                                                    <div class="pull-left mb-2">
+                                                        <a href="{{url_for('vente.validation',type=0)}} "
+                                                            class="btn btn-sm btn-warning"><i  class="la la-cube"></i> Detaille
+                                                        </a>
+                                                        <a href="{{url_for('vente.validation',type=1)}} "
+                                                            class="btn btn-sm btn-info"><i  class="la la-cubes"></i> Gros
+                                                        </a>
+                                                    </div>
+                                                    <div class="pull-right">
+                                                        <form action="" method="POST">
+                                                            {{ form.csrf_token }}
+                                                        
+                                                            <div class="form-group d-flex box-shadow--2dp" >
+                                                                
+                                                                {% if form.facture_client.errors %}
+                                                                {{ form.facture_client(class="form-control input-sm  is-invalid", placeholder="Chercher une facture")}}
+                                                                <i class="form-group__bar"></i>
+                                                                <div class="invalid-feedback">
+                                                                  {% for error in form.facture_client.errors %}
+                                                                  <span>{{ error }}</span>
+                                                                  {% endfor %}
+                                                                </div>
+                                                                {% else %}
+                                                                {{ form.facture_client(class="form-control input-sm ", placeholder="La quantité à diminuer")}}
+                                                                <i class="form-group__bar"></i>
+                                                                {% endif %}
+                                                                <button type="submit" name="submit" class="btn  btn-sm btn-secondary text-white px-4">Chercher</button>
+                                                            </div>
+                                                          </form>
+                                                    </div>
+                                                </div>
+                                            {%if ver_facture_sub=="Vide"%}
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr class="text-center" >
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">Client</th>
+                                                            <th scope="col">Montant</th>
+                                                            <th scope="col">Type vente </th>
+                                                            <th scope="col">Par</th>
+                                                            {%if current_user.role=='Gérant' and current_user.role=='Associé' %}
+                                                                <th scope="col">Boutique</th>
+                                                            {%endif%}
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       {% for liste in listes.items%}
+                                                       <tr class="text-center">
+                                                        <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
+                                                        <td> <span class="badge badge-pill badge-warning"> 
+                                                            {%if liste.type_vente==False and liste.code_id_facture==None%}  
+                                                             
+                                                            <a  target="_blank" href=" {{url_for('vente.voir_facture',facture=liste.id)}} ">{{liste.code_facture}}</a> </span> 
+                                                            {%elif liste.type_vente==True and liste.code_id_facture==None%}
+                                                            <a  target="_blank" href=" {{url_for('vente.voir_facture_gros',facture=liste.id)}} ">{{liste.code_facture}}</a> </span> 
+                                                            {%elif liste.liquidation==True and liste.type_vente==False and liste.code_id_facture!=None%} 
+                                                            <a  target="_blank" href=" {{url_for('vente.voir_facture_paye',facture=liste.code_id_facture)}} ">{{liste.code_facture}}</a> </span> 
+                                                            {%elif liste.liquidation==True and liste.type_vente==True and liste.code_id_facture!=None%}
+                                                            <a  target="_blank" href=" {{url_for('vente.voir_facture_gros_paye',facture=liste.code_id_facture)}} ">{{liste.code_facture}}</a> </span>                                                  
+                                                            {%endif%} 
+                                                            </td>                                                              
+                                                        <td>{{liste.facture_client.nom_client}}</td>
+                                                        <td>
+                                                            ${{ liste.montant|round(2)}}
+                                                        </td>
+                                                        <td>
+                                                            {%if liste.type_vente==False and liste.cash==True%}
+                                                                <span class="badge badge-pill badge-warning">Cash en detaille </span>
+                                                            {%elif liste.type_vente==True and liste.cash==True %}
+                                                                <span class="badge badge-pill badge-info">Cash en gros </span>
+                                                            {%elif liste.type_vente==False and liste.dette==True%}
+                                                                <span class="badge badge-pill badge-warning">Dette en detaille </span>
+                                                            {%elif liste.type_vente==True and liste.dette==True %}
+                                                                <span class="badge badge-pill badge-danger">Dette en gros </span>
+                                                            {%endif%}
+                                                        </td>
+                                                        <td>{{liste.facture_user.prenom}}</td>
+
+                                                        {%if current_user.role=='Gérant' and current_user.role=='Associé' %}
+                                                        <td>{{liste.facture_boutique.nom_boutique}}</td>
+                                                        {%endif%}
+                                                        <td> <span class="badge badge-pill badge-danger"> <a data-toggle="popover" data-trigger="hover" data-content="Supprimer la facture" href=" {{url_for('vente.supprimer_facture',facture=liste.id)}} "> <i class="la la-close"></i> </a> </span> </td>                                        
+                                                        </tr>
+                                                        {% endfor %} 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-center">
+                                                {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                {% if page_num %}
+                                                    {% if listes.page==page_num %}
+                                                      <a href="{{ url_for('vente.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
+                                                                              
+                                                    {% else %}
+                                                      <a href="{{ url_for('vente.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
+                                                                              
+                                                    {% endif %}
+                                                {% else %}
+                                                  ...
+                                                {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            {%else%}
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr class="text-center" >
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">Client</th>
+                                                            <th scope="col">Montant</th>
+                                                            <th scope="col">Type vente </th>
+                                                            <th scope="col">Par</th>
+                                                            {%if current_user.role=='Gérant' and current_user.role=='Associé' %}
+                                                                <th scope="col">Boutique</th>
+                                                            {%endif%}
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       <tr class="text-center">
+                                                        <th scope="row">{{liste.date.strftime('%d-%m-%Y')}} </th>
+                                                        <td> <span class="badge badge-pill badge-warning"> 
+                                                        {%if liste.type_vente==False and liste.code_id_facture==None%}  
+                                                         
+                                                        <a  target="_blank" href=" {{url_for('vente.voir_facture',facture=liste.id)}} ">{{liste.code_facture}}</a> </span> 
+                                                        {%elif liste.type_vente==True and liste.code_id_facture==None%}
+                                                        <a  target="_blank" href=" {{url_for('vente.voir_facture_gros',facture=liste.id)}} ">{{liste.code_facture}}</a> </span> 
+                                                        {%elif liste.liquidation==True and liste.type_vente==False and liste.code_id_facture!=None%} 
+                                                        <a  target="_blank" href=" {{url_for('vente.voir_facture_paye',facture=liste.code_id_facture)}} ">{{liste.code_facture}}</a> </span> 
+                                                        {%elif liste.liquidation==True and liste.type_vente==True and liste.code_id_facture!=None%}
+                                                        <a  target="_blank" href=" {{url_for('vente.voir_facture_gros_paye',facture=liste.code_id_facture)}} ">{{liste.code_facture}}</a> </span>                                                  
+                                                        {%endif%} 
+                                                        </td>                                                            
+                                                        <td>{{liste.facture_client.nom_client}}</td>
+                                                        <td>
+                                                            ${{ liste.montant|round(2)}}
+                                                        </td>
+                                                        <td>
+                                                            {%if liste.type_vente==False and liste.cash==True%}
+                                                                <span class="badge badge-pill badge-warning">Cash en detaille </span>
+                                                            {%elif liste.type_vente==True and liste.cash==True %}
+                                                                <span class="badge badge-pill badge-info">Cash en gros </span>
+                                                            {%elif liste.type_vente==False and liste.dette==True%}
+                                                                <span class="badge badge-pill badge-warning">Dette en detaille </span>
+                                                            {%elif liste.type_vente==True and liste.dette==True %}
+                                                                <span class="badge badge-pill badge-danger">Dette en gros </span>
+                                                            {%endif%}
+                                                        </td>
+                                                        <td>{{liste.facture_user.prenom}}</td>
+                                            
+                                                        {%if current_user.role=='Gérant' and current_user.role=='Associé' %}
+                                                        <td>{{liste.facture_boutique.nom_boutique}}</td>
+                                                        {%endif%}
+                                                        <td> <span class="badge badge-pill badge-danger"> <a data-toggle="popover" data-trigger="hover" data-content="Supprimer la facture" href=" {{url_for('vente.supprimer_facture',facture=liste.id)}} "> <i class="la la-close"></i> </a> </span> </td>                                        
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
+                                            {%endif%}
+                                        </fieldset>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
+
+
+{% endblock  %}

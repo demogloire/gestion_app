@@ -1,0 +1,274 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Stock disponible</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('stock.index')}}"> {{current_user.user_depot.nom_depot}}  </a>
+                            </li>
+                            <li class="breadcrumb-item active">Transfert du stock
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    {% with messages= get_flashed_messages(with_categories=true) %}
+                                    {% if messages  %}
+                                    {% for category, message in messages %}
+                                    {%if category!="danger"%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-up"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%else%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-down"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%endif%}
+
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+
+
+                                    <div class="card" style="zoom: 1;">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Fiche de stock du dépôt: {{current_user.user_depot.nom_depot}}  </h4>
+                                            <a class="heading-elements-toggle"><i
+                                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                                            <div class="heading-elements">
+                                                <ul class="list-inline mb-0">
+                                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-content collapse show">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <!-- <div class="btn-group" role="group"> -->
+                                                        <a href="{{url_for('stock.index')}} "
+                                                        class="btn btn-info"><i  class="la la-barcode"></i> Stockage
+                                                        </a>
+                                                    <a href="{{url_for('stock.transfert_depot')}} "
+                                                        class="btn btn-warning"><i  class="la la-arrows-h"></i> Transferts
+                                                    </a>
+                                                    <a href="{{url_for('stock.stock_de_depot')}} "
+                                                        class="btn btn-success"><i  class="la la-search"></i> Recherche
+                                                    </a>
+                                                    
+                                                <!-- </div> -->
+                                                </div>
+                                                
+                                                <div>
+                                                    <a href="{{url_for('stock.transfertboutique')}} "
+                                                    class="btn  btn-sm btn-light"><i  class="la la-arrows-h"></i> Transferer 
+                                                    </a>
+                                                    <a href="{{url_for('stock.trier_depot')}} "
+                                                    class="btn  btn-sm btn-primary"><i  class="la la-filter"></i> Trier 
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">Avatar</th>
+                                                            <th scope="col">Produit</th>
+                                                            <th scope="col">Qté</th>
+                                                            <th scope="col">P.U</th>
+                                                            <th scope="col">PT</th>
+                                                            <th scope="col">Qté dispo.</th>
+                                                            <th scope="col">PT dispo.</th>
+                                                            <th scope="col">Pr cpte.</th>
+                                                            <th scope="col">Par</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       {% for liste in listes.items%}
+                                                       {%if liste.solde==True%}
+                                                       <tr>
+                                                        <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
+                                                        <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
+                                                        <td> {{liste.stock_produit.nom_produit}}  </td>
+                                                        <td>{{liste.quantite }}  
+                                                            {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                {%if liste.disponible > 1 %}
+                                                                    Pièces
+                                                                {%else%}
+                                                                    Pièce
+                                                                {%endif%}
+                                                            {%else%}
+                                                                {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                    {{liste.stock_produit.emballage }}
+                                                                {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                    {{liste.stock_produit.emballage }}s
+                                                                {%else%}
+                                                                    {{liste.stock_produit.emballage }}
+                                                                {%endif%}
+                                                            {%endif%}
+
+                                                        </td>
+                                                        <td>${{ liste.prix_unit  |round(2)}} </td>
+                                                        <td>${{ liste.valeur  |round(2)}} </td>
+                                                        <td>{{liste.disponible }}  
+                                                            {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                {%if liste.disponible > 1 %}
+                                                                    Pièces
+                                                                {%else%}
+                                                                    Pièce
+                                                                {%endif%}
+                                                            {%else%}
+                                                                {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                    {{liste.stock_produit.emballage }}
+                                                                {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                    {{liste.stock_produit.emballage }}s
+                                                                {%else%}
+                                                                    {{liste.stock_produit.emballage }}
+                                                                {%endif%}
+                                                            {%endif%}
+                                                        </td>
+                                                        <td>${{ liste.valeur_dispo |round(2)}}</td>
+                                                        <td>{%if liste.stockage==True %}  
+                                                            <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
+                                                            {%elif liste.transfert==True %} 
+                                                            <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
+                                                            {%elif liste.erreur==True %} 
+                                                            <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
+                                                            {%endif%}
+                                                        </td>
+                                                        <td>
+                                                            {%if liste.stockage!=True %} 
+                                                            <span class="badge badge-pill badge-success"> {{liste.stock_user.prenom}}</span>
+                                                            {%endif%} 
+                                                        </td>
+
+                                                       </tr>
+                                                        {%endif%}
+                                                        {% endfor %} 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-center">
+                                                {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                {% if page_num %}
+                                                    {% if listes.page==page_num %}
+                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
+                                                                              
+                                                    {% else %}
+                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
+                                                                              
+                                                    {% endif %}
+                                                {% else %}
+                                                  ...
+                                                {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+
+{% endblock  %}

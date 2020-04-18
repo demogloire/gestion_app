@@ -1,0 +1,269 @@
+{% extends "layout/fac.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<script src="{{url_for('static', filename='html2pdf.bundle.min.js')}}"></script>
+<script>
+    function generatePDF() {
+
+      const element = document.getElementById("facture");
+      html2pdf()
+        .set({ html2canvas: { scale: 4 } })
+        .from(element)
+        .save();
+    }
+  </script>
+
+<script src=" {{ url_for('static', filename='JsBarcode.all.min.js')}} "></script>
+{% endblock  %}
+
+{% block body %}
+<div class="content-body">
+
+        <div class="row match-height">
+
+            <div class="col-lg-12 col-md-12">
+                
+
+                <div class="card">
+                    <div class="card-block">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3"></div>
+                                <div class="col-lg-6 col-md-6">
+ 
+                                    <span>
+                                        <a  onclick="generatePDF()" class="btn btn-sm btn-danger"> <i class="la la-file-pdf-o"></i></a>
+                                    </span>
+                                    
+                                </div>
+                                <div class="col-lg-3 col-md-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+   
+
+    <div class="basic-inputs">
+        <div class="row match-height">
+
+            <div class="col-lg-12 col-md-12">
+                
+
+                <div class="card" >
+                    <div class="card-block">
+                        <div class="card-body">
+                            <div class="row" id="facture">
+                                
+                                <div class="col-lg-12 col-md-12">
+ 
+                                    <div class="box-shadow--6dp">
+                                        <div class="card ">
+                                            <div class="card-header">
+                                                <svg id="barcode"></svg><br><br>
+                                                Facture: {{facture_d.code_facture}}  <br>
+                                                Date: <strong>{{facture_d.date.strftime('%d/%m/%Y')}}</strong>
+                                                <span class="float-right"> <strong>Statut:</strong> 
+                                                    {%if facture_d.cash==1 %}
+                                                        Cash
+                                                    {%elif facture_d.dette==1 %}
+                                                        Crédit
+                                                    {%elif facture_d.annule==1 %}
+                                                        Annulée
+                                                    {%elif facture_d.vente_acompte==1 %}
+                                                        Vente à decouvert
+                                                    {%endif%}
+                                                </span>
+
+                                            </div>
+                                            <div class="card-body">
+
+                                                <div class="row mb-4">
+                                                    <div class="col-sm-6">
+                                                        <h6 class="mb-3">De:</h6>
+                                                        <div>
+                                                            <strong>
+                                                                {%if current_user.user_entreprise !=None %}
+                                                                {{current_user.user_entreprise.denomination}} 
+                                                                {%endif%} 
+                                                            </strong>
+                                                        </div>
+                                                        <div>{%if current_user.user_entreprise !=None %}
+                                                            {{current_user.user_entreprise.adresse}} 
+                                                            {%endif%} 
+                                                        </div>
+                                                        <div>{%if current_user.user_entreprise !=None %}
+                                                            {{current_user.user_entreprise.siege_social}} 
+                                                            {%endif%} 
+                                                        </div>
+                                                        <div>{%if current_user.user_entreprise !=None %}
+                                                            Phone:{{current_user.user_entreprise.telephone}} 
+                                                            {%endif%} 
+                                                        </div>
+                                                        <div>{%if current_user.user_entreprise !=None %}
+                                                            E-mail:{{current_user.user_entreprise.email}} 
+                                                            {%endif%} 
+                                                        </div>
+                                                        <div>{%if current_user.user_entreprise !=None %}
+                                                            {{current_user.user_entreprise.personalite}} 
+                                                            {%endif%} 
+                                                        </div>
+                                                    </div>
+                                
+                                                    <div class="col-sm-6">
+                                                        <h6 class="mb-3"> A:</h6>
+                                                        <div>
+                                                            <strong>{{facture_d.facture_client.nom_client}}</strong>
+                                                        </div>
+                                                        <div>
+                                                            {%if facture_d.facture_client.adresse!=None%}
+                                                                {{facture_d.facture_client.adresse}}
+                                                            {%endif%}
+                                                        </div>
+                                                        <div>
+                                                            {%if facture_d.facture_client.email!=None%}
+                                                                {{facture_d.facture_client.email}}
+                                                            {%endif%}
+                                
+                                                        </div>
+                                                        <div>
+                                                            {%if facture_d.facture_client.tel_client!=None%}
+                                                                {{facture_d.facture_client.tel_client}}
+                                                            {%endif%}
+                                                        </div>
+                                                    </div>
+                                
+                                
+                                
+                                                </div>
+
+                                                <div class="table-responsive-sm">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                
+                                                                <th class="center">#</th>
+                                                                <th>Description</th>
+                                                                <th class="right">Qté</th>
+                                                                <th class="center">P.U</th>
+                                                                <th class="right">Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {%for facture in facture_encours%}
+                                                            <tr>
+                                                               
+                                                                <td class="center">{{loop.index}}  </td>
+                                                                <td class="left">{{facture.vente_produitboutique.nom_produit}}</td>
+                                                                <td class="right">{{ facture.quantite|round(2)}} </td>
+                                                                <td class="center"> ${{ facture.prix_unitaire|round(2)}}</td>
+                                                                <td class="right">${{ facture.montant|round(2)}}</td>
+                                                            </tr>
+                                                            {%endfor%}
+                                                            <tr>
+                                                                <td colspan="6">Payement de la facture</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="center">#</td>
+                                                                <td class="left">Date</td>
+                                                                <td class="right">Code </td>
+                                                                <td class="center"> Description</td>
+                                                                <td class="right">Montant</td>
+                                                            </tr>
+
+                                                            {%for payement in payements%}
+                                                            <tr>
+                                                                <td class="center">{{loop.index}}  </td>
+                                                                <td class="left strong">{{payement.date.strftime('%d/%m/%Y')}}  </td>
+                                                                <td class="left">{{ payement.code_payement }}</td>
+                                                                <td class="right">{{ payement.denomination }} </td>
+                                                                <td class="right">${{ payement.montant|round(2)}}</td>
+                                                            </tr>
+                                                            {%endfor%}
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-sm-5">
+
+                                                    </div>
+
+                                                    <div class="col-lg-5 col-sm-5 ml-auto">
+                                                        <table class="table table-clear">
+                                                            <table class="table table-clear">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="left">
+                                                                            <strong>Sous-total</strong>
+                                                                        </td>
+                                                                        <td class="right">${{ (nbr_tot_dette) |round(2) }} </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="left">
+                                                                            <strong>Payement</strong>
+                                                                        </td>
+                                                                        <td class="right">${{ nbr_tot_payer |round(2) }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="left">
+                                                                            <strong>Reduction</strong>
+                                                                        </td>
+                                                                        <td class="right">$0</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="left">
+                                                                            <strong>TVA</strong>
+                                                                        </td>
+                                                                        <td class="right">$0</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="left">
+                                                                            <strong>Total</strong>
+                                                                        </td>
+                                                                        <td class="right">
+                                                                            <strong>${{ facture_d.montant|round(2)}}</strong>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </table>
+
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    JsBarcode("#barcode", "{{facture_d.code_facture}}",{
+        height: 40,
+        background: "#dddddd",
+        displayValue: false
+    });
+</script>
+{% endblock  %}

@@ -196,7 +196,7 @@
                                                     <i class="la la-barcode"></i> Transfert vers boutique
                                                 </button>
                                              
-                                                <a href=" {{url_for('stock.index')}}  " class="btn btn-min-width mr-1 mb-1 btn-danger"><i class="la la-close"></i>Terminer</a>
+                                                <a href=" {{url_for('stock.transfert_depot')}}  " class="btn btn-min-width mr-1 mb-1 btn-danger"><i class="la la-close"></i>Terminer</a>
                                                 
                                                     
                                             </div>
@@ -245,7 +245,8 @@
         uiLibrary: 'bootstrap4',
         icons: {
             rightIcon: '<i class="la la-calendar"></i>'
-        }
+        },
+        format: 'dd/mm/yyyy'
     });
 </script>
 

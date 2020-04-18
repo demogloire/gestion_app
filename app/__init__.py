@@ -17,6 +17,7 @@ bcrypt = Bcrypt()
 
 path = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
 
+
 def create_app(config_name):
     # Les configuration de l'application
     app = Flask(__name__, instance_relative_config=True)
@@ -73,9 +74,16 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    #Dashboard
+    #Stock
     from .stock import stock as stock_blueprint
     app.register_blueprint(stock_blueprint)
+
+    #Vente
+    from .vente import vente as vente_blueprint
+    app.register_blueprint(vente_blueprint)
+
+    
+
 
 
 
