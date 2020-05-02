@@ -1,0 +1,274 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Clients</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('client.index')}}">Client</a>
+                            </li>
+                            <li class="breadcrumb-item active">Opérations clients
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Gestion des clients</h4>
+                                                <p>Toutes les opérations des clients</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('compte.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-money primary font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="primary">Opérations</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href=" {{url_for('client.index_dette')}} ">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-cart-plus danger font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Dette</h3>
+                                                                                <span class="danger">Clients</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                        <div class="col-xl-12 col-sm-12 col-12">
+                                                            <div class="card">
+                                                                <a href=" {{url_for('client.index_conf')}}  ">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-users warning font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Clients</h3>
+                                                                                <span class="warning">Configurations</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            </div>
+                                                        </div>
+
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="height-400">
+                                                            <canvas id="line-chart"></canvas>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+
+<script>
+    $(window).on("load", function(){
+
+//Get the context of the Chart canvas element we want to select
+var ctx = $("#line-chart");
+
+// Chart Options
+var chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+        position: 'bottom',
+    },
+    hover: {
+        mode: 'label'
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Client'
+            }
+        }],
+        yAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Montant en $'
+            }
+        }]
+    },
+    title: {
+        display: true,
+        text: '30 clients les plus en dettés'
+    }
+};
+
+// Chart Data
+var chartData = {
+    labels: [{% for item in label %}"{{item}}",{% endfor %}],
+    datasets: [{
+        label: "Dette en USD",
+        data: [{% for item in series %}{{item}},{% endfor %}],
+        fill: false,
+        borderDash: [5, 5],
+        borderColor: "#9C27B0",
+        pointBorderColor: "#9C27B0",
+        pointBackgroundColor: "#FFF",
+        pointBorderWidth: 2,
+        pointHoverBorderWidth: 2,
+        pointRadius: 4,
+    }]
+};
+
+var config = {
+    type: 'line',
+
+    // Chart Options
+    options : chartOptions,
+
+    data : chartData
+};
+
+// Create the chart
+var lineChart = new Chart(ctx, config);
+});
+</script>
+
+
+{% endblock  %}

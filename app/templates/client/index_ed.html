@@ -1,0 +1,295 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+
+<script src=" {{ url_for('static', filename='summnernote/jquer.js')}} "></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Clients</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('client.index')}}">Client</a>
+                            </li>
+                            <li class="breadcrumb-item active">Modification de client
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Gestion des clients</h4>
+                                                <p>Toutes les opérations des clients</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('compte.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-money primary font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="primary">Opérations</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-cart-plus danger font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body text-right">
+                                                                            <h3>Dette</h3>
+                                                                            <span class="danger">Clients</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                        <div class="col-xl-12 col-sm-12 col-12">
+                                                            <div class="card">
+                                                                <a href="">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-users warning font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Clients</h3>
+                                                                                <span class="warning">Configurations</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">                                          
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <fieldset class="scheduler-border">
+                                                            <legend class="scheduler-border">Les informations du client</legend>
+
+                                                        <form action="" method="POST">
+    
+                                                            {{ form.csrf_token }}                      
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Nom du client</label>
+                                                                        {% if form.nom_client.errors %}
+                                                                        {{ form.nom_client(class="form-control input-lg is-invalid")}}
+                                                                        <div class="invalid-feedback">
+                                                                            {% for error in form.nom_client.errors %}
+                                                                                <span>{{ error }}</span>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% else %}
+                                                                        {{ form.nom_client(class="form-control input-lg")}}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>Téléphone</label>
+                                                                        {% if form.tel_client.errors %}
+                                                                        {{ form.tel_client(class="form-control input-lg is-invalid")}}
+                                                                        <div class="invalid-feedback">
+                                                                            {% for error in form.tel_client.errors %}
+                                                                                <span>{{ error }}</span>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% else %}
+                                                                        {{ form.tel_client(class="form-control input-lg")}}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>E-mail</label>
+                                                                        {% if form.email.errors %}
+                                                                        {{ form.email(class="form-control input-lg is-invalid")}}
+                                                                        <div class="invalid-feedback">
+                                                                            {% for error in form.email.errors %}
+                                                                                <span>{{ error }}</span>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% else %}
+                                                                        {{ form.email(class="form-control input-lg")}}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Adresse</label>
+                                                                        {% if form.adresse.errors %}
+                                                                        {{ form.adresse(class="form-control input-lg is-invalid")}}
+                                                                        <div class="invalid-feedback">
+                                                                            {% for error in form.adresse.errors %}
+                                                                                <span>{{ error }}</span>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% else %}
+                                                                        {{ form.adresse(class="form-control input-lg")}}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Groupe client</label>
+                                                                        {% if form.typeclient_id.errors %}
+                                                                        {{ form.typeclient_id(class="form-control input-lg is-invalid")}}
+                                                                        <div class="invalid-feedback">
+                                                                            {% for error in form.typeclient_id.errors %}
+                                                                                <span>{{ error }}</span>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% else %}
+                                                                        {{ form.typeclient_id(class="form-control input-lg")}}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                                <div class="text-center mb-1">
+                                                                    <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
+                                                                        <i class="la la-edit"></i> Modifier 
+                                                                    </button> 
+                                                                </div>
+                                                        </form>
+                                                    </fieldset>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
+
+{% endblock  %}

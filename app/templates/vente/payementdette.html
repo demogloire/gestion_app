@@ -77,6 +77,8 @@
                                             <span>
                                                 <a href="" data-toggle="modal" data-target="#agence" class="btn btn-md btn-info"> <i class="la la-money"></i> Payer la facture</a>
                                                 <a href=" {{url_for('vente.payement_facture_total', facture=facture_d.id)}} " class="btn btn-md btn-warning"> <i class="la la-money"></i> Payer la totalité</a>
+                                                <a href="" data-toggle="modal" data-target="#parcompte" class="btn btn-md btn-light"> <i class="la la-money"></i> Payer par compte</a>
+                                              
                                             </span> <br><br>
                                             <span>
 
@@ -353,6 +355,41 @@
                       <button type="submit" name="submit" class="btn btn-success text-white px-4"><i class="la la-money"></i> Payer</button>
                     </div>
                   </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade " id="parcompte" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-md modal-center">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="text-center"><h4 class="modal-title">Payer par compte client
+                </h4></span>
+            </div>
+            <div class="modal-body text-center">
+                <form   action=" {{url_for('vente.payement_facture_total_compte', facture=facture_d.id)}}  "   class="text-center"  method="POST">
+                    {{ rech.csrf_token }}
+                    <div class="form-group d-flex text-center" >
+                        {% if rech.clients_client.errors %}
+                        {{ rech.clients_client(class="form-control form-control-sm  is-invalid", placeholder="Chercher une facture")}}
+                        <i class="form-group__bar"></i>
+                        <div class="invalid-feedback">
+                          {% for error in rech.clients_client.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ rech.clients_client(class="form-control form-control-sm  ")}}
+                        <i class="form-group__bar"></i>
+                        {% endif %}
+                        <button type="submit" name="submit" class="btn  btn-sm btn-info text-white px-4">Chercher</button>
+                    </div>
+                </form>
 
             </div>
         </div>

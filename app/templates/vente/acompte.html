@@ -36,7 +36,7 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Accompte</h3>
+                <h3 class="content-header-title">Acompte</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
@@ -207,11 +207,13 @@
                                                         <td>{{liste.facture_boutique.nom_boutique}}</td>
                                                         {%endif%}
                                                         <td> 
+                                                            {%if liste.valide_account==False %}
                                                             <span class="badge badge-pill badge-success"> 
                                                                 <a data-toggle="popover" data-trigger="hover" data-content="Acquitter l'acompte" href=" {{url_for('vente.acompte_facture',facture=liste.id)}} "> <i class="la la-check-circle"></i> </a> 
                                                             </span>
+                                                            {%endif%}
                                                             <span class="badge badge-pill badge-danger">  
-                                                                <a data-toggle="popover" data-trigger="hover" data-content="Supprimer la facture" href=" {{url_for('vente.supprimer_facture',facture=liste.id)}} "> <i class="la la-close"></i> </a> 
+                                                                <a data-toggle="popover" data-trigger="hover" data-content="Supprimer la facture" href=" {{url_for('vente.sup_acompte_facture',facture=liste.id)}} "> <i class="la la-close"></i> </a> 
                                                             </span> 
                                                             </td>  </tr>
                                                         {% endfor %} 

@@ -1,0 +1,396 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Stock disponible</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('stock.boutique_stock')}}"> {{current_user.user_boutique.nom_boutique}}  </a>
+                            </li>
+                            <li class="breadcrumb-item active">Fiche de stock
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    {% with messages= get_flashed_messages(with_categories=true) %}
+                                    {% if messages  %}
+                                    {% for category, message in messages %}
+                                    {%if category!="danger"%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-up"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%else%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-down"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%endif%}
+
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+
+
+                                    <div class="card" style="zoom: 1;">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Fiche de stock de boutique: {{current_user.user_boutique.nom_boutique}}  </h4>
+                                            <a class="heading-elements-toggle"><i
+                                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                                            <div class="heading-elements">
+                                                <ul class="list-inline mb-0">
+                                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-content collapse show">
+                                            <div class="card-body" style="margin-bottom:20px ;">
+                                                
+                                                
+                                                <fieldset class="scheduler-border">
+                                                    <legend class="scheduler-border">Stock disponible:</legend>
+                                                <div >
+                                                    <span class="pull-right" style="margin-bottom:10px;">
+                                                    <a data-toggle="modal" href="" class="btn btn-sm btn-danger" data-target="#graphique_stock"><i  class="la la-bar-chart"></i> 
+                                                    </a>
+                                                </span>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Date</th>
+                                                                <th scope="col">Avatar</th>
+                                                                <th scope="col">Produit</th>
+                                                                <th scope="col">Qté dispo.</th>
+                                                                <th class="text-center" scope="col">Action</th>
+                                                                
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+    
+                                                           {% for liste in listes.items%}
+                                                            <tr>
+                                                                <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
+                                                                <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produitboutique.avatar))}} " height="40px" width="40px"></td>
+                                                                <td> {{liste.stock_produitboutique.nom_produit}}  </td>
+                                                                <td> 
+                                                                    {%if liste.stock_produitboutique.emballage=='Vrac'%}
+                                                                        {%if liste.disponible > 1 %}
+                                                                            {{liste.disponible }}  Pièces
+                                                                        {%else%}
+                                                                            {{liste.disponible }}  Pièce
+                                                                        {%endif%}
+                                                                    {%else%}
+                                                                        {%if liste.disponible >= 0  and liste.stock_produitboutique.emballage=="Box" %}
+                                                                            {{liste.disponible}}  Pièce ( {{ (liste.disponible/liste.stock_produitboutique.nombre_contenu)|round(1) }}{{liste.stock_produitboutique.emballage }} )
+                                                                        {%elif liste.disponible > 1  and liste.stock_produitboutique.emballage !="Box" %}
+                                                                            {{liste.disponible}} Pièces ( {{ (liste.disponible/liste.stock_produitboutique.nombre_contenu)|round(1) }}{{liste.stock_produitboutique.emballage }}s )
+                                                                        {%else%}
+                                                                            {{liste.disponible}} Pièces ( {{ (liste.disponible/liste.stock_produitboutique.nombre_contenu)|round(1) }}{{liste.stock_produitboutique.emballage }} )
+                                                                        {%endif%}
+                                                                    {%endif%}
+                                                                </td>
+                                                                <td class="text-center"><a href="" class="btn btn-sm btn-info" data-toggle="modal"  data-target="#id{{liste.id}}"> <i class="la la-archive"></i> </a></td>
+                                                            </tr>
+                                                            <div class="modal fade " id="id{{liste.id}}" role="dialog" style="margin-top: 100px;">
+                                                                <div class="modal-dialog modal-lg">
+                                        
+                                                                    <!-- Modal content-->
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body">
+                                        
+                                                                            <div class="card">
+                                                                                <div class="row">
+                                                                                    <aside class="col-sm-5 border-right">
+                                                                                        <article class="gallery-wrap">
+                                                                                            <div class="img-big-wrap">
+                                                                                                <div> <a href="#" ><img style="border-radius: 5px;" width="300px" src="{{url_for('static', filename='produit/{}'.format(liste.stock_produitboutique.avatar))}}"></a>
+                                                                                                </div>
+                                                                                            </div> <!-- slider-product.// -->
+                                                                                        </article> <!-- gallery-wrap .end// -->
+                                                                                    </aside>
+                                                                                    <aside class="col-sm-7">
+                                                                                        <article class="card-body p-5">
+                                                                                            <h3 class="title mb-3">{{liste.stock_produitboutique.code_produit}} - {{liste.stock_produitboutique.nom_produit}}</h3>
+                                        
+                                                                                            <p class="price-detail-wrap">
+                                                                                                <span class="price h3 text-warning">
+                                                                                                    <span class="currency">Emballage</span>
+                                                                                                </span>
+                                                                                                <span> :
+                                                                                                    {%if liste.stock_produitboutique.emballage=='Vrac'%}
+                                                                                                        Pièce
+                                                                                                    {%else%}
+                                                                                                        {{liste.stock_produitboutique.emballage}}
+                                                                                                    {%endif%}
+                                                                                                </span><br><br>
+                                                                                                <span> 
+                                                                                                    {%if liste.stock_produitboutique.emballage=='Vrac'%}
+                                                                                                        Contenu par emballage: <b>Une seule pièce </b> 
+                                                                                                    {%else%}
+                                                                                                        Contenu de {{liste.stock_produitboutique.emballage}}: <b>{{liste.stock_produitboutique.nombre_contenu}}</b>
+                                                                                                    {%endif%}
+                                                                                                     </span><br>
+                                                                                                <hr>
+                                                                                            </p> <!-- price-detail-wrap .// -->
+                                                                                            <dl class="item-property">
+                                                                                                <dt>Description</dt>
+                                                                                                <dd>
+                                                                                                    <p>{{liste.stock_produitboutique.description|safe}} </p>
+                                                                                                </dd>
+                                                                                            </dl>
+                                                                                            <dl class="param param-feature">
+                                                                                                <dt>Prix de vente par pièce détaille:</dt>
+                                                                                                <dd>${{ liste.stock_produitboutique.vt_detaille_piece|round(2)}}</dd>
+                                                                                            </dl> <!-- item-property-hor .// -->
+                                                                                            <dl class="param param-feature">
+                                                                                                <dt>Prix de vente de produit en en gros:</dt>
+                                                                                                <dd>${{ liste.stock_produitboutique.vt_gros_entier|round(2)}}</dd>
+                                                                                            </dl> <!-- item-property-hor .// -->
+                                        
+                                                                                            <hr>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-12">
+                                                                                                    <dl class="param param-inline">
+                                                                                                        <dt>Categorie: </dt>
+                                                                                                        <dd>
+                                                                                                            <h5>{{liste.stock_produitboutique.produitboutique_categorie.nom_categorie}}</h5>
+                                                                                                        </dd>
+                                                                                                    </dl> <!-- item-property .// -->
+                                                                                                </div> <!-- col.// -->
+                                                                                            </div> <!-- row.// -->
+                                         
+                                                                                        </article> <!-- card-body.// -->
+                                                                                    </aside> <!-- col.// -->
+                                                                                </div> <!-- row.// -->
+                                                                            </div> <!-- card.// -->
+                                        
+                                        
+                                                                        </div>
+                                                                    </div>
+                                        
+                                                                </div>
+                                                            </div>
+                                                            {% endfor %} 
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="text-center">
+                                                    {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                    {% if page_num %}
+                                                        {% if listes.page==page_num %}
+                                                          <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
+                                                                                  
+                                                        {% else %}
+                                                          <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
+                                                                                  
+                                                        {% endif %}
+                                                    {% else %}
+                                                      ...
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+<div class="modal fade " id="graphique_stock" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="height-400">
+                    <canvas id="column-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script>
+    $(window).on("load", function(){
+
+//Get the context of the Chart canvas element we want to select
+var ctx = $("#column-chart");
+
+// Chart Options
+var chartOptions = {
+    // Elements options apply to all of the options unless overridden in a dataset
+    // In this case, we are setting the border of each bar to be 2px wide and green
+    elements: {
+        rectangle: {
+            borderWidth: 2,
+            borderColor: 'rgb(0, 255, 0)',
+            borderSkipped: 'bottom'
+        }
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    responsiveAnimationDuration:500,
+    legend: {
+        position: 'top',
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+            }
+        }],
+        yAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f2f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+            }
+        }]
+    },
+};
+
+// Chart Data
+var chartData = {
+    labels: [{% for item in label %}"{{item}}",{% endfor %}],
+    datasets: [{
+        label: "Stock par produit",
+        data: [{% for item in series %}{{item}},{% endfor %}],
+
+        backgroundColor: "#5b712c",
+        hoverBackgroundColor: "rgba(40,208,148,.9)",
+        borderColor: "transparent"
+    },]
+};
+
+var config = {
+    type: 'bar',
+
+    // Chart Options
+    options : chartOptions,
+
+    data : chartData
+};
+
+// Create the chart
+var lineChart = new Chart(ctx, config);
+});
+</script>
+
+
+{% endblock  %}

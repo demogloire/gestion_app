@@ -160,17 +160,17 @@
                                                                
                                                                 <td class="center">{{loop.index}}  </td>
                                                                 <td class="left">{{facture.vente_produitboutique.nom_produit}}</td>
-                                                                <td class="right">{{ (facture.quantite|int / facture.vente_produitboutique.nombre_contenu|int)|int }} 
+                                                                <td class="right">{{ (facture.quantite / facture.vente_produitboutique.nombre_contenu|round(2))|round(2) }} 
                                                                     {%if facture.vente_produitboutique.emballage=='Vrac'%}
-                                                                        {%if (facture.quantite|int / facture.vente_produitboutique.nombre_contenu|int)|int > 1 %}
+                                                                        {%if (facture.quantite|round(2) / facture.vente_produitboutique.nombre_contenu|round(2))|round(2) > 1 %}
                                                                             Pièces
                                                                         {%else%}
                                                                             Pièce
                                                                         {%endif%}
                                                                     {%else%}
-                                                                        {%if (facture.quantite|int / facture.vente_produitboutique.nombre_contenu|int)|int >= 0  and facture.vente_produitboutique.emballage=="Box" %}
-                                                                            {{facture.stock_produit.emballage }}
-                                                                        {%elif (facture.quantite|int / facture.vente_produitboutique.nombre_contenu|int)|int > 1  and facture.vente_produitboutique.emballage !="Box" %}
+                                                                        {%if (facture.quantite|round(2) / facture.vente_produitboutique.nombre_contenu|round(2))|round(2) >= 0  and facture.vente_produitboutique.emballage=="Box" %}
+                                                                            {{facture.vente_produitboutique.emballage }}
+                                                                        {%elif (facture.quantite|round(2) / facture.vente_produitboutique.nombre_contenu|round(2))|round(2) > 1  and facture.vente_produitboutique.emballage !="Box" %}
                                                                             {{facture.vente_produitboutique.emballage }}s
                                                                         {%else%}
                                                                             {{facture.vente_produitboutique.emballage }}

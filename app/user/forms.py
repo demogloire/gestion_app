@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length,Email, EqualTo, ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 import re
-
+import phonenumbers
 
 from ..models import User, Boutique, Depot
 
@@ -19,6 +19,7 @@ class AjoutUserForm(FlaskForm):
     post_nom= StringField('Post-Nom', validators=[DataRequired("Completer le post-nom"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
     prenom= StringField('Prénom', validators=[DataRequired("Completer le prenom"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
     adress= StringField('Adresse', validators=[DataRequired("Completer l'adresse"),  Length(min=2, max=200, message="Veuillez respecté les caractères")])
+    #phone= StringField('Adresse', validators=[DataRequired("Completer le téléphone"),  Length(min=10, max=125, message="Veuillez respecté les caractères")])
     tel= StringField('Adresse', validators=[DataRequired("Completer le téléphone"),  Length(min=10, max=125, message="Veuillez respecté les caractères")])
     email= StringField('Email', validators=[DataRequired('Veuillez completer votre email'), Email('Votre email est incorrect')])
     password= PasswordField('Mot de passe', validators=[DataRequired("Completer votre mot de passe"),  Length(min=6, max=13, message="Veuillez respecté les caractères")])
@@ -36,6 +37,14 @@ class AjoutUserForm(FlaskForm):
         if user:
             raise ValidationError("Cet utilisateur existe déjà")
     
+    # def validate_phone(self, phone):
+    #     try:
+    #         p = phonenumbers.parse(phone.data)
+    #         if not phonenumbers.is_valid_number(p):
+    #             raise ValueError()
+    #     except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
+    #         raise ValidationError('Invalid phone number')
+
     #Numero de téléphone. validation
     def validate_tel(self, tel):
         tel=tel.data

@@ -3,12 +3,9 @@
 {% block hprincipal %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
-<link rel="stylesheet" type="text/css"
-    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
-<link rel="stylesheet" type="text/css"
-    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
-
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
 <link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
@@ -212,7 +209,8 @@
                                                         {%if current_user.role=='Gérant' and current_user.role=='Associé' %}
                                                         <td>{{liste.facture_boutique.nom_boutique}}</td>
                                                         {%endif%}
-                                                        <td> <span class="badge badge-pill badge-danger"> <a data-toggle="popover" data-trigger="hover" data-content="Supprimer la facture" href=" {{url_for('vente.supprimer_facture',facture=liste.id)}} "> <i class="la la-close"></i> </a> </span> </td>                                        
+                                                        <td> <span class="badge badge-pill badge-danger"> 
+                                                            <a data-toggle="popover" data-trigger="hover" data-content="Supprimer la facture" href=" {{url_for('vente.supprimer_facture',facture=liste.id)}} "> <i class="la la-close"></i> </a> </span> </td>                                        
                                                         </tr>
                                                         {% endfor %} 
                                                     </tbody>

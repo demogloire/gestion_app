@@ -3,16 +3,15 @@ from .. import db, bcrypt
 from ..models import User, Boutique, Depot, Entreprise
 from app.user.forms import AjoutUserForm, EditUserForm, PassuserForm, SuperAjoutUserForm, InformationEntrepriseForm
 from app.user.utility import save_picture, verification_de_role
+from app.user.autorisation  import autorisation_gerant
 from flask_login import login_user, current_user, login_required
 
-
-
-import flask_sijax
 from . import user
 
 """ Ajout utilisateur"""
 @user.route('/ajouter_utilisateur', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def ajouterutilisateur():
    #Un utilisateur
    form=AjoutUserForm()
@@ -75,6 +74,7 @@ def ajouterutilisateur():
 
 @user.route('/')
 @login_required
+@autorisation_gerant
 def index():
    #Titre de l'onglet
    title="Liste des utlisateurs"
@@ -86,6 +86,7 @@ def index():
 """Statut de l'utilisateur"""
 @user.route('/activation/<int:id_user>/utilisateur',methods=('GET', 'POST') )
 @login_required
+@autorisation_gerant
 def activationuser(id_user):
    #Vérification de l'existence de l'utilisateur
    user_profil=User.query.filter_by(id=id_user).first_or_404()
@@ -105,6 +106,7 @@ def activationuser(id_user):
 """ Ajout utilisateur"""
 @user.route('/miseajour/<int:id_user>', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def miseajour_utilisateur(id_user):
    #Un utilisateur
    form=EditUserForm()
@@ -264,7 +266,7 @@ def superajouterutilisateur():
          user_nv=User(nom=form.nom.data.upper(), post_nom=form.post_nom.data.upper(), prenom=form.prenom.data.capitalize(),\
          adress=form.adress.data, tel=form.tel.data, email=form.email.data,\
          password=password_hash, password_onhash=form.password.data, depot_id=id_depot,\
-         boutique_id=id_boutique,avatar=avatar_user,role=form.role.data,statut=True)
+         boutique_id=id_boutique,avatar=avatar_user,role=form.role.data,statut=True, pp_admin=True)
          db.session.add(user_nv)
          db.session.commit()
          session['user_id']=user_nv.id
@@ -274,7 +276,7 @@ def superajouterutilisateur():
          user_nv=User(nom=form.nom.data.upper(), post_nom=form.post_nom.data.upper(), prenom=form.prenom.data.capitalize(),\
          adress=form.adress.data, tel=form.tel.data, email=form.email.data,\
          password=password_hash, password_onhash=form.password.data, depot_id=id_depot,\
-         boutique_id=id_boutique,role=form.role.data,statut=True)
+         boutique_id=id_boutique,role=form.role.data,statut=True, pp_admin=True)
          db.session.add(user_nv)
          db.session.commit()
          session['user_id']=user_nv.id

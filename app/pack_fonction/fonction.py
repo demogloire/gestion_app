@@ -7,7 +7,7 @@ from .. import create_app
 from .. import db, vente
 from functools import wraps
 
-from ..models import Produit, Facture, Client, Typeclient 
+from ..models import Produit, Facture, Client, Typeclient, Comptes 
 
 
 config_name = os.getenv('FLASK_CONFIG')
@@ -228,6 +228,39 @@ def validationtype_dette():
         return None
 
 
+#Autorisation des vendeur
+def autorisation_gerant(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if current_user.role =='Gérant':
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('main.index'))       
+    return wrap
+
+#Compte de gestion des clients
+def compte_client():
+    #Caisse=01, Compte bancaire=02, Client=03, Autres=04
+    comptes_client=Comptes.query.filter_by(boutique_id=current_user.boutique_id).order_by(Comptes.id.desc()).first()
+    numero_client=None
+    code_gestion=None
+    branche_gestion="03"
+    if comptes_client is None:
+        numero_client='001'
+    else:
+        numero_client=f'00{comptes_client.id + 1}'
+    
+    if current_user.role=='Gérant':
+        code_gestion=1
+    else:
+        code_gestion=current_user.boutique_id
+    
+    compte_complet_client=f"{code_gestion} - {numero_client} - {branche_gestion}"
+    
+    return compte_complet_client
+    
+
+    
 
 
 

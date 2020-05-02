@@ -2,12 +2,14 @@ from flask import render_template, flash, url_for, redirect, request
 from .. import db
 from ..models import Fournisseur
 from app.fournisseur.forms import FournisseurForm, FournisseurMAJForm
+from app.fournisseur.autorisation  import autorisation_gerant
 from flask_login import login_user, current_user, logout_user, login_required
 
 from . import fournisseur
 
 @fournisseur.route('/ajouter_fournisseur', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def ajouterfounisseur():
     #Les catagories de livre
     title="Fournisseur | Lambda Gestion"
@@ -31,6 +33,7 @@ def ajouterfounisseur():
 
 @fournisseur.route('/')
 @login_required
+@autorisation_gerant
 def index():
     #Les forunisseurs de l'entreprise
     title="Fournisseur | Lambda Gestion"

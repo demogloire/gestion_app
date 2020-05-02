@@ -12,10 +12,10 @@ class Produit(db.Model):
     code_produit = db.Column(db.String(128))
     nom_produit = db.Column(db.String(128))
     description = db.Column(db.Text)
-    vt_gros_piece = db.Column(db.DECIMAL(precision=20, scale=16))
-    vt_detaille_piece = db.Column(db.DECIMAL(precision=20, scale=16))
-    vt_gros_entier = db.Column(db.DECIMAL(precision=20, scale=16))
-    cout_d_achat = db.Column(db.DECIMAL(precision=20, scale=16))
+    vt_gros_piece = db.Column(db.DECIMAL(precision=30, scale=16))
+    vt_detaille_piece = db.Column(db.DECIMAL(precision=30, scale=16))
+    vt_gros_entier = db.Column(db.DECIMAL(precision=30, scale=16))
+    cout_d_achat = db.Column(db.DECIMAL(precision=30, scale=16))
     avatar = db.Column(db.String(128), default="avatar.jpg")
     emballage = db.Column(db.String(128))
     nombre_contenu=db.Column(db.Integer, default=1)
@@ -42,23 +42,24 @@ class Typecommande(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     commande = db.Column(db.String(128))
     date_commande = db.Column(db.Date)
-    valeur = db.Column(db.DECIMAL(precision=20, scale=16))
+    valeur = db.Column(db.DECIMAL(precision=30, scale=16))
     commandes = db.relationship('Commande', backref='commande_typecommande', lazy='dynamic')
 
 class Typeclient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom_type = db.Column(db.Text)
+    seuil = db.Column(db.DECIMAL(precision=30, scale=16))
     statut = db.Column(db.Boolean, default=False) 
     clients = db.relationship('Client', backref='client_typeclient', lazy='dynamic')
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantite = db.Column(db.Integer)
-    valeur = db.Column(db.DECIMAL(precision=20, scale=16))
+    valeur = db.Column(db.DECIMAL(precision=30, scale=16))
     datest = db.Column(db.Date)
-    prix_unit = db.Column(db.DECIMAL(precision=20, scale=16))
+    prix_unit = db.Column(db.DECIMAL(precision=30, scale=16))
     disponible = db.Column(db.Integer, default=0)
-    valeur_dispo = db.Column(db.DECIMAL(precision=20, scale=16), default=0)
+    valeur_dispo = db.Column(db.DECIMAL(precision=30, scale=16), default=0)
     stockage = db.Column(db.Boolean, default=False)
     transfert = db.Column(db.Boolean, default=False)
     erreur = db.Column(db.Boolean, default=False)
@@ -78,6 +79,9 @@ class Depot(db.Model):
     nom_depot = db.Column(db.String(128))
     stocks = db.relationship('Stock', backref='stock_depot', lazy='dynamic')
     users = db.relationship('User', backref='user_depot', lazy='dynamic')
+    depenses = db.relationship('Depense', backref='depense_depot', lazy='dynamic')
+    comptess = db.relationship('Comptes', backref='depot_compte', lazy='dynamic')
+
 
 
 class Boutique(db.Model):
@@ -85,10 +89,11 @@ class Boutique(db.Model):
     nom_boutique = db.Column(db.String(128))
     factures = db.relationship('Facture', backref='facture_boutique', lazy='dynamic')
     produitboutiques = db.relationship('Produitboutique', backref='produitboutique_boutique', lazy='dynamic')
-    comptedepenses = db.relationship('Comptedepense', backref='comptedepense_boutique', lazy='dynamic')
+    depenses = db.relationship('Depense', backref='depense_boutique', lazy='dynamic')
     clients = db.relationship('Client', backref='client_boutique', lazy='dynamic')
     users = db.relationship('User', backref='user_boutique', lazy='dynamic')
     stocks = db.relationship('Stock', backref='stock_boutique', lazy='dynamic')
+    comptess = db.relationship('Comptes', backref='compte_boutique', lazy='dynamic')
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,16 +104,17 @@ class Client(db.Model):
     factures = db.relationship('Facture', backref='facture_client', lazy='dynamic')
     typeclient_id = db.Column(db.Integer, db.ForeignKey('typeclient.id'), nullable=False)
     boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'), nullable=False)
+    comptess = db.relationship('Comptes', backref='compte_client', lazy='dynamic')
 
 class Produitboutique(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_produit = db.Column(db.String(128))
     nom_produit = db.Column(db.String(128))
     description = db.Column(db.Text)
-    vt_gros_piece = db.Column(db.DECIMAL(precision=20, scale=16))
-    vt_detaille_piece = db.Column(db.DECIMAL(precision=20, scale=16))
-    vt_gros_entier = db.Column(db.DECIMAL(precision=20, scale=16))
-    cout_d_achat = db.Column(db.DECIMAL(precision=20, scale=16))
+    vt_gros_piece = db.Column(db.DECIMAL(precision=30, scale=16))
+    vt_detaille_piece = db.Column(db.DECIMAL(precision=30, scale=16))
+    vt_gros_entier = db.Column(db.DECIMAL(precision=30, scale=16))
+    cout_d_achat = db.Column(db.DECIMAL(precision=30, scale=16))
     avatar = db.Column(db.String(128), default="avatar.jpg")
     emballage = db.Column(db.String(128))
     nombre_contenu=db.Column(db.Integer, default=1)
@@ -121,15 +127,15 @@ class Produitboutique(db.Model):
 class Commande(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantite_commande = db.Column(db.Integer)
-    prix_unitaire = db.Column(db.DECIMAL(precision=20, scale=16))
+    prix_unitaire = db.Column(db.DECIMAL(precision=30, scale=16))
     date = db.Column(db.Date)
     typecomande_id = db.Column(db.Integer, db.ForeignKey('typecommande.id'), nullable=False)
 
 class Vente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    quantite = db.Column(db.DECIMAL(precision=20, scale=16))
-    montant = db.Column(db.DECIMAL(precision=20, scale=16))
-    prix_unitaire = db.Column(db.DECIMAL(precision=20, scale=16))
+    quantite = db.Column(db.DECIMAL(precision=30, scale=16))
+    montant = db.Column(db.DECIMAL(precision=30, scale=16))
+    prix_unitaire = db.Column(db.DECIMAL(precision=30, scale=16))
     no_facture = db.Column(db.Boolean, default=False)
     facture_id = db.Column(db.Integer, db.ForeignKey('facture.id'), nullable=False)
     produitboutique_id = db.Column(db.Integer, db.ForeignKey('produitboutique.id'), nullable=False)
@@ -137,7 +143,7 @@ class Vente(db.Model):
 class Facture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_facture = db.Column(db.String(128))
-    montant = db.Column(db.DECIMAL(precision=20, scale=16), default=0)
+    montant = db.Column(db.DECIMAL(precision=30, scale=16), default=0)
     cash = db.Column(db.Boolean, default=False)
     dette = db.Column(db.Boolean, default=False)
     annule = db.Column(db.Boolean, default=False)
@@ -149,6 +155,7 @@ class Facture(db.Model):
     valide_account = db.Column(db.Boolean, default=False)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    compte_id = db.Column(db.Integer, db.ForeignKey('comptes.id'), nullable=True)
     boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'), nullable=False)
     ventes = db.relationship('Vente', backref='vente_facture', lazy='dynamic')
     payements = db.relationship('Payement', backref='payement_facture', lazy='dynamic')
@@ -163,35 +170,51 @@ class Achat(db.Model):
 
 class Fraisconnexe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    frais = db.Column(db.DECIMAL(precision=20, scale=16))
-    montant = db.Column(db.DECIMAL(precision=20, scale=16))
+    frais = db.Column(db.DECIMAL(precision=30, scale=16))
+    montant = db.Column(db.DECIMAL(precision=30, scale=16))
     achat_id = db.Column(db.Integer, db.ForeignKey('achat.id'), nullable=False)
 
 class Comptedepense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rubrique = db.Column(db.String(128))
-    boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    branche_depense=db.Column(db.String(128))
+    statut = db.Column(db.Boolean, default=False)     
     depenses = db.relationship('Depense', backref='depense_comptedepense', lazy='dynamic')
 
 class Depense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.Text)
-    montant = db.Column(db.DECIMAL(precision=20, scale=16))
+    montant = db.Column(db.DECIMAL(precision=30, scale=16))
     date = db.Column(db.Date)
     comptedepense_id = db.Column(db.Integer, db.ForeignKey('comptedepense.id'), nullable=False)
+    boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'), nullable=True)
+    depot_id = db.Column(db.Integer, db.ForeignKey('depot.id'), nullable=True)
+    user_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Operation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     motif = db.Column(db.Text)
-    montant = db.Column(db.DECIMAL(precision=20, scale=16))
+    date = db.Column(db.Date)
+    montant = db.Column(db.DECIMAL(precision=30, scale=16))
+    type_transanction = db.Column(db.String(128))
+    facture=db.Column(db.Integer)
     compte_id = db.Column(db.Integer, db.ForeignKey('comptes.id'), nullable=False)
 
 class Comptes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    num_compte = db.Column(db.String(128))
     compte = db.Column(db.String(128))
+    branche_compte = db.Column(db.String(128))
+    solde = db.Column(db.DECIMAL(precision=30, scale=16), default=0)
     operations = db.relationship('Operation', backref='operation_compte', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'), nullable=True)
+    depot_id = db.Column(db.Integer, db.ForeignKey('depot.id'), nullable=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=True)
+    factures = db.relationship('Facture', backref='facture_compte', lazy='dynamic')
+    
+    
+    
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -210,9 +233,10 @@ class User(UserMixin, db.Model):
     entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprise.id'))
     boutique_id = db.Column(db.Integer, db.ForeignKey('boutique.id'))
     comptes = db.relationship('Comptes', backref='compte_user', lazy='dynamic')
-    comptedepenses = db.relationship('Comptedepense', backref='comptedepense_user', lazy='dynamic')
     factures = db.relationship('Facture', backref='facture_user', lazy='dynamic')
     stocks = db.relationship('Stock', backref='stock_user', lazy='dynamic')
+    depenses = db.relationship('Depense', backref='depense_user', lazy='dynamic')
+    pp_admin=db.Column(db.Boolean, default=True)
 
 class Entreprise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -231,7 +255,7 @@ class Payement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_payement = db.Column(db.String(128))
     denomination = db.Column(db.String(128))
-    montant = db.Column(db.DECIMAL(precision=20, scale=16), default=0)
+    montant = db.Column(db.DECIMAL(precision=30, scale=16), default=0)
     liquidation = db.Column(db.Boolean, default=False)
     date = db.Column(db.Date)
     facture_id = db.Column(db.Integer, db.ForeignKey('facture.id'), nullable=False)

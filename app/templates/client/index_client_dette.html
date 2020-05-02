@@ -1,0 +1,398 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Clients</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('client.index')}}">Client</a>
+                            </li>
+                            <li class="breadcrumb-item active">Opérations clients
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Gestion des clients</h4>
+                                                <p>Toutes les opérations des clients</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('compte.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-money primary font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="primary">Opérations</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href=" {{url_for('client.index_dette')}} ">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-cart-plus danger font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Dette</h3>
+                                                                                <span class="danger">Clients</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+
+                                                    
+                                                        <div class="col-xl-12 col-sm-12 col-12">
+                                                            <div class="card">
+                                                                <a href="{{url_for('client.index_conf')}}">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-users warning font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Clients</h3>
+                                                                                <span class="warning">Configurations</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                {% with messages= get_flashed_messages(with_categories=true) %}
+                                                {% if messages  %}
+                                                {% for category, message in messages %}
+                                                {%if category!="danger"%}
+                                                <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                                    role="alert">
+                                                    <span class="alert-icon">
+                                                        <i class="ft-thumbs-up"></i>
+                                                    </span>
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <strong>{{ message }}!</strong>
+            
+                                                </div>
+                                                {%else%}
+                                                <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                                    role="alert">
+                                                    <span class="alert-icon">
+                                                        <i class="ft-thumbs-down"></i>
+                                                    </span>
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <strong>{{ message }}!</strong>
+            
+                                                </div>
+                                                {%endif%}
+                                                {% endfor %}
+                                                {% endif %}
+                                                {% endwith %}
+                                               
+                                                <fieldset class="scheduler-border">
+                                                    <legend class="scheduler-border">Les dettes des clients:</legend>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <h4>
+                                                                Total dette: ${{dette_client|round(2)}}
+                                                            </h4>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <span class="pull-right">
+                                                                <a href="" data-toggle="modal"  data-target="#ajouter_client"
+                                                                class="btn btn-sm btn-info"><i  class="la la-area-chart"></i>
+                                                            </a>
+
+                                                             <a href="{{url_for('client.index_dette_imp')}} " target="_blank"
+                                                                class="btn btn-sm btn-warning"><i  class="la la-print"></i>
+                                                            </a>
+                                                            </span>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">Noms</th>
+                                                                        <th class="text-center" scope="col">Montant</th>
+                                                                        <th class="text-center"  scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+            
+            
+                                                                    {% for liste in listes.items%}
+                                                                    <tr>
+            
+                                                                        <td scope="row">{{loop.index}} </td>
+                                                                        <td>
+                                                                            {{liste.Facture.facture_client.nom_client}}
+                                                                        </td>
+                                                                        <td class="text-center" >
+                                                                            ${{liste.sommes|round(2)}}
+                                                                        </td>
+                                                                        <td class="text-center" ><a data-toggle="popover" data-trigger="hover" data-content="Détails par client" href=" {{url_for('client.index_dette_client', id=liste.Facture.client_id)}} "><span class="badge badge-pill badge-danger"> <i class="la la-money"></i> </span>   </a></td>
+
+                                                                    
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                            {% if page_num %}
+                                                                {% if listes.page==page_num %}
+                                                                  <a href="{{ url_for('client.index_dette', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
+                                                                                          
+                                                                {% else %}
+                                                                  <a href="{{ url_for('client.index_dette', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
+                                                                                          
+                                                                {% endif %}
+                                                            {% else %}
+                                                              ...
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="ajouter_client" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-header text-center">
+                    <span class="text-center">
+                        <h4 class="modal-title">Evolution des dettes</h4>
+                    </span>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="height-400">
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
+<script>
+    $(window).on("load", function(){
+
+//Get the context of the Chart canvas element we want to select
+var ctx = $("#line-chart");
+
+// Chart Options
+var chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+        position: 'bottom',
+    },
+    hover: {
+        mode: 'label'
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Client'
+            }
+        }],
+        yAxes: [{
+            display: true,
+            gridLines: {
+                color: "#f3f3f3",
+                drawTicks: false,
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Montant en $'
+            }
+        }]
+    },
+    title: {
+        display: true,
+        text: 'Les dettes des clients'
+    }
+};
+
+// Chart Data
+var chartData = {
+    labels: [{% for item in label %}"{{item}}",{% endfor %}],
+    datasets: [{
+        label: "Dette en USD",
+        data: [{% for item in series %}{{item}},{% endfor %}],
+        lineTension: 0,
+        fill: false,
+        borderColor: "#FF7D4D",
+        pointBorderColor: "#FF7D4D",
+        pointBackgroundColor: "#FFF",
+        pointBorderWidth: 2,
+        pointHoverBorderWidth: 2,
+        pointRadius: 4,
+    }]
+};
+
+var config = {
+    type: 'line',
+
+    // Chart Options
+    options : chartOptions,
+
+    data : chartData
+};
+
+// Create the chart
+var lineChart = new Chart(ctx, config);
+});
+</script>
+
+{% endblock  %}

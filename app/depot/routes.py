@@ -1,13 +1,16 @@
 from flask import render_template, flash, url_for, redirect, request
 from .. import db
 from ..models import Categorie, Produit, Depot
+from app.boutique.autorisation import autorisation_gerant
 from app.depot.forms import DepotForm, DepotEditForm
+
 from flask_login import login_user, current_user, logout_user, login_required
 
 from . import depot
 
 @depot.route('/ajouter_depot', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def ajouterdepot():
     #Les dépots
     title="Ajouter un dépôt"
@@ -32,6 +35,7 @@ def ajouterdepot():
 
 @depot.route('/')
 @login_required
+@autorisation_gerant
 def index():
 
     title="Liste | dépôt"

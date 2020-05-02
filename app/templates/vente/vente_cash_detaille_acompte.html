@@ -81,16 +81,8 @@
                                                     facture</a>
                                             </span> <br><br>
                                             <span>
-                                                
-                                                
-                                                {%if facture_d.cash==True and facture_d.type_vente==False %}
                                                 <a href="{{url_for('vente.impression',facture=id_facture)}}" target="_blank" class="btn btn-sm btn-success"> <i class="la la-print"></i></a>
-                                                {%elif facture_d.dette==True and facture_d.type_vente==False %}
-                                                <a href="{{url_for('vente.voir_facture_imp',facture=id_facture)}}" target="_blank" class="btn btn-sm btn-success"> <i class="la la-print"></i></a>
-                                                {%endif%}
-                                                
-                                                
-                                                <a href=" {{url_for('vente.finfacture')}} " class="btn btn-sm btn-danger"> <i class="la la-close"></i> Clôture la facture</a>
+                                                <a href=" {{url_for('vente.finfactureaccompte')}} " class="btn btn-sm btn-danger"> <i class="la la-close"></i> Clôture la facture</a>
                                             </span>
                                             <br><br>
                                             <div class="box-shadow--6dp">

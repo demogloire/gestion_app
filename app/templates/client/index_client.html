@@ -1,0 +1,413 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Clients</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('client.index')}}">Client</a>
+                            </li>
+                            <li class="breadcrumb-item active">Opérations clients
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Gestion des clients</h4>
+                                                <p>Toutes les opérations des clients</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('compte.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-money primary font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="primary">Opérations</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href=" {{url_for('client.index_dette')}} ">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-cart-plus danger font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Dette</h3>
+                                                                                <span class="danger">Clients</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+
+                                                    
+                                                        <div class="col-xl-12 col-sm-12 col-12">
+                                                            <div class="card">
+                                                                <a href="{{url_for('client.index_conf')}}">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-users warning font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Clients</h3>
+                                                                                <span class="warning">Configurations</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="mb-2">
+                                                            <a href="" data-toggle="modal"  data-target="#ajouter_client"
+                                                                class="btn btn-sm btn-info"><i  class="la la-user-times"></i>Ajouter clients
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {% with messages= get_flashed_messages(with_categories=true) %}
+                                                {% if messages  %}
+                                                {% for category, message in messages %}
+                                                {%if category!="danger"%}
+                                                <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                                    role="alert">
+                                                    <span class="alert-icon">
+                                                        <i class="ft-thumbs-up"></i>
+                                                    </span>
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <strong>{{ message }}!</strong>
+            
+                                                </div>
+                                                {%else%}
+                                                <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                                    role="alert">
+                                                    <span class="alert-icon">
+                                                        <i class="ft-thumbs-down"></i>
+                                                    </span>
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <strong>{{ message }}!</strong>
+            
+                                                </div>
+                                                {%endif%}
+                                                {% endfor %}
+                                                {% endif %}
+                                                {% endwith %}
+                                               
+                                                <fieldset class="scheduler-border">
+                                                    {%if nom_type_client %}
+                                                    <legend class="scheduler-border">Groupe {{nom_type_client}}:</legend>
+                                                    {%else%}
+                                                    <legend class="scheduler-border">Les clients de boutique:</legend>
+                                                    {%endif%}
+
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">Noms</th>
+                                                                        <th class="text-center" scope="col">Tél.</th>
+                                                                        <th class="text-center"  scope="col">E-mail</th>
+                                                                        <th class="text-center"  scope="col">Adresse</th>
+                                                                        <th class="text-center"  scope="col">Groupe</th>
+                                                                        <th class="text-center"  scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+            
+            
+                                                                    {% for liste in listes%}
+                                                                    <tr>
+            
+                                                                        <td scope="row">{{loop.index}} </td>
+                                                                        <td>
+                                                                            {%if liste.nom_client==None %}
+                                                                            <span class="badge badge-pill badge-warning"><i class="la la-rotate-left"></i></span>
+                                                                            {%else%}
+                                                                                {{liste.nom_client}} 
+                                                                            {%endif%}
+                                                                        </td>
+                                                                        <td class="text-center" >
+                                                                            {%if liste.tel_client==None %}
+                                                                            <span data-toggle="popover" data-trigger="hover" data-content="Completer num. téléphone" class="badge badge-pill badge-warning"><i class="la la-rotate-left"></i></span>
+                                                                            {%else%}
+                                                                                {{liste.tel_client}} 
+                                                                            {%endif%}
+                                                                        </td>
+                                                                        <td class="text-center" >
+                                                                            {%if liste.email==None %}
+                                                                            <span data-toggle="popover" data-trigger="hover" data-content="Completer E-mail" class="badge badge-pill badge-warning"><i class="la la-rotate-left"></i></span>
+                                                                            {%else%}
+                                                                                {{liste.email}} 
+                                                                            {%endif%}
+                                                                        </td>
+                                                                        <td class="text-center" >
+                                                                            {%if liste.adresse==None %}
+                                                                            <span data-toggle="popover" data-trigger="hover" data-content="Completer adresse" class="badge badge-pill badge-warning"><i class="la la-rotate-left"></i></span>
+                                                                            {%else%}
+                                                                                {{liste.adresse}} 
+                                                                            {%endif%}
+                                                                        </td>
+                                                                        <td class="text-center" ><a data-toggle="popover" data-trigger="hover" data-content="Trier par groupe client" href="{{url_for('client.index_conf_cate', id=liste.typeclient_id)}}"><span class="badge badge-pill badge-dark">{{liste.client_typeclient.nom_type}}</span>   </a></td>
+                                                                        <td class="text-center" ><a data-toggle="popover" data-trigger="hover" data-content="Editer le client" href=" {{url_for('client.index_conf_edit', id=liste.id)}} "><span class="badge badge-pill badge-light"> <i class="la la-edit"></i> </span>   </a></td>
+
+                                                                    
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="ajouter_client" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Ajouter un client </h4>
+                </div>
+                    <form action="" method="POST">
+    
+                        {{ form.csrf_token }}                      
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Nom du client</label>
+                                    {% if form.nom_client.errors %}
+                                    {{ form.nom_client(class="form-control input-lg is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.nom_client.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    {{ form.nom_client(class="form-control input-lg")}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Téléphone</label>
+                                    {% if form.tel_client.errors %}
+                                    {{ form.tel_client(class="form-control input-lg is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.tel_client.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    {{ form.tel_client(class="form-control input-lg")}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>E-mail</label>
+                                    {% if form.email.errors %}
+                                    {{ form.email(class="form-control input-lg is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    {{ form.email(class="form-control input-lg")}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Adresse</label>
+                                    {% if form.adresse.errors %}
+                                    {{ form.adresse(class="form-control input-lg is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.adresse.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    {{ form.adresse(class="form-control input-lg")}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Groupe client</label>
+                                    {% if form.typeclient_id.errors %}
+                                    {{ form.typeclient_id(class="form-control input-lg is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.typeclient_id.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    {{ form.typeclient_id(class="form-control input-lg")}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                            <div class="text-center mb-1">
+                                <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
+                                    <i class="la la-user-times"></i> Ajouter client
+                                </button>
+                                    
+                            </div>
+                    
+
+                    </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='datepicker/datepicker.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
+
+{% endblock  %}

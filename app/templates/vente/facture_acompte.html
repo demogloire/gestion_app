@@ -164,6 +164,23 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
+                                                    <label>Dépôt du client</label>
+                                                    {% if form.clients_client.errors %}
+                                                    {{ form.clients_client(class="form-control input-md is-invalid")}}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.clients_client.errors %}
+                                                        <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    {{ form.clients_client(class="form-control input-md")}}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
                                                     <label>Date d'opération</label>
                                                     {% if form.date_op.errors %}
                                                     {{ form.date_op(class="form-control input-md", id="datepicker")}}
@@ -184,11 +201,9 @@
                                             <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" onclick="return confirm('Voulez-vous vraiment créer la facture?')" name="submit" type="submit"  >
                                             <i class="la la-ticket"></i> Créer facture </button>
 
-                                            <a href="{{url_for('vente.annulefacture')}} "
+                                            <a href="{{url_for('vente.annulefactureacompte')}} "
                                                 class="btn btn-min-width mr-1 mb-1 btn-danger"><i
                                                     class="la la-close"></i>Terminer</a>
-
-
                                         </div>
 
 

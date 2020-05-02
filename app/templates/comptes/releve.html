@@ -1,0 +1,172 @@
+{% extends "layout/impression.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<script src="{{url_for('static', filename='html2pdf.bundle.min.js')}}"></script>
+<script>
+    function generatePDF() {
+
+        const element = document.getElementById("releve");
+        html2pdf()
+            .set({ html2canvas: { scale: 4 } })
+            .from(element)
+            .save();
+    }
+</script>
+{% endblock  %}
+
+{% block body %}
+
+<div class="col-lg-12 col-md-12 text-center">
+    <a onclick="generatePDF()" class="btn btn-sm btn-warning"><i class="la la-file-pdf-o"></i></a>
+</div>
+
+<div class="row " id="releve">
+
+    <div class="col-lg-1 col-md-1"></div>
+
+
+
+    <div class="col-lg-10 col-md-10">
+
+
+        <span>
+        <div class="col-lg-12 col-md-12" style="margin-top: 20px;">
+            <h2 class="text-center">RELEVE DU COMPTE</h2>
+        </div>
+
+        
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                    <div>
+                        <strong>
+                            {%if current_user.user_entreprise !=None %}
+                            {{current_user.user_entreprise.denomination}} 
+                            {%endif%} 
+                        </strong>
+                    </div>
+                    <div>{%if current_user.user_entreprise !=None %}
+                        {{current_user.user_entreprise.adresse}} 
+                        {%endif%} 
+                    </div>
+                    <div>{%if current_user.user_entreprise !=None %}
+                        {{current_user.user_entreprise.siege_social}} 
+                        {%endif%} 
+                    </div>
+                    <div>{%if current_user.user_entreprise !=None %}
+                        Phone:{{current_user.user_entreprise.telephone}} 
+                        {%endif%} 
+                    </div>
+                    <div>{%if current_user.user_entreprise !=None %}
+                        E-mail:{{current_user.user_entreprise.email}} 
+                        {%endif%} 
+                    </div>
+                    <div>{%if current_user.user_entreprise !=None %}
+                        {{current_user.user_entreprise.personalite}} 
+                        {%endif%} 
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5 col-md-5"> </div>
+            <div class="col-lg-7 col-md-7">
+                <div>
+                    <strong>{{ "{} ( {} )".format(ver_compte.num_compte, ver_compte.compte)       }}</strong>
+                </div>
+                <div>
+                    <strong>{{ver_compte.compte_client.nom_client}}</strong>
+                </div>
+                <div>
+                    {%if ver_compte.compte_client.adresse!=None%}
+                        {{ver_compte.compte_client.adresse}}
+                    {%endif%}
+                </div>
+                <div>
+                    {%if ver_compte.compte_client.email!=None%}
+                        {{ver_compte.compte_client.email}}
+                    {%endif%}
+
+                </div>
+                <div>
+                    {%if ver_compte.compte_client.tel_client!=None%}
+                        {{ver_compte.compte_client.tel_client}}
+                    {%endif%}
+                </div>
+            
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th class="text-center" scope="col">Date</th>
+                                <th class="text-center" scope="col">Transanction</th>
+                                <th class="text-center" scope="col">Motif</th>
+                                <th class="text-center" scope="col">Montant</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            {% for liste in listes%}
+                            <tr>
+                                <td scope="row">{{loop.index}} </td>
+                                <td class="text-center" scope="row">{{liste.date.strftime('%d/%m/%Y')}} </td>
+                                <td class="text-center">{{liste.type_transanction}} </td>
+                                <td class="text-center">{{liste.motif|safe }} </td>
+                                <td class="text-center"> $
+                                    {%if liste.montant==None %}0{%else%}{{liste.montant|round(2)}}{%endif%}</td>
+
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <th colspan="4">
+                                    <h5>Solde</h5>
+                                </th>
+                                <td class="text-center">
+                                    <h5>${{ver_compte.solde|round(2)}}</h5>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </span>
+    </div>
+
+    <div class="col-lg-1 col-md-1"></div>
+
+</div>
+
+
+
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript"
+    src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+
+{% endblock  %}

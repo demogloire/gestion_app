@@ -15,6 +15,7 @@
 <script src="{{ url_for('static', filename='summnernote/summernote-lite.js')}}"></script>
 <link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
 <link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.css')}} ">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css">
 
 {% endblock  %}
 
@@ -106,14 +107,14 @@
                                                 <div class="form-group">
                                                     <label>Prénom</label>
                                                     {% if form.prenom.errors %}
-                                                    {{ form.prenom(class="form-control input-md is-invalid")}}
+                                                    {{ form.prenom(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.prenom.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.prenom(class="form-control input-md")}}
+                                                    {{ form.prenom(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -125,14 +126,14 @@
                                                 <div class="form-group">
                                                     <label>Nom</label>
                                                     {% if form.nom.errors %}
-                                                    {{ form.nom(class="form-control input-md is-invalid")}}
+                                                    {{ form.nom(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.nom.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.nom(class="form-control input-md")}}
+                                                    {{ form.nom(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -140,14 +141,14 @@
                                                 <div class="form-group">
                                                     <label>Post-nom</label>
                                                     {% if form.post_nom.errors %}
-                                                    {{ form.post_nom(class="form-control input-sm is-invalid")}}
+                                                    {{ form.post_nom(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.post_nom.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.post_nom(class="form-control input-sm")}}
+                                                    {{ form.post_nom(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -159,14 +160,14 @@
                                                 <div class="form-group">
                                                     <label>Téléphone</label>
                                                     {% if form.tel.errors %}
-                                                    {{ form.tel(class="form-control input-md is-invalid")}}
+                                                    {{ form.tel(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.tel.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.tel(class="form-control input-md")}}
+                                                    {{ form.tel(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -174,14 +175,14 @@
                                                 <div class="form-group">
                                                     <label>E-mail</label>
                                                     {% if form.email.errors %}
-                                                    {{ form.email(class="form-control input-md is-invalid")}}
+                                                    {{ form.email(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.email.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.email(class="form-control input-md")}}
+                                                    {{ form.email(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -194,14 +195,14 @@
                                                 <div class="form-group">
                                                     <label>Adresse physique</label>
                                                     {% if form.adress.errors %}
-                                                    {{ form.adress(class="form-control input-md is-invalid")}}
+                                                    {{ form.adress(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.adress.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.adress(class="form-control input-md")}}
+                                                    {{ form.adress(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -212,14 +213,14 @@
                                                 <div class="form-group">
                                                     <label>Mot de passe</label>
                                                     {% if form.password.errors %}
-                                                    {{ form.password(class="form-control input-md is-invalid")}}
+                                                    {{ form.password(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.password.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.password(class="form-control input-md")}}
+                                                    {{ form.password(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -227,14 +228,14 @@
                                                 <div class="form-group">
                                                     <label>Répéter le mot de passe</label>
                                                     {% if form.confirm_password.errors %}
-                                                    {{ form.confirm_password(class="form-control input-md is-invalid")}}
+                                                    {{ form.confirm_password(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.confirm_password.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.confirm_password(class="form-control input-md")}}
+                                                    {{ form.confirm_password(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -245,14 +246,14 @@
                                                 <div class="form-group">
                                                     <label>Rôle</label>
                                                     {% if form.role.errors %}
-                                                    {{ form.role(class="form-control input-md is-invalid")}}
+                                                    {{ form.role(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.role.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.role(class="form-control input-md")}}
+                                                    {{ form.role(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -270,7 +271,7 @@
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.boutique_users(class="form-control input-md")}}
+                                                    {{ form.boutique_users(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -278,14 +279,14 @@
                                                 <div class="form-group">
                                                     <label>Dépôt</label>
                                                     {% if form.depot_users.errors %}
-                                                    {{ form.depot_users(class="form-control input-md is-invalid")}}
+                                                    {{ form.depot_users(class="form-control form-control-sm is-invalid")}}
                                                     <div class="invalid-feedback">
                                                         {% for error in form.depot_users.errors %}
                                                         <span>{{ error }}</span>
                                                         {% endfor %}
                                                     </div>
                                                     {% else %}
-                                                    {{ form.depot_users(class="form-control input-md")}}
+                                                    {{ form.depot_users(class="form-control form-control-sm")}}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -354,5 +355,23 @@
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js"></script>
+<script>
+    var wtf_phone_field = document.getElementById('phone');
+    wtf_phone_field.style.position = 'absolute';
+    wtf_phone_field.style.top = '-9999px';
+    wtf_phone_field.style.left = '-9999px';
+    wtf_phone_field.parentElement.insertAdjacentHTML('beforeend', '<div><input type="tel" id="_phone"></div>');
+    var fancy_phone_field = document.getElementById('_phone');
+    var fancy_phone_iti = window.intlTelInput(fancy_phone_field, {
+        separateDialCode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js",
+    });
+    fancy_phone_iti.setNumber(wtf_phone_field.value);
+    fancy_phone_field.addEventListener('blur', function() {
+        wtf_phone_field.value = fancy_phone_iti.getNumber();
+    });
+</script> -->
 
 {% endblock  %}

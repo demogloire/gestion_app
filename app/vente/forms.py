@@ -7,7 +7,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask_login import login_user, current_user, login_required
 
 
-from ..models import Fournisseur, Produit, Boutique, Client, Produitboutique, Facture
+from ..models import Fournisseur, Produit, Boutique, Client, Produitboutique, Facture, Comptes
 
 
 def rech_produit():
@@ -34,6 +34,8 @@ def rech_facture_dette():
 def rech_facture_acompte():
     return Facture.query.filter(Facture.vente_acompte==True, Facture.montant >=1, Facture.annule==False, Facture.boutique_id==current_user.boutique_id).all()
 
+def rech_compte_filter():
+    return Comptes.query.filter_by(boutique_id=current_user.boutique_id).all()
 
 
 class FactureForm(FlaskForm):
@@ -127,5 +129,30 @@ class PayementFactureForm(FlaskForm):
         if payer <= 0:
             raise ValidationError("Le montant doit être supérieur à 0")
 
+class RechercheForm(FlaskForm):
+    clients_client=QuerySelectField(query_factory=rech_compte_filter, get_label='num_compte', allow_blank=True, blank_text="Choissisez le compte client ") 
+    submit= SubmitField('Enregister')
 
+
+class FactureAcForm(FlaskForm):
+    codefacture=StringField('Code facture', validators=[DataRequired("Completer le code facture"),  Length(min=4, max=200, message="Respecter la procedure")])
+    client_input=StringField('Client')
+    clients_client=QuerySelectField(query_factory=rech_compte_filter, validators=[DataRequired("Le compte client si non veuillez l'ajouter aux clients")], get_label='num_compte', allow_blank=True, blank_text="Choissisez le compte client ") 
+    client_input_cherch=QuerySelectField(query_factory=rech_client, get_label='nom_client', allow_blank=False)
+    date_op= StringField('Date', validators=[DataRequired("Completer la date"),  Length(min=10, max=200, message="Format 02-02-2020")])
+    submit = SubmitField('Ajouter facture')
+    # Vérification des champs entrées
+    def validate_date_op(self, date_op):
+        date=date_op.data
+        result = re.findall(r"[\d]{1,2}-[\d]{1,2}-[\d]{4}", date)
+        if result:
+            pass
+        else:
+            raise ValidationError("La date doit respectée cette format jj-mm-aaaa")
+  
+    #Verification des données
+    def validate_client_input_cherch(self, client_input_cherch):
+        client=client_input_cherch.data
+        if client is None:
+            client_input_cherch.data=None
         

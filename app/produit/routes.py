@@ -3,6 +3,7 @@ from .. import db
 from ..models import Produit, Categorie, Produitboutique
 from app.produit.forms import ProduitJForm, ProduitAForm
 import app.pack_fonction.fonction as utilitaire
+from app.produit.autorisation  import autorisation_gerant
 #from app.pack_fonction.fonction import save_picture, codeproduit
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -10,6 +11,7 @@ from . import produit
 
 @produit.route('/ajouter_produit', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def ajouterproduit():
     #Les catagories de livre
     title="Ajouter un produit"
@@ -73,6 +75,7 @@ def ajouterproduit():
 
 @produit.route('/produit/<string:code_pro>', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def mod_pro(code_pro):
     #Les catagories de livre
     title="Modifification | Lambda Gestion"
@@ -183,6 +186,7 @@ def mod_pro(code_pro):
 
 @produit.route('/')
 @login_required
+@autorisation_gerant
 def index():
     #Les produits 
     title="Produits | {} ".format(current_user.user_entreprise.denomination)

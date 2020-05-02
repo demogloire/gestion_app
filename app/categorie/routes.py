@@ -2,12 +2,14 @@ from flask import render_template, flash, url_for, redirect, request
 from .. import db
 from ..models import Categorie, Produit 
 from app.categorie.forms import CategorieForm, CategorieEditerForm
+from app.categorie.autorisation  import autorisation_gerant
 from flask_login import login_user, current_user, logout_user, login_required
 
 from . import categorie
 
 @categorie.route('/ajouter_categorie', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def ajouter_categorie():
     #Les catagories de livre
     title="Ajouter une catégorie"
@@ -32,6 +34,7 @@ def ajouter_categorie():
 
 @categorie.route('/')
 @login_required
+@autorisation_gerant
 def index():
     #Les catagories des articles
     title="Liste | Catégorie"
@@ -43,6 +46,7 @@ def index():
 
 @categorie.route('/<int:cat_id>/categorie', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def editer_categorie(cat_id):
 
     # #Verification de l'authentification
@@ -73,6 +77,7 @@ def editer_categorie(cat_id):
 
 @categorie.route('/<int:cat_id>/association', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def association_categorie(cat_id):
 
     # #Verification de l'authentification

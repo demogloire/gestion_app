@@ -82,6 +82,17 @@ def create_app(config_name):
     from .vente import vente as vente_blueprint
     app.register_blueprint(vente_blueprint)
 
+    #Depense
+    from .depense import depense as depense_blueprint
+    app.register_blueprint(depense_blueprint)
+
+    #Client
+    from .client import client as client_blueprint
+    app.register_blueprint(client_blueprint)
+
+    #Client
+    from .comptes import comptes as comptes_blueprint
+    app.register_blueprint(comptes_blueprint)
     
 
 

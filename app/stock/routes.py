@@ -3,7 +3,7 @@ from .. import db, bcrypt
 from datetime import date, datetime
 from ..models import User, Boutique, Depot, Stock, Produit, Produitboutique
 from app.stock.forms import StockageForm, StockageErreurForm, BoutiqueRechForm, AnneeTransForm, MensuelTransForm
-from app.stock.utility import save_picture, verification_de_role
+from app.stock.utility import save_picture, verification_de_role, autorisation_magasinier
 from flask_login import login_user, current_user, login_required
 from sqlalchemy import func
 
@@ -13,6 +13,7 @@ from . import stock
 """ Ajout utilisateur"""
 @stock.route('/stockage_depot', methods=['GET','POST'])
 @login_required
+@autorisation_magasinier
 def stockagedepot():
    title="Stock dépôt"
    #Formulaire
@@ -87,6 +88,7 @@ def stockagedepot():
 """ Erreur de stockage de marchandise"""
 @stock.route('/erreur_stockage_depot', methods=['GET','POST'])
 @login_required
+@autorisation_magasinier
 def erreurstockagedepot():
    title="Erreur de stockage dépôt"
    #Formulaire
@@ -167,6 +169,7 @@ def erreurstockagedepot():
 """ Transfert de la marchandise"""
 @stock.route('/transfert_boutique', methods=['GET','POST'])
 @login_required
+@autorisation_magasinier
 def transfertboutique():
    title="Transfer boutique"
    #Formulaire
@@ -313,6 +316,7 @@ def transfertboutique():
 #Liste de sockage du dépôt
 @stock.route('/')
 @login_required
+@autorisation_magasinier
 def index():
     #Le stock
     title="Gestion Lambda"
@@ -338,6 +342,7 @@ def index():
 #Liste les transfert du dépôt
 @stock.route('/transfert')
 @login_required
+@autorisation_magasinier
 def transfert_depot():
     #Le stock
     title="Gestion Lambda"
@@ -352,6 +357,7 @@ def transfert_depot():
 #Liste les transfert du dépôt
 @stock.route('/triertransfert', methods=['GET','POST'])
 @login_required
+@autorisation_magasinier
 def trier_depot():
     #Le stock
     title="Gestion Lambda"
@@ -437,7 +443,6 @@ def trier_depot():
     return render_template('stock/trier.html',option_encours=option_encours, title=title, listes=list_stock, form=form, ver=ver, list_stock_mois=list_stock_mois, list_stock_annee=stock_annee)
 
 
-
 #Recherche du stock d'une date
 @stock.route('/stockdate', methods=['GET','POST'])
 @login_required
@@ -495,6 +500,34 @@ def stock_de_depot():
     return render_template('stock/cherche.html',option_encours=option_encours, title=title, listes=list_stock, form=form, ver=ver, list_stock_mois=list_stock_mois, list_stock_annee=stock_annee)
 
 
+#--------------------------------------------------- GESTION DE STOCK VENDEUR ---------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+#Liste de sockage du dépôt
+@stock.route('/boutique/disponible')
+@login_required
+def boutique_stock():
+    #Le stock
+    title="Stock disponible | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    
+    #Stock disponible
+    page= request.args.get('page', 1, type=int)
+    list_stock=Stock.query.filter(Stock.boutique_id==current_user.boutique_id, Stock.produitboutique_id!=None, Stock.solde==True).order_by(Stock.id.desc()).paginate(page=page, per_page=50)
+
+    stock_graphe=Stock.query.filter(Stock.boutique_id==current_user.boutique_id,Stock.produitboutique_id!=None,  Stock.solde==True).all()
+    produit_dispo=[] #
+    serie_produit=[] #Tableau valeur vendue
+
+    for stock_pro in stock_graphe:
+      i=stock_pro.disponible
+      b=stock_pro.stock_produitboutique.nom_produit
+      serie_produit.insert(0,i)
+      produit_dispo.insert(0,b)
+
+    return render_template('stock/boutique_index.html',option_encours=option_encours, title=title, listes=list_stock, label=produit_dispo, series=serie_produit)
 
 
 

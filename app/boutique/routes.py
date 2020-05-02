@@ -2,12 +2,14 @@ from flask import render_template, flash, url_for, redirect, request
 from .. import db
 from ..models import Boutique 
 from app.boutique.forms import BoutiqueForm, BoutiqueEditerForm
+from app.boutique.autorisation  import autorisation_gerant
 from flask_login import login_user, current_user, logout_user, login_required
 
 from . import boutique
 
 @boutique.route('/ajouter_boutique', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def ajouterboutique():
     #Boutique 
     title="Ajouter une boutique"
@@ -31,6 +33,7 @@ def ajouterboutique():
 
 @boutique.route('/')
 @login_required
+@autorisation_gerant
 def index():
     #Les boutiques
     title="Liste | Boutique"
@@ -42,6 +45,7 @@ def index():
 
 @boutique.route('/<int:bout_id>/boutique', methods=['GET','POST'])
 @login_required
+@autorisation_gerant
 def editer_boutique(bout_id):
 
     # #Verification de l'authentification

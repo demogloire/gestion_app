@@ -1,9 +1,10 @@
 import os
 import secrets
-from flask import flash, url_for, redirect
-from PIL import Image
+from flask import render_template, flash, url_for, redirect, request, session
+from flask_login import login_user, current_user, login_required
 from .. import create_app
-from .. import db
+from .. import db, vente
+from functools import wraps
 
 from ..models import Produit 
 #from . import user
@@ -55,3 +56,13 @@ def verification_de_role(role, droit_b, droit_d):
             return ver
         else:
             return ver_b
+
+#Autorisation des vendeur
+def autorisation_magasinier(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if current_user.role =='Magasinier':
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('main.index'))       
+    return wrap

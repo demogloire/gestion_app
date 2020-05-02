@@ -26,11 +26,11 @@
         </li>
         <li class="{%if option_encours=='vente'%}active{%endif%} nav-item"><a href="{{url_for('vente.index')}}"><i class="la la-shopping-cart"></i><span class="menu-title" data-i18n="">Ventes</span></a>
         </li>
-        <li class=" nav-item"><a href="icons.html"><i class="la la-area-chart"></i><span class="menu-title" data-i18n="">Stocks</span></a>
+        <li class="{%if option_encours=='stock'%}active{%endif%} nav-item"><a href="{{url_for('stock.boutique_stock')}}"><i class="la la-area-chart"></i><span class="menu-title" data-i18n="">Stocks</span></a>
         </li>
-        <li class=" nav-item"><a href="cards.html"><i class="la la-money"></i><span class="menu-title" data-i18n="">Dépenses</span></a>
+        <li class="{%if option_encours=='depense'%}active{%endif%} nav-item"><a href="{{url_for('depense.depenseboutique')}}"><i class="la la-money"></i><span class="menu-title" data-i18n="">Dépenses</span></a>
         </li>
-        <li class=" nav-item"><a href="buttons.html"><i class="la la-users"></i><span class="menu-title" data-i18n="">Clients</span></a>
+        <li class="{%if option_encours=='client'%}active{%endif%} nav-item"><a href="{{url_for('client.index')}}"><i class="la la-users"></i><span class="menu-title" data-i18n="">Clients</span></a>
         </li>
         <li class=" nav-item"><a href="typography.html"><i class="la la-opencart"></i><span class="menu-title" data-i18n="">Inventaire</span></a>
         </li>

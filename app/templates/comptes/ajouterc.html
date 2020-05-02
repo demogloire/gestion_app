@@ -1,0 +1,259 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.css')}} ">
+<link rel="stylesheet" href="{{ url_for('static',filename='datepicker/datepicker.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Clients</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('client.index')}}">Client</a>
+                            </li>
+                            <li class="breadcrumb-item active">Opérations clients
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Gestion des clients</h4>
+                                                <p>Toutes les opérations des clients</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('compte.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-money primary font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="primary">Opérations</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href=" {{url_for('client.index_dette')}} ">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-cart-plus danger font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Dette</h3>
+                                                                                <span class="danger">Clients</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                        <div class="col-xl-12 col-sm-12 col-12">
+                                                            <div class="card">
+                                                                <a href=" {{url_for('client.index_conf')}}  ">
+                                                                <div class="card-content box-shadow--4dp">
+                                                                    <div class="card-body">
+                                                                        
+                                                                        <div class="media d-flex">
+                                                                            <div class="align-self-center">
+                                                                                <i class="la la-users warning font-large-2 float-left"></i>
+                                                                            </div>
+                                                                            <div class="media-body text-right">
+                                                                                <h3>Clients</h3>
+                                                                                <span class="warning">Configurations</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            </div>
+                                                        </div>
+
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Modification du compte: {{compte}} :</legend>
+                                                        <br>
+                                                        <form action="" method="POST">
+    
+                                                            {{ form.csrf_token }}
+                                                            {% with messages= get_flashed_messages(with_categories=true) %}
+                                                            {% if messages  %}
+                                                            {% for category, message in messages %}
+                                                            {%if category!="danger"%}
+                                                                <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2" role="alert">
+                                                                    <span class="alert-icon">
+                                                                        <i class="ft-thumbs-up"></i>
+                                                                    </span>
+                                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                    <strong>{{ message }}!</strong> 
+                                                                    
+                                                                </div>
+                                                            {%else%}
+                                                                <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2" role="alert">
+                                                                    <span class="alert-icon">
+                                                                        <i class="ft-thumbs-down"></i>
+                                                                    </span>
+                                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                    <strong>{{ message }}!</strong>
+                                                                    
+                                                                </div>
+                                                            {%endif%}
+                                                            
+                                                            {% endfor %}
+                                                            {% endif %}
+                                                            {% endwith %}
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Intitulé du compte</label>
+                                                                        {% if form.nom_compte.errors %}
+                                                                        {{ form.nom_compte(class="form-control form-control-sm is-invalid")}}
+                                                                        <div class="invalid-feedback">
+                                                                            {% for error in form.nom_compte.errors %}
+                                                                                <span>{{ error }}</span>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% else %}
+                                                                        {{ form.nom_compte(class="form-control form-control-sm")}}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>                                                         
+                                                                <div class="text-center mb-1">
+                                                                    <button class="btn btn-info btn-min-width mr-1 mb-1" id="submit" name="submit" type="submit">
+                                                                        <i class="la la-edit"></i> EDITER COMPTE
+                                                                    </button>
+                                                                        
+                                                                </div>
+                                                        
+                                                        
+                                                        </form>
+                                                         </fieldset>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/forms/tags/form-field.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/select2.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='dashboard/select2/scripts.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='datepicker/datepicker.js')}}"></script>
+
+
+{% endblock  %}

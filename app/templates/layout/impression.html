@@ -7,7 +7,15 @@
     <meta name="description" content="Gestion Lambda Multi-domaine">
     <meta name="keywords" content="Gestion, Lambda, Administration Gestion Lambda">
     <meta name="author" content="Gestion Lambda">
-    <title>Lambda Gestion</title>
+    {% if title %}
+        <title>  {{ title }} </title>
+    {% else %}
+    <title>  {{current_user.user_entreprise.denomination}}</title>
+    {% endif %}
+
+
+
+
     {% block header %}
         {% block hprincipal %}{% endblock  %}
         {% block sprincipal %}{% endblock  %}        
@@ -18,7 +26,7 @@
     
     
   </head>
-  <body onload="window.print();" style="background-color: beige;">
+  <body onload="window.print();" style="background-color:white;">
 
     <!-- contenu -->
     {% block body %}{% endblock  %} 
