@@ -14,3 +14,11 @@ def index():
 
     return render_template('main/index.html', title=title,option_encours=option_encours)
 
+
+@main.route('/configurations')
+@login_required
+def conf_gerant():
+    title="Dashboard"
+    option_encours="conf"
+
+    return render_template('main/conf_admin.html', title=title,option_encours=option_encours)

@@ -108,7 +108,8 @@
                                                 
                                                 
                                                 <fieldset class="scheduler-border">
-                                                    <legend class="scheduler-border">Stock disponible:</legend>
+                                                {%if listes.items != [] %}
+                                                <legend class="scheduler-border">Stock disponible:</legend>
                                                 <div >
                                                     <span class="pull-right" style="margin-bottom:10px;">
                                                     <a data-toggle="modal" href="" class="btn btn-sm btn-danger" data-target="#graphique_stock"><i  class="la la-bar-chart"></i> 
@@ -251,9 +252,21 @@
                                                     {% endif %}
                                                     {% endfor %}
                                                 </div>
+                                                {%else%}
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <p class="text-center" style="margin-top:100px">
+                                                            <i class="la la la-archive success font-large-5 text-center"></i>
+                                                            <h4 class="text-center">AUCUN PRODUIT DANS LE STOCK.</h4>
+                                                            <br><br><br><br><br><br>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {%endif%}
+                                                </fieldset>
                                             </div>
 
-                                        </fieldset>
+                                        
 
 
                                         </div>

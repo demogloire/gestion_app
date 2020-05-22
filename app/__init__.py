@@ -90,9 +90,13 @@ def create_app(config_name):
     from .client import client as client_blueprint
     app.register_blueprint(client_blueprint)
 
-    #Client
+    #comptes
     from .comptes import comptes as comptes_blueprint
     app.register_blueprint(comptes_blueprint)
+
+    #comptes
+    from .inventaire import inventaire as inventaire_blueprint
+    app.register_blueprint(inventaire_blueprint)
     
 
 

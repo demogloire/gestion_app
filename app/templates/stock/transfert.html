@@ -7,7 +7,13 @@
     href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
 <link rel="stylesheet" type="text/css"
     href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+
 
 {% endblock  %}
 
@@ -119,111 +125,133 @@
                                                 <!-- </div> -->
                                                 </div>
                                                 
+                                                <fieldset class="scheduler-border">
+                                                    {%if listes.items !=[] %}
+                                                    <legend class="scheduler-border">Les transferts:</legend>
                                                 <div>
-                                                    <a href="{{url_for('stock.transfertboutique')}} "
-                                                    class="btn  btn-sm btn-light"><i  class="la la-arrows-h"></i> Transferer 
-                                                    </a>
-                                                    <a href="{{url_for('stock.trier_depot')}} "
-                                                    class="btn  btn-sm btn-primary"><i  class="la la-filter"></i> Trier 
-                                                    </a>
+                                                    <div class="pull-left">
+                                                        <a href="{{url_for('stock.transfertboutique')}} "
+                                                        class="btn  btn-sm btn-light"><i  class="la la-arrows-h"></i> Transferer 
+                                                        </a>
+                                                        <a href="{{url_for('stock.trier_depot')}} "
+                                                        class="btn  btn-sm btn-primary"><i  class="la la-filter"></i> Trier 
+                                                        </a>
+                                                    </div>
+                                                    <div class="pull-right">
+                                                        <a href="" class="btn btn-sm btn-success"><i class="la la-print"></i></a>
+                                                    </div>
+
                                                 </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Date</th>
-                                                            <th scope="col">Avatar</th>
-                                                            <th scope="col">Produit</th>
-                                                            <th scope="col">Qté</th>
-                                                            <th scope="col">P.U</th>
-                                                            <th scope="col">PT</th>
-                                                            <th scope="col">Qté dispo.</th>
-                                                            <th scope="col">PT dispo.</th>
-                                                            <th scope="col">Pr cpte.</th>
-                                                            <th scope="col">Par</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                       {% for liste in listes.items%}
-                                                       {%if liste.solde==True%}
-                                                       <tr>
-                                                        <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
-                                                        <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
-                                                        <td> {{liste.stock_produit.nom_produit}}  </td>
-                                                        <td>{{liste.quantite }}  
-                                                            {%if liste.stock_produit.emballage=='Vrac'%}
-                                                                {%if liste.disponible > 1 %}
-                                                                    Pièces
+                                                <br><br><br>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Date</th>
+                                                                <th scope="col">Avatar</th>
+                                                                <th scope="col">Produit</th>
+                                                                <th scope="col">Qté</th>
+                                                                <th scope="col">P.U</th>
+                                                                <th scope="col">PT</th>
+                                                                <th scope="col">Qté dispo.</th>
+                                                                <th scope="col">PT dispo.</th>
+                                                                <th scope="col">Pr cpte.</th>
+                                                                <th scope="col">Par</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                           {% for liste in listes.items%}
+                                                           <tr>
+                                                            <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
+                                                            <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
+                                                            <td> {{liste.stock_produit.nom_produit}}  </td>
+                                                            <td>{{liste.quantite }}  
+                                                                {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                    {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                    {%else%}
+                                                                        Pièce
+                                                                    {%endif%}
                                                                 {%else%}
-                                                                    Pièce
+                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                    {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%endif%}
                                                                 {%endif%}
-                                                            {%else%}
-                                                                {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
-                                                                    {{liste.stock_produit.emballage }}
-                                                                {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
-                                                                    {{liste.stock_produit.emballage }}s
+    
+                                                            </td>
+                                                            <td>${{ liste.prix_unit  |round(2)}} </td>
+                                                            <td>${{ liste.valeur  |round(2)}} </td>
+                                                            <td>{{liste.disponible }}  
+                                                                {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                    {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                    {%else%}
+                                                                        Pièce
+                                                                    {%endif%}
                                                                 {%else%}
-                                                                    {{liste.stock_produit.emballage }}
+                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                    {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                    {%endif%}
                                                                 {%endif%}
-                                                            {%endif%}
-
-                                                        </td>
-                                                        <td>${{ liste.prix_unit  |round(2)}} </td>
-                                                        <td>${{ liste.valeur  |round(2)}} </td>
-                                                        <td>{{liste.disponible }}  
-                                                            {%if liste.stock_produit.emballage=='Vrac'%}
-                                                                {%if liste.disponible > 1 %}
-                                                                    Pièces
-                                                                {%else%}
-                                                                    Pièce
+                                                            </td>
+                                                            <td>${{ liste.valeur_dispo |round(2)}}</td>
+                                                            <td>{%if liste.stockage==True %}  
+                                                                <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
+                                                                {%elif liste.transfert==True %} 
+                                                                <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
+                                                                {%elif liste.erreur==True %} 
+                                                                <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
                                                                 {%endif%}
-                                                            {%else%}
-                                                                {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
-                                                                    {{liste.stock_produit.emballage }}
-                                                                {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
-                                                                    {{liste.stock_produit.emballage }}s
-                                                                {%else%}
-                                                                    {{liste.stock_produit.emballage }}
-                                                                {%endif%}
-                                                            {%endif%}
-                                                        </td>
-                                                        <td>${{ liste.valeur_dispo |round(2)}}</td>
-                                                        <td>{%if liste.stockage==True %}  
-                                                            <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
-                                                            {%elif liste.transfert==True %} 
-                                                            <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
-                                                            {%elif liste.erreur==True %} 
-                                                            <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
-                                                            {%endif%}
-                                                        </td>
-                                                        <td>
-                                                            {%if liste.stockage!=True %} 
-                                                            <span class="badge badge-pill badge-success"> {{liste.stock_user.prenom}}</span>
-                                                            {%endif%} 
-                                                        </td>
-
-                                                       </tr>
-                                                        {%endif%}
-                                                        {% endfor %} 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="text-center">
-                                                {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                                                {% if page_num %}
-                                                    {% if listes.page==page_num %}
-                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
-                                                                              
+                                                            </td>
+                                                            <td>
+                                                                {%if liste.stockage!=True %} 
+                                                                <span class="badge badge-pill badge-success"> {{liste.stock_user.prenom}}</span>
+                                                                {%endif%} 
+                                                            </td>
+    
+                                                           </tr>
+                                                            {% endfor %} 
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="text-center">
+                                                    {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                    {% if page_num %}
+                                                        {% if listes.page==page_num %}
+                                                          <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
+                                                                                  
+                                                        {% else %}
+                                                          <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
+                                                                                  
+                                                        {% endif %}
                                                     {% else %}
-                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
-                                                                              
+                                                      ...
                                                     {% endif %}
-                                                {% else %}
-                                                  ...
-                                                {% endif %}
-                                                {% endfor %}
+                                                    {% endfor %}
+                                                </div>
+                                                {%else%}
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <p class="text-center" style="margin-top:100px">
+                                                            <i
+                                                                class="la la-folder success font-large-5 text-center"></i>
+                                                        <h4 class="text-center">AUCUN MOUVEMENT.</h4>
+                                                        <br><br><br><br><br><br>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {%endif%}
+                                                </fieldset>
                                             </div>
+                                            
                                         </div>
                                     </div>
 

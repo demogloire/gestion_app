@@ -274,7 +274,7 @@ def transfertboutique():
                qte_disponible_boutique=qte_nouvelle_boutique 
                valeur_disponible_boutique=float(prix_nouvelle_boutique*qte_nouvelle_boutique)
             else:
-               qte_disponible_boutique=stock_disponible_boutique.quantite + qte_nouvelle_boutique
+               qte_disponible_boutique=stock_disponible_boutique.disponible + qte_nouvelle_boutique
                valeur_disponible_boutique=float(stock_disponible_boutique.valeur_dispo) + val_con
                #Mise à jour de la quantité d
                stock_disponible_boutique.solde=False

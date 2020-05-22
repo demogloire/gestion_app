@@ -126,6 +126,8 @@
                                                 </div>
                                             </div>
                                             <fieldset class="scheduler-border">
+                                            {%if listes.items !=[] %}
+                                            
                                                 <legend class="scheduler-border">Vente par acompte:</legend>
                                                 <div>
                                                     <div class="pull-left mb-2">
@@ -297,7 +299,18 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            
+                                            {%endif%}
+                                            {%else%}
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+
+                                                        <p class="text-center" style="margin-top:100px">
+                                                            <i class="la la-money success font-large-5 text-center"></i>
+                                                            <h4 class="text-center">AUCUNE VENTE.</h4>
+                                                            <br><br><br><br><br><br>
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             {%endif%}
                                         </fieldset>
                                         </div>

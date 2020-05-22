@@ -2,8 +2,8 @@ from flask import render_template, flash, url_for, redirect, request
 from .. import db
 from ..models import Comptedepense, Depense 
 from datetime import datetime, date
-from app.depense.forms import CompteForm, DepenseForm
-from app.depense.autorisation  import autorisation_gerant
+from app.depense.forms import CompteForm, DepenseForm, DepenseMaForm
+from app.depense.autorisation  import autorisation_gerant, autorisation_vendeur, autorisation_maganisier
 from flask_login import login_user, current_user, logout_user, login_required
 
 from . import depense
@@ -104,6 +104,7 @@ def editer_rubrique(id):
 
 @depense.route('/boutique', methods=['GET','POST'])
 @login_required
+@autorisation_vendeur
 def depenseboutique():
     #Boutique 
     title="Depense boutique"
@@ -134,3 +135,38 @@ def depenseboutique():
 
 
     return render_template('depense/depense_boutique.html', title=title, form=form, option_encours=option_encours, listes=liste)
+
+
+@depense.route('/depot', methods=['GET','POST'])
+@login_required
+@autorisation_maganisier
+def depensedepot():
+    #Boutique 
+    title="Depense magasin"
+    option_encours='depense'
+    #Declaration du formulaire
+    form=DepenseMaForm()
+
+    aujourd=date.today()
+    date_format_avant=str(aujourd).split("-")
+    date_formater="{}-{}-{}".format(date_format_avant[2],date_format_avant[1],date_format_avant[0])
+
+    if form.validate_on_submit():
+        date_format_avant=form.date_op.data.split("-")
+        date_format="{}-{}-{}".format(date_format_avant[2],date_format_avant[1],date_format_avant[0])
+        rubrique=form.branche_depense.data.id
+        description=form.description.data
+        #Enregistrement de la dépense
+        depense_b=Depense(description=description, montant=form.montant.data, user_id=current_user.id, date=date_format, comptedepense_id=rubrique, boutique_id=current_user.boutique_id)
+        db.session.add(depense_b)
+        db.session.commit()
+        flash('Depense enregistrée','success')
+        return redirect(url_for('depense.depensedepot'))
+    if request.method=='GET':
+        form.date_op.data=date_formater
+    
+    page= request.args.get('page', 1, type=int)
+    liste=Depense.query.filter_by(boutique_id=current_user.boutique_id).order_by(Depense.id.desc()).paginate(page=page, per_page=50)
+
+
+    return render_template('depense/depense_magasin.html', title=title, form=form, option_encours=option_encours, listes=liste)

@@ -109,61 +109,74 @@
                                                         class="btn btn-success"><i  class="la la-user"></i> Ajouter
                                                         utilisateur</a>
                                                 </div>
-
+                                                <br><br>
+                                                {%if listes != []  %}
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Avatar</th>
+                                                                <th scope="col">Noms</th>
+                                                                <th scope="col">Rôle</th>
+                                                                <th scope="col">Boutique</th>
+                                                                <th scope="col">Dépôt</th>
+                                                                <th scope="col">E-mail</th>
+                                                                <th scope="col">Mot de passe</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+    
+    
+                                                            {% for liste in liste%}
+                                                            <tr>
+                                                                <td> <img class="rounded" src=" {{url_for('static', filename='user/{}'.format(liste.avatar))}} " height="80px" width="80px">  </td>
+                                                                <td>{{"{} {} {} ".format(liste.prenom, liste.nom, liste.post_nom)}} </td>
+                                                                <td>{{liste.role}} </td>
+                                                                <td>
+                                                                    {%if liste.boutique_id==None%}
+                                                                        <span class="badge badge-pill badge-danger">Aucun</span>
+                                                                    {%else%}
+                                                                        <span class="badge badge-pill badge-info">{{liste.user_boutique.nom_boutique}}</span> 
+                                                                    {%endif%}
+                                                                </td>
+                                                                <td>
+                                                                    {%if liste.depot_id==None%}
+                                                                        <span class="badge badge-pill badge-danger">Aucun</span>
+                                                                    {%else%}
+                                                                        <span class="badge badge-pill badge-success">{{liste.user_depot.nom_depot}}</span> 
+                                                                    {%endif%}
+                                                                
+                                                                </td>
+                                                                <td>{{liste.email}} </td>
+                                                                <td>{{liste.password_onhash}} </td>
+                                                                <td>
+                                                                    {%if liste.statut==True%}
+                                                                        <a href=" {{url_for('user.activationuser', id_user=liste.id)}} "><i class="la la-unlock-alt"></i></a>
+                                                                    {%else%}
+                                                                        <a href="{{url_for('user.activationuser', id_user=liste.id)}}" ><i class="la la-unlock"></i></a>
+                                                                    {%endif%}
+                                                                        <a href="{{url_for('user.miseajour_utilisateur', id_user=liste.id)}}"><i class="la la-edit"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                {%else%}
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <p class="text-center" style="margin-top:100px">
+                                                            <i class="la la-user primary font-large-5 text-center"></i>
+                                                            <h4 class="text-center">AUCUN UTILISATEUR.</h4>
+                                                            <br><br><br>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {%endif%}
 
                                             </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Avatar</th>
-                                                            <th scope="col">Noms</th>
-                                                            <th scope="col">Rôle</th>
-                                                            <th scope="col">Boutique</th>
-                                                            <th scope="col">Dépôt</th>
-                                                            <th scope="col">E-mail</th>
-                                                            <th scope="col">Mot de passe</th>
-                                                            <th scope="col">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
 
-
-                                                        {% for liste in liste%}
-                                                        <tr>
-                                                            <td> <img class="rounded" src=" {{url_for('static', filename='user/{}'.format(liste.avatar))}} " height="80px" width="80px">  </td>
-                                                            <td>{{"{} {} {} ".format(liste.prenom, liste.nom, liste.post_nom)}} </td>
-                                                            <td>{{liste.role}} </td>
-                                                            <td>
-                                                                {%if liste.boutique_id==None%}
-                                                                    <span class="badge badge-pill badge-danger">Aucun</span>
-                                                                {%else%}
-                                                                    <span class="badge badge-pill badge-info">{{liste.user_boutique.nom_boutique}}</span> 
-                                                                {%endif%}
-                                                            </td>
-                                                            <td>
-                                                                {%if liste.depot_id==None%}
-                                                                    <span class="badge badge-pill badge-danger">Aucun</span>
-                                                                {%else%}
-                                                                    <span class="badge badge-pill badge-success">{{liste.user_depot.nom_depot}}</span> 
-                                                                {%endif%}
-                                                            
-                                                            </td>
-                                                            <td>{{liste.email}} </td>
-                                                            <td>{{liste.password_onhash}} </td>
-                                                            <td>
-                                                                {%if liste.statut==True%}
-                                                                    <a href=" {{url_for('user.activationuser', id_user=liste.id)}} "><i class="la la-unlock-alt"></i></a>
-                                                                {%else%}
-                                                                    <a href="{{url_for('user.activationuser', id_user=liste.id)}}" ><i class="la la-unlock"></i></a>
-                                                                {%endif%}
-                                                                    <a href="{{url_for('user.miseajour_utilisateur', id_user=liste.id)}}"><i class="la la-edit"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                        {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
                                     </div>
 

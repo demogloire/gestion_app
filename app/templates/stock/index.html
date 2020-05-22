@@ -7,8 +7,12 @@
     href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
 <link rel="stylesheet" type="text/css"
     href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
-
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
 
 {% endblock  %}
 
@@ -39,7 +43,8 @@
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url_for('stock.index')}}"> {{current_user.user_depot.nom_depot}}  </a>
+                            <li class="breadcrumb-item"><a href="{{url_for('stock.index')}}">
+                                    {{current_user.user_depot.nom_depot}} </a>
                             </li>
                             <li class="breadcrumb-item active">Fiche de stock
                             </li>
@@ -92,7 +97,8 @@
 
                                     <div class="card" style="zoom: 1;">
                                         <div class="card-header">
-                                            <h4 class="card-title">Fiche de stock du dépôt: {{current_user.user_depot.nom_depot}}  </h4>
+                                            <h4 class="card-title">Fiche de stock du dépôt:
+                                                {{current_user.user_depot.nom_depot}} </h4>
                                             <a class="heading-elements-toggle"><i
                                                     class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
@@ -106,211 +112,265 @@
                                         <div class="card-content collapse show">
                                             <div class="card-body">
                                                 <div class="mb-2">
-                                                    <!-- <div class="btn-group" role="group"> -->
-                                                        <a href="{{url_for('stock.index')}} "
-                                                        class="btn btn-info"><i  class="la la-barcode"></i> Stockage
+                                                        <!-- <div class="btn-group" role="group"> -->
+                                                        <a href="{{url_for('stock.index')}} " class="btn btn-info"><i
+                                                                class="la la-barcode"></i> Stockage
                                                         </a>
-                                                    <a href="{{url_for('stock.transfert_depot')}} "
-                                                        class="btn btn-warning"><i  class="la la-arrows-h"></i> Transferts
-                                                    </a>
-                                                    <a href="{{url_for('stock.stock_de_depot')}} "
-                                                        class="btn btn-success"><i  class="la la-search"></i> Recherche
-                                                    </a>
-                                                    
-                                                <!-- </div> -->
+                                                        <a href="{{url_for('stock.transfert_depot')}} "
+                                                            class="btn btn-warning"><i class="la la-arrows-h"></i>
+                                                            Transferts
+                                                        </a>
+                                                        <a href="{{url_for('stock.stock_de_depot')}} "
+                                                            class="btn btn-success"><i class="la la-search"></i>
+                                                            Recherche
+                                                        </a>
                                                 </div>
-                                                
-                                                <div>
-                                                    <a href="{{url_for('stock.stockagedepot')}} "
-                                                    class="btn  btn-sm btn-light"><i  class="la la-barcode"></i> Stocker
-                                                    </a>
-                                                    <a href="{{url_for('stock.erreurstockagedepot')}} "
-                                                        class="btn btn-sm btn-secondary"><i  class="la la-close"></i> Erreur de stockage
-                                                    </a>
-                                                </div>
-                                                <div class="height-400">
-                                                    <canvas id="column-chart"></canvas>
-                                                </div>
+
+                                                <fieldset class="scheduler-border">
+                                                    {%if listes.items !=[] %}
+                                                    <legend class="scheduler-border">Mouvement du stock:</legend>
+                                                    <div>
+                                                        <div class="pull-left">
+                                                            <a href="{{url_for('stock.stockagedepot')}} "
+                                                                class="btn  btn-sm btn-light"><i class="la la-barcode"></i>
+                                                                Stocker
+                                                            </a>
+                                                            <a href="{{url_for('stock.erreurstockagedepot')}} "
+                                                                class="btn btn-sm btn-secondary"><i class="la la-close"></i>
+                                                                Erreur de stockage
+                                                            </a>
+                                                        </div>
+                                                        <div class="pull-right">
+                                                            <a href="" data-toggle="modal" data-target="#graphique" class="btn  btn-sm btn-danger"><i class="la la-bar-chart"></i>
+                                                            
+                                                            </a>
+                                                            <a href="" class="btn btn-sm btn-success"><i class="la la-print"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <br><br><br><br>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Date</th>
+                                                                    <th scope="col">Avatar</th>
+                                                                    <th scope="col">Produit</th>
+                                                                    <th scope="col">Qté</th>
+                                                                    <th scope="col">P.U</th>
+                                                                    <th scope="col">PT</th>
+                                                                    <th scope="col">Qté dispo.</th>
+                                                                    <th scope="col">PT dispo.</th>
+                                                                    <th scope="col">Pr cpte.</th>
+                                                                    <th scope="col"><span
+                                                                            class="badge-success">Fss</span> - <span
+                                                                            class="badge-info">Par</span></th>
+                                                                    <th scope="col">Op.</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+
+                                                                {% for liste in listes.items%}
+                                                                {%if liste.solde==True%}
+                                                                <tr class="bg-light">
+                                                                    <th scope="row">
+                                                                        {{liste.datest.strftime('%d/%m/%Y')}} </th>
+                                                                    <td><img class="rounded"
+                                                                            src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} "
+                                                                            height="40px" width="40px"></td>
+                                                                    <td> {{liste.stock_produit.nom_produit}} </td>
+                                                                    <td>{{liste.quantite }}
+                                                                        {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                        {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                        {%else%}
+                                                                        Pièce
+                                                                        {%endif%}
+                                                                        {%else%}
+                                                                        {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                        {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%endif%}
+                                                                        {%endif%}
+
+                                                                    </td>
+                                                                    <td>${{ liste.prix_unit  |round(2)}} </td>
+                                                                    <td>${{ liste.valeur  |round(2)}} </td>
+                                                                    <td>{{liste.disponible }}
+                                                                        {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                        {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                        {%else%}
+                                                                        Pièce
+                                                                        {%endif%}
+                                                                        {%else%}
+                                                                        {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                        {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%endif%}
+                                                                        {%endif%}
+                                                                    </td>
+
+                                                                    <td>${{ liste.valeur_dispo |round(2)}}</td>
+                                                                    <td>{%if liste.stockage==True %}
+                                                                        <span class="badge badge-pill badge-danger"> D:
+                                                                            {{current_user.user_depot.nom_depot}}
+                                                                        </span>
+                                                                        {%elif liste.transfert==True %}
+                                                                        <span class="badge badge-pill badge-info">B:
+                                                                            {{liste.stock_boutique.nom_boutique}}</span>
+                                                                        {%elif liste.erreur==True %}
+                                                                        <span class="badge badge-pill badge-warning">D:
+                                                                            {{current_user.user_depot.nom_depot}}</span>
+                                                                        {%endif%}
+                                                                    </td>
+                                                                    <td>
+                                                                        {%if liste.stockage==True %}
+                                                                        <span class="badge badge-pill badge-success">
+                                                                            {{liste.stock_fournisseur.nom_fourn}}</span>
+                                                                        {%else%}
+                                                                        <span class="badge badge-pill badge-info">
+                                                                            {{liste.stock_user.prenom}}</span>
+                                                                        {%endif%}
+                                                                    </td>
+                                                                    <td>
+                                                                        {%if liste.stockage==True %}
+                                                                        <span
+                                                                            class="badge badge-pill badge-danger">S</span>
+                                                                        {%elif liste.transfert==True %}
+                                                                        <span
+                                                                            class="badge badge-pill badge-info">T</span>
+                                                                        {%elif liste.erreur==True %}
+                                                                        <span
+                                                                            class="badge badge-pill badge-warning">E</span>
+                                                                        {%endif%}
+                                                                    </td>
+                                                                </tr>
+                                                                {%else%}
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        {{liste.datest.strftime('%d/%m/%Y')}} </th>
+                                                                    <td><img class="rounded"
+                                                                            src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} "
+                                                                            height="40px" width="40px"></td>
+                                                                    <td> {{liste.stock_produit.nom_produit}} </td>
+                                                                    <td>{{liste.quantite }}
+                                                                        {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                        {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                        {%else%}
+                                                                        Pièce
+                                                                        {%endif%}
+                                                                        {%else%}
+                                                                        {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                        {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%endif%}
+                                                                        {%endif%}
+
+                                                                    </td>
+                                                                    <td>${{ liste.prix_unit  |round(2)}} </td>
+                                                                    <td>${{ liste.valeur  |round(2)}} </td>
+                                                                    <td>{{liste.disponible }}
+                                                                        {%if liste.stock_produit.emballage=='Vrac'%}
+                                                                        {%if liste.disponible > 1 %}
+                                                                        Pièces
+                                                                        {%else%}
+                                                                        Pièce
+                                                                        {%endif%}
+                                                                        {%else%}
+                                                                        {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
+                                                                        {{liste.stock_produit.emballage }}s
+                                                                        {%else%}
+                                                                        {{liste.stock_produit.emballage }}
+                                                                        {%endif%}
+                                                                        {%endif%}
+                                                                    </td>
+
+                                                                    <td>${{ liste.valeur_dispo |round(2)}}</td>
+                                                                    <td>{%if liste.stockage==True %}
+                                                                        <span class="badge badge-pill badge-danger"> D:
+                                                                            {{current_user.user_depot.nom_depot}}
+                                                                        </span>
+                                                                        {%elif liste.transfert==True %}
+                                                                        <span class="badge badge-pill badge-info">B:
+                                                                            {{liste.stock_boutique.nom_boutique}}</span>
+                                                                        {%elif liste.erreur==True %}
+                                                                        <span class="badge badge-pill badge-warning">D:
+                                                                            {{current_user.user_depot.nom_depot}}</span>
+                                                                        {%endif%}
+                                                                    </td>
+                                                                    <td>
+                                                                        {%if liste.stockage==True %}
+                                                                        <span class="badge badge-pill badge-success">
+                                                                            {{liste.stock_fournisseur.nom_fourn}}</span>
+                                                                        {%else%}
+                                                                        <span class="badge badge-pill badge-info">
+                                                                            {{liste.stock_user.prenom}}</span>
+                                                                        {%endif%}
+                                                                    </td>
+                                                                    <td>
+                                                                        {%if liste.stockage==True %}
+                                                                        <span
+                                                                            class="badge badge-pill badge-danger">S</span>
+                                                                        {%elif liste.transfert==True %}
+                                                                        <span
+                                                                            class="badge badge-pill badge-info">T</span>
+                                                                        {%elif liste.erreur==True %}
+                                                                        <span
+                                                                            class="badge badge-pill badge-warning">E</span>
+                                                                        {%endif%}
+                                                                    </td>
+                                                                </tr>
+                                                                {%endif%}
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                                        {% if page_num %}
+                                                        {% if listes.page==page_num %}
+                                                        <a href="{{ url_for('stock.index', page=page_num) }}"
+                                                            class="btn btn-sm btn-info">{{ page_num}}</a>
+
+                                                        {% else %}
+                                                        <a href="{{ url_for('stock.index', page=page_num) }}"
+                                                            class="btn btn-sm btn-success">{{ page_num}}</a>
+
+                                                        {% endif %}
+                                                        {% else %}
+                                                        ...
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    {%else%}
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12">
+                                                            <p class="text-center" style="margin-top:100px">
+                                                                <i
+                                                                    class="la la-folder success font-large-5 text-center"></i>
+                                                            <h4 class="text-center">AUCUN MOUVEMENT.</h4>
+                                                            <br><br><br><br><br><br>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    {%endif%}
+
+                                                </fieldset>
                                             </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Date</th>
-                                                            <th scope="col">Avatar</th>
-                                                            <th scope="col">Produit</th>
-                                                            <th scope="col">Qté</th>
-                                                            <th scope="col">P.U</th>
-                                                            <th scope="col">PT</th>
-                                                            <th scope="col">Qté dispo.</th>
-                                                            <th scope="col">PT dispo.</th>
-                                                            <th scope="col">Pr cpte.</th>
-                                                            <th scope="col"><span class="badge-success">Fss</span> - <span class="badge-info">Par</span></th>
-                                                            <th scope="col">Op.</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
 
-
-                                                       {% for liste in listes.items%}
-                                                       {%if liste.solde==True%}
-                                                        <tr class="bg-light">
-                                                            <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
-                                                            <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
-                                                            <td> {{liste.stock_produit.nom_produit}}  </td>
-                                                            <td>{{liste.quantite }}  
-                                                                {%if liste.stock_produit.emballage=='Vrac'%}
-                                                                    {%if liste.disponible > 1 %}
-                                                                        Pièces
-                                                                    {%else%}
-                                                                        Pièce
-                                                                    {%endif%}
-                                                                {%else%}
-                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
-                                                                        {{liste.stock_produit.emballage }}s
-                                                                    {%else%}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%endif%}
-                                                                {%endif%}
-
-                                                            </td>
-                                                            <td>${{ liste.prix_unit  |round(2)}} </td>
-                                                            <td>${{ liste.valeur  |round(2)}} </td>
-                                                            <td>{{liste.disponible }}  
-                                                                {%if liste.stock_produit.emballage=='Vrac'%}
-                                                                    {%if liste.disponible > 1 %}
-                                                                        Pièces
-                                                                    {%else%}
-                                                                        Pièce
-                                                                    {%endif%}
-                                                                {%else%}
-                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
-                                                                        {{liste.stock_produit.emballage }}s
-                                                                    {%else%}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%endif%}
-                                                                {%endif%}
-                                                                </td>
-
-                                                            <td>${{ liste.valeur_dispo |round(2)}}</td>
-                                                            <td>{%if liste.stockage==True %}  
-                                                                <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
-                                                                {%elif liste.transfert==True %} 
-                                                                <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
-                                                                {%elif liste.erreur==True %} 
-                                                                <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
-                                                                {%endif%}
-                                                            </td>
-                                                            <td>
-                                                                {%if liste.stockage==True %} 
-                                                                <span class="badge badge-pill badge-success"> {{liste.stock_fournisseur.nom_fourn}}</span>
-                                                                {%else%}
-                                                                <span class="badge badge-pill badge-info"> {{liste.stock_user.prenom}}</span>
-                                                                {%endif%}
-                                                            </td>
-                                                            <td>
-                                                                {%if liste.stockage==True %}  
-                                                                <span class="badge badge-pill badge-danger">S</span>
-                                                                {%elif liste.transfert==True %} 
-                                                                <span class="badge badge-pill badge-info">T</span>
-                                                                {%elif liste.erreur==True %} 
-                                                                <span class="badge badge-pill badge-warning">E</span>
-                                                                {%endif%}
-                                                            </td>
-                                                        </tr>
-                                                        {%else%}
-                                                        <tr>
-                                                            <th scope="row">{{liste.datest.strftime('%d/%m/%Y')}} </th>
-                                                            <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(liste.stock_produit.avatar))}} " height="40px" width="40px"></td>
-                                                            <td> {{liste.stock_produit.nom_produit}}  </td>
-                                                            <td>{{liste.quantite }}  
-                                                                {%if liste.stock_produit.emballage=='Vrac'%}
-                                                                    {%if liste.disponible > 1 %}
-                                                                        Pièces
-                                                                    {%else%}
-                                                                        Pièce
-                                                                    {%endif%}
-                                                                {%else%}
-                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
-                                                                        {{liste.stock_produit.emballage }}s
-                                                                    {%else%}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%endif%}
-                                                                {%endif%}
-
-                                                            </td>
-                                                            <td>${{ liste.prix_unit  |round(2)}} </td>
-                                                            <td>${{ liste.valeur  |round(2)}} </td>
-                                                            <td>{{liste.disponible }}  
-                                                                {%if liste.stock_produit.emballage=='Vrac'%}
-                                                                    {%if liste.disponible > 1 %}
-                                                                        Pièces
-                                                                    {%else%}
-                                                                        Pièce
-                                                                    {%endif%}
-                                                                {%else%}
-                                                                    {%if liste.disponible >= 0  and liste.stock_produit.emballage=="Box" %}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%elif liste.disponible > 1  and liste.stock_produit.emballage !="Box" %}
-                                                                        {{liste.stock_produit.emballage }}s
-                                                                    {%else%}
-                                                                        {{liste.stock_produit.emballage }}
-                                                                    {%endif%}
-                                                                {%endif%}
-                                                                </td>
-
-                                                            <td>${{ liste.valeur_dispo |round(2)}}</td>
-                                                            <td>{%if liste.stockage==True %}  
-                                                                <span class="badge badge-pill badge-danger"> D: {{current_user.user_depot.nom_depot}} </span>
-                                                                {%elif liste.transfert==True %} 
-                                                                <span class="badge badge-pill badge-info">B: {{liste.stock_boutique.nom_boutique}}</span>
-                                                                {%elif liste.erreur==True %} 
-                                                                <span class="badge badge-pill badge-warning">D: {{current_user.user_depot.nom_depot}}</span>
-                                                                {%endif%}
-                                                            </td>
-                                                            <td>
-                                                                {%if liste.stockage==True %} 
-                                                                <span class="badge badge-pill badge-success"> {{liste.stock_fournisseur.nom_fourn}}</span>
-                                                                {%else%}
-                                                                <span class="badge badge-pill badge-info"> {{liste.stock_user.prenom}}</span>
-                                                                {%endif%}
-                                                            </td>
-                                                            <td>
-                                                                {%if liste.stockage==True %}  
-                                                                <span class="badge badge-pill badge-danger">S</span>
-                                                                {%elif liste.transfert==True %} 
-                                                                <span class="badge badge-pill badge-info">T</span>
-                                                                {%elif liste.erreur==True %} 
-                                                                <span class="badge badge-pill badge-warning">E</span>
-                                                                {%endif%}
-                                                            </td>
-                                                        </tr>
-                                                        {%endif%}
-                                                        {% endfor %} 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="text-center">
-                                                {% for page_num in listes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                                                {% if page_num %}
-                                                    {% if listes.page==page_num %}
-                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-info">{{ page_num}}</a>
-                                                                              
-                                                    {% else %}
-                                                      <a href="{{ url_for('stock.index', page=page_num) }}" class="btn btn-sm btn-success">{{ page_num}}</a>
-                                                                              
-                                                    {% endif %}
-                                                {% else %}
-                                                  ...
-                                                {% endif %}
-                                                {% endfor %}
-                                            </div>
                                         </div>
                                     </div>
 
@@ -326,7 +386,24 @@
     </div>
 </div>
 
+<div class="modal fade " id="graphique" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-lg">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Stock disponible pour les produits</h4>
+            </div>
+            <div class="modal-body">
+                <div class="height-400">
+                    <canvas id="column-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 </div>
 
@@ -354,62 +431,63 @@
 {% block pfooter %}
 
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript"
+    src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
 <script>
-    $(window).on("load", function(){
+    $(window).on("load", function () {
 
-//Get the context of the Chart canvas element we want to select
-var ctx = $("#column-chart");
+        //Get the context of the Chart canvas element we want to select
+        var ctx = $("#column-chart");
 
-// Chart Options
-var chartOptions = {
-    // Elements options apply to all of the options unless overridden in a dataset
-    // In this case, we are setting the border of each bar to be 2px wide and green
-    elements: {
-        rectangle: {
-            borderWidth: 2,
-            borderColor: 'rgb(0, 255, 0)',
-            borderSkipped: 'bottom'
-        }
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    responsiveAnimationDuration:500,
-    legend: {
-        position: 'top',
-    },
-    scales: {
-        xAxes: [{
-            display: true,
-            gridLines: {
-                color: "#f3f3f3",
-                drawTicks: false,
+        // Chart Options
+        var chartOptions = {
+            // Elements options apply to all of the options unless overridden in a dataset
+            // In this case, we are setting the border of each bar to be 2px wide and green
+            elements: {
+                rectangle: {
+                    borderWidth: 2,
+                    borderColor: 'rgb(0, 255, 0)',
+                    borderSkipped: 'bottom'
+                }
             },
-            scaleLabel: {
-                display: true,
-            }
-        }],
-        yAxes: [{
-            display: true,
-            gridLines: {
-                color: "#f3f3f3",
-                drawTicks: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            responsiveAnimationDuration: 500,
+            legend: {
+                position: 'top',
             },
-            scaleLabel: {
-                display: true,
-            }
-        }]
-    },
-};
+            scales: {
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        color: "#f3f3f3",
+                        drawTicks: false,
+                    },
+                    scaleLabel: {
+                        display: true,
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        color: "#f3f3f3",
+                        drawTicks: false,
+                    },
+                    scaleLabel: {
+                        display: true,
+                    }
+                }]
+            },
+        };
 
-// Chart Data
-var chartData = {
-    labels: [{% for item in label %}"{{item}}",{% endfor %}],
-    datasets: [{
-        label: "Les produits",
-        data: [{% for item in series %}{{item}},{% endfor %}],
+        // Chart Data
+        var chartData = {
+            labels: [{% for item in label %}"{{item}}", {% endfor %}],
+        datasets: [{
+            label: "Les produits",
+            data: [{% for item in series %}{{ item }}, {% endfor %}],
 
         backgroundColor: "#28D094",
         hoverBackgroundColor: "rgba(40,208,148,.9)",
@@ -417,17 +495,17 @@ var chartData = {
     },]
 };
 
-var config = {
-    type: 'bar',
+    var config = {
+        type: 'bar',
 
-    // Chart Options
-    options : chartOptions,
+        // Chart Options
+        options: chartOptions,
 
-    data : chartData
-};
+        data: chartData
+    };
 
-// Create the chart
-var lineChart = new Chart(ctx, config);
+    // Create the chart
+    var lineChart = new Chart(ctx, config);
 });
 </script>
 

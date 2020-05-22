@@ -1,0 +1,374 @@
+{% extends "layout/impression.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<script src="{{url_for('static', filename='html2pdf.bundle.min.js')}}"></script>
+<script>
+    function generatePDF() {
+
+        const element = document.getElementById("rapport");
+        html2pdf()
+            .set({ html2canvas: { scale: 4 }, jsPDF:{ orientation: 'landscape' }})
+            .from(element)
+            .save();
+            
+    }
+</script>
+{% endblock  %}
+
+{% block body %}
+<div class="col-lg-12 col-md-12 text-center">
+    <a onclick="generatePDF()" class="btn btn-sm btn-warning"><i class="la la-file-pdf-o"></i></a>
+</div>
+
+<div id="rapport" class="row">
+
+    <div class="col-lg-12 col-md-12">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 text-center"  style="margin-top: 20px;">
+                <div>
+                    <strong>
+                        {%if current_user.user_entreprise !=None %}
+                        {{current_user.user_entreprise.denomination}}
+                        {%endif%}
+                    </strong>
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    {{current_user.user_entreprise.adresse}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    {{current_user.user_entreprise.siege_social}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    Phone:{{current_user.user_entreprise.telephone}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    E-mail:{{current_user.user_entreprise.email}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    {{current_user.user_entreprise.personalite}}
+                    {%endif%}
+                </div>
+            </div>    
+                <div class="col-lg-12 col-md-12">
+                    
+                        
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    
+                                        <br><br>
+                                        <h2 class="text-center">INVENTAIRE PERMANENT EN DATE DU {{date_in}} </h2>
+                                    
+                                </div>
+                        </div>
+                            <div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4">
+                                        <div>{%if produits.code_produit !=None %}
+                                            Code porduit: {{produits.code_produit }}
+                                            {%endif%}
+                                        </div>
+                                        <div>{%if produits.nom_produit !=None %}
+                                            Nom porduit: {{produits.nom_produit}}
+                                            {%endif%}
+                                        </div>
+                                        <div>{%if produits.perissable == True %}
+                                                Type produit: Perissable
+                                            {%else%}
+                                                Type produit: Non perissable
+                                            {%endif%}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <div class="text-center">
+                                            <img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(produits.avatar))  }} " height="120px" width="120px">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 text-right">
+                                        <div>{%if produits.emballage !=None %}
+                                            Emballage: {{produits.emballage }}
+                                            {%endif%}
+                                        </div>
+                                        <div>{%if produits.nombre_contenu !=None %}
+                                            Contenu d'emballage: {{produits.nombre_contenu}}
+                                            {%endif%}
+                                        </div>
+                                        <div>
+                                            <h4><b>Valeur du produit: ${{inventaire[0][5]|round(2)}} </b></h4> 
+                                        </div>
+                                    </div>
+                            </div>
+                            <br>
+        
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        
+                                            <tr>
+                                                <th colspan="2"></th>
+                                                <th class="text-center" colspan="3">Entrée</th>
+                                                <th class="text-center" colspan="3">Sortie</th>
+                                                <th  class="text-center" colspan="3">Stock</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Libelle</th>
+                                                <th class="text-center">Qte</th>
+                                                <th class="text-center">PU</th>
+                                                <th class="text-center">T</th>
+                                                <th class="text-center">Qte</th>
+                                                <th class="text-center">PU</th>
+                                                <th class="text-center">T</th>
+                                                <th class="text-center">Qte</th>
+                                                <th class="text-center">PU</th>
+                                                <th class="text-center">T</th>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%if produits.perissable==True%}
+                                        {%for liste in listes%}
+                                        <tr>
+                                            <!-- date -->
+                                            <td>{{liste.datest.strftime('%d/%m/%Y')}}</td>
+                                            <!-- OPERATION D'ENTREE -->
+                                            {%if liste.stockage==True or liste.facture_annule==True %}
+                                                {%if liste.stockage==True %}
+                                                    <td>Approvisionnement</td>
+                                                    <!-- colonne d'entrée -->
+                                                    <td> {{liste.quantite}} </td>
+                                                    <td> {{liste.prix_unit|round(2)}} </td>
+                                                    <td> {{liste.valeur|round(2)}} </td>
+                                                    <!-- colonne de sortie -->
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <!-- colonne en stock -->
+                                                    <td> {{liste.disponible}} </td>
+                                                    <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                    <td> {{liste.valeur_dispo|round(2)}} </td>
+                                                {%elif liste.facture_annule==True %}
+                                                    <td>Facture annulée</td>
+                                                    <!-- colonne d'entrée -->
+                                                    <td> {{liste.quantite}} </td>
+                                                    <td> {{liste.prix_unit|round(2)}} </td>
+                                                    <td> {{liste.valeur|round(2)}} </td>
+                                                    <!-- colonne de sortie -->
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <!-- colonne en stock -->
+                                                    <td> {{liste.disponible}} </td>
+                                                    <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                    <td> {{liste.valeur_dispo|round(2)}} </td>
+
+                                                {%endif%}
+                                            {%elif liste.vente_boutique==True %}
+                                                    <td>Vente</td>
+                                                    <!-- colonne de sortie -->
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <!-- colonne d'entrée -->
+                                                    <td> {{liste.quantite}} </td>
+                                                    <td> {{liste.prix_unit|round(2)}} </td>
+                                                    <td> {{liste.valeur|round(2)}} </td>
+                                                    <!-- colonne en stock -->
+                                                    <td> {{liste.disponible}} </td>
+                                                    <td> {{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                    <td> {{liste.valeur_dispo|round(2)}} </td>
+                                            {%endif%}
+                                        </tr>
+                                        {%endfor%}
+                                        {%else%}
+                                        {%for liste in listes%}
+                                        <tr>
+                                            <!-- date -->
+                                            <td>{{liste.datest.strftime('%d/%m/%Y')}}</td>
+                                            <!-- OPERATION D'ENTREE -->
+                                            {%if liste.stockage==True or liste.facture_annule==True %}
+                                                {%if liste.stockage==True %}
+                                                    <td>Approvisionnement</td>
+                                                    <!-- colonne d'entrée -->
+                                                    <td> {{liste.quantite}} </td>
+                                                    <td> {{liste.prix_unit|round(2)}} </td>
+                                                    <td> {{liste.valeur|round(2)}} </td>
+                                                    <!-- colonne de sortie -->
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <!-- colonne en stock -->
+                                                    <td> {{liste.disponible}} </td>
+                                                    <td>{{ liste.prix_unit|round(2)  }}</td>
+                                                    <td> {{ (liste.disponible*liste.prix_unit)|round(2) }} </td>
+                                                {%elif liste.facture_annule==True %}
+                                                    <td>Facture annulée</td>
+                                                    <!-- colonne d'entrée -->
+                                                    <td> {{liste.quantite}} </td>
+                                                    <td> {{liste.prix_unit|round(2)}} </td>
+                                                    <td> {{liste.valeur|round(2)}} </td>
+                                                    <!-- colonne de sortie -->
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <!-- colonne en stock -->
+                                                    <td> {{liste.disponible}} </td>
+                                                    <td>{{ liste.prix_unit|round(2)  }}</td>
+                                                    <td> {{ (liste.disponible*liste.prix_unit)|round(2) }} </td>
+
+                                                {%endif%}
+                                            {%elif liste.vente_boutique==True %}
+                                                    <td>Vente</td>
+                                                    <!-- colonne de sortie -->
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <!-- colonne d'entrée -->
+                                                    <td> {{liste.quantite}} </td>
+                                                    <td> {{liste.prix_unit|round(2)}} </td>
+                                                    <td> {{liste.valeur|round(2)}} </td>
+                                                    <!-- colonne en stock -->
+                                                    <td> {{liste.disponible}} </td>
+                                                    <td>{{ liste.prix_unit|round(2)  }}</td>
+                                                    <td> {{ (liste.disponible*liste.prix_unit)|round(2) }} </td>
+                                            {%endif%}
+                                        </tr>
+                                        {%endfor%}
+                                        {%endif%}
+                                        <tr class="bg-success">
+                                            
+                                            <th colspan="8">  <h4>Valeur après évaluation</h4> </th>
+                                            <td> <h4>{{inventaire[0][3]|round(2)}}</h4> </td>
+                                            <td> <h4>{{inventaire[0][4]|round(2)}}</h4> </td>
+                                            <td>  <h4>{{inventaire[0][5]|round(2)}}</h4>  </td>
+                                        
+
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <p class="text-justify">
+                                <small>
+                                Inventaire du stock est éffectué suivant les produits perrisables et non perrissable.
+                                Pour les porduits perrisables on utilise <b>PEPS</b>.
+                                Pour les produits non perrisables on utilise <b>CUMP</b>. <br>
+                            </small>
+                            </p>
+                   
+                </div>
+
+
+            
+        </div>
+    </div>
+</div>
+
+
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript"
+    src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+<script>
+    $(window).on("load", function () {
+
+        //Get the context of the Chart canvas element we want to select
+        var ctx = $("#line-chart");
+
+        // Chart Options
+        var chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                position: 'bottom',
+            },
+            hover: {
+                mode: 'label'
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        color: "#f3f3f3",
+                        drawTicks: false,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Client'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    gridLines: {
+                        color: "#f3f3f3",
+                        drawTicks: false,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Montant en $'
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: 'Evolution des  dettes'
+            }
+        };
+
+        // Chart Data
+        var chartData = {
+            labels: [{% for item in label %}"{{item}}", {% endfor %}],
+        datasets: [{
+            label: "Dette en USD",
+            data: [{% for item in series %}{{ item }}, {% endfor %}],
+        lineTension: 0,
+        fill: false,
+        borderColor: "#FF7D4D",
+        pointBorderColor: "#FF7D4D",
+        pointBackgroundColor: "#FFF",
+        pointBorderWidth: 2,
+        pointHoverBorderWidth: 2,
+        pointRadius: 4,
+    }]
+};
+
+    var config = {
+        type: 'line',
+
+        // Chart Options
+        options: chartOptions,
+
+        data: chartData
+    };
+
+    // Create the chart
+    var lineChart = new Chart(ctx, config);
+});
+</script>
+
+{% endblock  %}

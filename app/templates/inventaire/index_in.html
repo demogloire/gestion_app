@@ -1,0 +1,221 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Inventaire</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('inventaire.index')}}">  {{current_user.user_depot.nom_depot}} </a>
+                            </li>
+                            <li class="breadcrumb-item active">Inventaire permanent
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Inventaire permanent</h4>
+                                                <p>Inventaire du stock est éffectué suivant les produits perrisables et non perrissable.
+                                                                      Pour les porduits perrisables on utilise PEPS.
+                                                    Pour les produits non perrisables on utilise CUMP.
+
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                
+                                                    <fieldset class="scheduler-border">
+                                                        {%if inventaire != [] %}
+                                                        <legend class="scheduler-border">Inventaire permanent:</legend>
+                                                        <div>
+                                                            <div class="pull-left mb-2">
+                                                                <br>
+                                                                <h5>Inventaire en date du {{date_in}} </h5>
+                                                            </div>
+                                                            <div class="pull-right  mb-2">
+                                                                <a href=" {{url_for('inventaire.index_impr')}} " target="_blank" class="btn btn-sm btn-success"> <i class="la la-print"></i> </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">avatar</th>
+                                                                        <th scope="col">Produit</th>
+                                                                        <th class="text-center" scope="col">Qté</th>
+                                                                        <th class="text-center" scope="col">Prix unitaire </th>
+                                                                        <th class="text-center" scope="col">Valeur </th>
+                                                                        <th class="text-center" scope="col">Type produit </th>
+                                                                        <th class="text-center"  scope="col">Action </th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {%for i in inventaire%}
+                                                                    <tr>
+                                                                        <td> {{loop.index}} </td>
+                                                                        <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(i[1]))}} " height="40px" width="40px"></td>
+                                                                        <td >{{i[2]}}</td>
+                                                                        <td class="text-center" >
+                                                                        {%if i[7]=='Vrac'%}
+                                                                            {%if i[3] > 1 %}
+                                                                                {{i[3] }}  Pièces
+                                                                            {%else%}
+                                                                                {{i[3] }}  Pièce
+                                                                            {%endif%}
+                                                                        {%else%}
+                                                                            {%if i[3] >= 0  and i[7]=="Box" %}
+                                                                                {{ i[3]|round(1) }} {{i[7] }} 
+                                                                            {%elif i[3] > 1  and i[7] !="Box" %}
+                                                                                {{ i[3]|round(1) }} {{i[7] }}s 
+                                                                            {%else%}
+                                                                                 {{ i[3]|round(1) }} {{i[7] }} 
+                                                                            {%endif%}
+                                                                        {%endif%}
+
+                                                                        </td>
+                                                                        <td class="text-center"  >$ {{i[4]|round(2)}}</td>
+                                                                        <td class="text-center" >$ {{i[5]|round(2)}}</td>
+                                                                        <td class="text-center" >
+                                                                            {%if i[6]==0%}
+                                                                            <span class="badge badge-pill badge-primary"> NP </span>
+                                                                            {%else%}
+                                                                            <span class="badge badge-pill badge-danger"> P </span>
+                                                                            {%endif%}
+                                                                        </td>
+                                                                        <td class="text-center" ><a data-toggle="popover" data-trigger="hover" class="btn btn-sm btn-default" data-content="Fiche d'inventaire du produit" href="{{url_for('inventaire.inventaire_produit_ma',id=i[0]) }} "> 
+                                                                            <span class="badge badge-pill badge-info"><i class="la la-clone"></i> </span>
+                                                                        </a></td>
+
+                                                                    </tr>
+                                                                    {%endfor%}
+                                                                    <tr class="bg-teal">
+                                                                        <th colspan="5"><h5> <b>Total</b></h5> </th>
+                                                                         <td class="text-center"> <h5><b>$ {{valeur|round(2)}} </b> </h5> </td>
+                                                                         <td></td>
+                                                                         <td></td>
+                                                                    </tr>
+                                                                </tbody>
+
+                                                            </table>
+                                                        </div>
+                                                        {%else%}
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <p class="text-center" style="margin-top:100px">
+                                                                    <i class="la la-folder success font-large-5 text-center"></i>
+                                                                    <h4 class="text-center">AUCUN INVENTAIRE .</h4>
+                                                                    <br><br><br><br><br><br>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        {%endif%}
+                                                </fieldset>
+                                            </div>
+                                        </div>
+
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
+
+
+{% endblock  %}

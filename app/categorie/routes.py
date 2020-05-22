@@ -87,13 +87,13 @@ def association_categorie(cat_id):
     #Verification de l'existence de la cetégorie
     cate_association=Categorie.query.filter_by(id=cat_id).first_or_404()
     #Titre de la catégorie
-    title=" {} | Association "+cate_association.nom_categorie
+    title=" {} | Association ".format(cate_association.nom_categorie)
     #Verification des informations de l'ID
     if cate_association is None:
         flash("Veuillez respecté la procedure",'danger')
         return redirect(url_for('categorie.index'))
     #Vérification des produit associé à la catégorie.
-    produits=Produit.query.filter_by(categorie_id=cat_id)
+    produits=Produit.query.filter_by(categorie_id=cat_id).all()
     #Nom de la catégorie de l'association.
     nom_categorie_association=cate_association.nom_categorie
     

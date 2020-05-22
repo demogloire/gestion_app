@@ -23,23 +23,3 @@ def autorisation_gerant(f):
         else:
             return redirect(url_for('main.index'))       
     return wrap
-
-#Autorisation des vendeur
-def autorisation_vendeur(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if current_user.role =='Vendeur':
-            return f(*args, **kwargs)
-        else:
-            return redirect(url_for('main.index'))       
-    return wrap
-
-#Autorisation des vendeur
-def autorisation_maganisier(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if current_user.role =='Magasinier':
-            return f(*args, **kwargs)
-        else:
-            return redirect(url_for('main.index'))       
-    return wrap

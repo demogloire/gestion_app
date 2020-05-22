@@ -1,0 +1,329 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cardsad.css')}}">
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Gérant</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('main.index')}}">Administration</a>
+                            </li>
+                            <li class="breadcrumb-item active">Les configurations d'application
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs ">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card bg-light">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    <section id="minimal-statistics">
+                                        <div class="row">
+                                            <div class="col-12 mt-3 mb-1">
+                                                <h4 class="text-uppercase">Configuration du système</h4>
+                                                <p>Toutes les configurations pour le fonctionnement de l'application.</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('categorie.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-folder-o primary font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body text-right">
+                                                                            <h3>Catégorie</h3>
+                                                                            <span class="primary">Produit</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('fournisseur.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-user-plus danger font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Fournisseur</h3>
+                                                                            <span class="danger">Produit</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('produit.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-archive info font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body text-right">
+                                                                            <h3>Produit</h3>
+                                                                            <span class="info">Système</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('boutique.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-square-o warning font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body text-right">
+                                                                            <h3>Boutique</h3>
+                                                                            <span class="warning">Système</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('depot.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-th-large success font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Dépôt</h3>
+                                                                            <span class="success">Système</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('depense.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-money light font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="light">Dépense</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-users info font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body text-right">
+                                                                            <h3>Type</h3>
+                                                                            <span class="info">Client</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-institution warning font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body  text-right">
+                                                                            <h3>Entreprise</h3>
+                                                                            <span class="warning">Système</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-sm-12 col-12">
+                                                        <div class="card">
+                                                            <a href="{{url_for('user.index')}}">
+                                                            <div class="card-content box-shadow--4dp">
+                                                                <div class="card-body">
+                                                                    <div class="media d-flex">
+                                                                        <div class="align-self-center">
+                                                                            <i class="la la-user success font-large-2 float-left"></i>
+                                                                        </div>
+                                                                        <div class="media-body text-right">
+                                                                            <h3>Compte</h3>
+                                                                            <span class="success">Opérations</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </section>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+
+{% endblock  %}

@@ -32,7 +32,7 @@
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12">
-                <h3 class="content-header-title">Les articles de la  catégorie {{nom_categorie_association}}</h3>
+                <h3 class="content-header-title">Les articles de {{nom_categorie_association}}</h3>
             </div>
             <div class="content-header-right col-md-8 col-12 mb-4">
                 <div class="breadcrumbs-top float-md-right">
@@ -91,8 +91,9 @@
 
 
                                     <div class="card" style="zoom: 1;">
+
                                         <div class="card-header">
-                                            <h4 class="card-title">Listes des articles associés</h4>
+                                            <h4 class="card-title">Listes des articles associés  au {{nom_categorie_association}} </h4>
                                             <a class="heading-elements-toggle"><i
                                                     class="la la-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
@@ -110,22 +111,127 @@
                                                         class="btn btn-success"><i  class="la la-folder-o"></i> Ajouter
                                                         catégorie</a>
                                                 </div>
-
+                                                <br><br>
+                                                {%if listes != [] %}
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">Produit</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {%for produit in produits%}
+                                                            <tr class="text-center">
+                                                                <td> {{loop.index}} </td>
+                                                                <td>{{produit.nom_produit}} </td>
+                                                                <td><a href="" class="btn btn-sm btn-info" data-toggle="modal"  data-target="#id{{produit.id}}"> <i class="la la-archive"></i> </a></td>
+                                                            </tr>
+                                                            <div class="modal fade " id="id{{produit.id}}" role="dialog" style="margin-top: 100px;">
+                                                                <div class="modal-dialog modal-lg">
+                                        
+                                                                    <!-- Modal content-->
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body">
+                                        
+                                                                            <div class="card">
+                                                                                <div class="row">
+                                                                                    <aside class="col-sm-5 border-right">
+                                                                                        <article class="gallery-wrap">
+                                                                                            <div class="img-big-wrap">
+                                                                                                <div> <a href="#" ><img style="border-radius: 5px;" width="300px" src="{{url_for('static', filename='produit/{}'.format(produit.avatar))}}"></a>
+                                                                                                </div>
+                                                                                            </div> <!-- slider-product.// -->
+                                                                                        </article> <!-- gallery-wrap .end// -->
+                                                                                    </aside>
+                                                                                    <aside class="col-sm-7">
+                                                                                        <article class="card-body p-5">
+                                                                                            <h3 class="title mb-3">{{produit.code_produit}} - {{produit.nom_produit}}</h3>
+                                        
+                                                                                            <p class="price-detail-wrap">
+                                                                                                <span> <b>Coût d'achat:</b> </span><br>
+                                                                                                <span class="price h3 text-warning">
+                                                                                                    <span class="currency">$</span><span
+                                                                                                        class="num">{{ produit.cout_d_achat|round(2)}}</span>
+                                                                                                </span>
+                                                                                                <span> / par
+                                                                                                    {%if produit.emballage=='Vrac'%}
+                                                                                                        Pièce
+                                                                                                    {%else%}
+                                                                                                        {{produit.emballage}}
+                                                                                                    {%endif%}
+                                                                                                </span><br><br>
+                                                                                                <span> 
+                                                                                                    {%if produit.emballage=='Vrac'%}
+                                                                                                        Contenu par emballage: <b>Une seule pièce </b> 
+                                                                                                    {%else%}
+                                                                                                        Contenu de {{produit.emballage}}: <b>{{produit.nombre_contenu}}</b>
+                                                                                                    {%endif%}
+                                                                                                     </span><br>
+                                                                                                <hr>
+                                                                                            </p> <!-- price-detail-wrap .// -->
+                                                                                            <dl class="item-property">
+                                                                                                <dt>Description</dt>
+                                                                                                <dd>
+                                                                                                    <p>{{produit.description|safe}} </p>
+                                                                                                </dd>
+                                                                                            </dl>
+                                                                                            <dl class="param param-feature">
+                                                                                                <dt>Prix de vente par pièce détaille:</dt>
+                                                                                                <dd>${{ produit.vt_detaille_piece|round(2)}}</dd>
+                                                                                            </dl> <!-- item-property-hor .// -->
+                                                                                            <dl class="param param-feature">
+                                                                                                <dt>Prix de vente par pièce gros:</dt>
+                                                                                                <dd>${{ produit.vt_gros_piece|round(2)}}</dd>
+                                                                                            </dl> <!-- item-property-hor .// -->
+                                                                                            <dl class="param param-feature">
+                                                                                                <dt>Prix de vente de produit en en gros:</dt>
+                                                                                                <dd>${{ produit.vt_gros_entier|round(2)}}</dd>
+                                                                                            </dl> <!-- item-property-hor .// -->
+                                        
+                                                                                            <hr>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-12">
+                                                                                                    <dl class="param param-inline">
+                                                                                                        <dt>Categorie: </dt>
+                                                                                                        <dd>
+                                                                                                            <h5>{{produit.produit_categorie.nom_categorie}}</h5>
+                                                                                                        </dd>
+                                                                                                    </dl> <!-- item-property .// -->
+                                                                                                </div> <!-- col.// -->
+                                                                                            </div> <!-- row.// -->
+                                         
+                                                                                        </article> <!-- card-body.// -->
+                                                                                    </aside> <!-- col.// -->
+                                                                                </div> <!-- row.// -->
+                                                                            </div> <!-- card.// -->
+                                        
+                                        
+                                                                        </div>
+                                                                    </div>
+                                        
+                                                                </div>
+                                                            </div>
+                                                            {%endfor%}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                {%else%}
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <p class="text-center" style="margin-top:100px">
+                                                            <i class="la la-folder-o success font-large-5 text-center"></i>
+                                                            <h4 class="text-center">AUCUNE RUBRIQUE CATEGORIE.</h4>
+                                                            <br><br><br>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {%endif%}
 
                                             </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">Porduit</th>
-                                                            <th class="text-center" scope="col">Articles associés</th>
-                                                            <th scope="col">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
+
                                         </div>
                                     </div>
 

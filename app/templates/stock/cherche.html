@@ -178,14 +178,14 @@
                                                                                 <div class="form-group">
                                                                                     <label>Date complet</label>
                                                                                     {% if form.date_annee_recherche.errors %}
-                                                                                    {{ form.date_annee_recherche(class="form-control input-md", id="datepicker", placeholder="jj-mm-aaaa")}}
+                                                                                    {{ form.date_annee_recherche(class="form-control form-control-sm", id="datepicker", placeholder="jj-mm-aaaa")}}
                                                                                     <div class="invalid-feedback">
                                                                                         {% for error in form.date_annee_recherche.errors %}
                                                                                         <span>{{ error }}</span>
                                                                                         {% endfor %}
                                                                                     </div>
                                                                                     {% else %}
-                                                                                    {{ form.date_annee_recherche(class="form-control input-md", id="datepicker", placeholder="jj-mm-aaaa")}}
+                                                                                    {{ form.date_annee_recherche(class="form-control form-control-sm", id="datepicker", placeholder="jj-mm-aaaa")}}
                                                                                     {% endif %}
                                                                                 </div>
                                                                             </div>
@@ -193,14 +193,14 @@
                                                                                 <div class="form-group">
                                                                                     <label>Produit</label>
                                                                                     {% if form.produit_stock.errors %}
-                                                                                    {{ form.produit_stock(class="input-md is-invalid")}}
+                                                                                    {{ form.produit_stock(class="form-control-sm is-invalid")}}
                                                                                     <div class="invalid-feedback">
                                                                                         {% for error in form.produit_stock.errors %}
                                                                                         <span>{{ error }}</span>
                                                                                         {% endfor %}
                                                                                     </div>
                                                                                     {% else %}
-                                                                                    {{ form.produit_stock(class="input-md")}}
+                                                                                    {{ form.produit_stock(class="form-control-sm")}}
                                                                                     {% endif %}
                                                                                 </div>
                                                                             </div>

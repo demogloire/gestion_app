@@ -92,6 +92,7 @@
                     </div>
                 </div>
                 <div class="row match-height">
+                    {%if listes.items != [] %}
                     {%for liste in listes.items%}
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
@@ -199,6 +200,17 @@
                         </div>
                     </div>
                     {%endfor%}
+                    {%else%}
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <p class="text-center" style="margin-top:100px">
+                                <i class="la la-archive primary font-large-5 text-center"></i>
+                                <h4 class="text-center">AUCUN PRODUIT.</h4>
+                                <br><br><br>
+                            </p>
+                        </div>
+                    </div>
+                    {%endif%}
                 </div>
             </section>
         </div>
