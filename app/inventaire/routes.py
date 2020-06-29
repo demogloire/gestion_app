@@ -71,14 +71,23 @@ def index():
                             stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                             stc_deux=Stock.query.filter_by(id=produits_anterieur[1]).first()
                             stoc_valeur_enre_deux= float(diff_stock_mouvement) * float(stc_deux.prix_unit) # La deuxieme nouvelle valeur
-                            sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
-                            prix_valeur=sommes_valeur/disponible_totale
+                            
+                            if disponible_totale == 0:
+                                prix_valeur=0
+                                sommes_valeur=0
+                            else:
+                                prix_valeur=sommes_valeur/disponible_totale
+                                sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
                             insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1,emballage_produit_inventaire, contenue_produit_inventaire ]
                             donnees_produits.insert(0,insertion_des_donnees)
                         else:
                             stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
-                            sommes_valeur= disponible_totale * float(prix)
-                            prix_valeur=float(prix)
+                            if disponible_totale==0:
+                                prix_valeur=0
+                                sommes_valeur=0
+                            else:
+                                sommes_valeur= disponible_totale * float(prix)
+                                prix_valeur=float(prix)
                             insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                             donnees_produits.insert(0,insertion_des_donnees)
 
@@ -93,21 +102,36 @@ def index():
                         if diff_stock_mouvement >=  1:
                             stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                             stoc_valeur_enre_deux= float(diff_stock_mouvement) * float(inv_prod_solde.prix_unit) # La deuxieme nouvelle valeur
-                            sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
-                            prix_valeur=sommes_valeur/disponible_totale
+                            
+                            if disponible_totale == 0:
+                                prix_valeur=0
+                                sommes_valeur=0
+                            else:
+                                prix_valeur=sommes_valeur/disponible_totale
+                                sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
                             insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1,emballage_produit_inventaire, contenue_produit_inventaire ]
                             donnees_produits.insert(0,insertion_des_donnees)
                         else:
                             stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
-                            sommes_valeur= stoc_valeur_enregistre
-                            prix_valeur=sommes_valeur/disponible_totale
+                            
+                            if disponible_totale == 0:
+                                prix_valeur=0
+                                sommes_valeur=0
+                            else:
+                                sommes_valeur= stoc_valeur_enregistre
+                                prix_valeur=sommes_valeur/disponible_totale
                             insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1,emballage_produit_inventaire, contenue_produit_inventaire ]
                             donnees_produits.insert(0,insertion_des_donnees)
                     else:
 
                         stoc_valeur_enregistre=float(inv_prod_solde.valeur_dispo) #la premiere nouvelle valeur
-                        sommes_valeur= stoc_valeur_enregistre
-                        prix_valeur=sommes_valeur/inv_prod_solde.disponible
+                        
+                        if inv_prod_solde.disponible == 0:
+                            prix_valeur=0
+                            sommes_valeur=0
+                        else:
+                            sommes_valeur= stoc_valeur_enregistre
+                            prix_valeur=sommes_valeur/inv_prod_solde.disponible
                         insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1,emballage_produit_inventaire, contenue_produit_inventaire ]
                         donnees_produits.insert(0,insertion_des_donnees)
         elif len(produit_perrisable_encours) == 1:
@@ -142,14 +166,22 @@ def index():
                         stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                         stc_deux=Stock.query.filter_by(id=produits_anterieur[1]).first()
                         stoc_valeur_enre_deux= float(diff_stock_mouvement) * float(stc_deux.prix_unit) # La deuxieme nouvelle valeur
-                        sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
-                        prix_valeur=sommes_valeur/disponible_totale
+                        
+                        if disponible_totale==0:
+                            prix_valeur=0
+                            sommes_valeur=0
+                        else:
+                            sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
+                            prix_valeur=sommes_valeur/disponible_totale
                         insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                         donnees_produits.insert(0,insertion_des_donnees)
                     else:
                         stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                         sommes_valeur= stoc_valeur_enregistre
-                        prix_valeur=sommes_valeur/disponible_totale
+                        if disponible_totale==0:
+                            prix_valeur=0
+                        else:
+                            prix_valeur=sommes_valeur/disponible_totale
                         insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                         donnees_produits.insert(0,insertion_des_donnees)
 
@@ -164,20 +196,35 @@ def index():
                     if diff_stock_mouvement >=  1:
                         stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                         stoc_valeur_enre_deux= float(diff_stock_mouvement) * float(inv_prod_solde.prix_unit) # La deuxieme nouvelle valeur
-                        sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
-                        prix_valeur=sommes_valeur/disponible_totale
+                        
+                        if disponible_totale==0:
+                            prix_valeur=0
+                            sommes_valeur=0
+                        else:
+                            sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
+                            prix_valeur=sommes_valeur/disponible_totale
                         insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                         donnees_produits.insert(0,insertion_des_donnees)
                     else:
                         stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
-                        sommes_valeur= stoc_valeur_enregistre
-                        prix_valeur=sommes_valeur/disponible_totale
+                        
+                        if disponible_totale==0:
+                            prix_valeur=0
+                            sommes_valeur=0
+                        else:
+                            sommes_valeur= stoc_valeur_enregistre
+                            prix_valeur=sommes_valeur/disponible_totale
                         insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                         donnees_produits.insert(0,insertion_des_donnees)
                 else:
                     stoc_valeur_enregistre=float(inv_prod_solde.valeur_dispo) #la premiere nouvelle valeur
-                    sommes_valeur= stoc_valeur_enregistre
-                    prix_valeur=sommes_valeur/inv_prod_solde.disponible
+                    
+                    if disponible_totale==0:
+                        prix_valeur=0
+                        sommes_valeur=0
+                    else:
+                        sommes_valeur= stoc_valeur_enregistre
+                        prix_valeur=sommes_valeur/inv_prod_solde.disponible
                     insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                     donnees_produits.insert(0,insertion_des_donnees)
         else:
@@ -215,8 +262,13 @@ def index():
                 contenue_produit_inventaire=inv_prod_solde.stock_produitboutique.nombre_contenu
                 #Stock disponible totale
                 disponible_totale=inv_prod_solde.disponible
-                sommes_valeur=float(inv_prod_solde.valeur_dispo)
-                prix_valeur= float(sommes_valeur) / float(disponible_totale)
+                
+                if disponible_totale==0:
+                    prix_valeur=0
+                    sommes_valeur=0
+                else:
+                    sommes_valeur=float(inv_prod_solde.valeur_dispo)
+                    prix_valeur= float(sommes_valeur) / float(disponible_totale)
                 insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,0, emballage_produit_inventaire, contenue_produit_inventaire]
                 donnees_produits.insert(0,insertion_des_donnees)
         else:
@@ -530,19 +582,27 @@ def inventaire_produit(id):
                     stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                     stc_deux=Stock.query.filter_by(id=produits_anterieur[1]).first()
                     stoc_valeur_enre_deux= float(diff_stock_mouvement) * float(stc_deux.prix_unit) # La deuxieme nouvelle valeur
-                    sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
-                    prix_valeur=sommes_valeur/disponible_totale
+                    if disponible_totale==0:
+                        sommes_valeur=0
+                        prix_valeur=0
+                    else:
+                        sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
+                        prix_valeur=sommes_valeur/disponible_totale
                     insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                     donnees_produits.insert(0,insertion_des_donnees)
                 else:
                     stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
-                    sommes_valeur= stoc_valeur_enregistre
-                    prix_valeur=sommes_valeur/disponible_totale
+                    if disponible_totale == 0:
+                        sommes_valeur=0
+                        prix_valeur=0
+                    else:
+                        sommes_valeur= stoc_valeur_enregistre
+                        prix_valeur=sommes_valeur/disponible_totale
+
                     insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                     donnees_produits.insert(0,insertion_des_donnees)
 
             elif len(produits_anterieur) == 1:
-               
                 stc=Stock.query.filter_by(id=produits_anterieur[0]).first()
                 prix=stc.prix_unit
                 stock_mouvement=stc.quantite
@@ -552,21 +612,32 @@ def inventaire_produit(id):
                 if diff_stock_mouvement >=  1:
                     stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
                     stoc_valeur_enre_deux= float(diff_stock_mouvement) * float(inv_prod_solde.prix_unit) # La deuxieme nouvelle valeur
-                    sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
-                    prix_valeur=sommes_valeur/disponible_totale
+                    if disponible_totale==0:
+                        sommes_valeur=0
+                        prix_valeur=0
+                    else:
+                        sommes_valeur= stoc_valeur_enre_deux + stoc_valeur_enregistre
+                        prix_valeur=sommes_valeur/disponible_totale
                     insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                     donnees_produits.insert(0,insertion_des_donnees)
                 else:
                     stoc_valeur_enregistre=float(stock_mouvement) * float(prix) #la premiere nouvelle valeur
-                    sommes_valeur= disponible_totale * float(prix)
-                    prix_valeur=float(prix)
+                    if disponible_totale==0:
+                        sommes_valeur=0
+                        prix_valeur=0
+                    else:
+                        sommes_valeur= disponible_totale * float(prix)
+                        prix_valeur=float(prix)
                     insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                     donnees_produits.insert(0,insertion_des_donnees)
             else:
-                
                 stoc_valeur_enregistre=float(inv_prod_solde.valeur_dispo) #la premiere nouvelle valeur
-                sommes_valeur= stoc_valeur_enregistre
-                prix_valeur=sommes_valeur/inv_prod_solde.disponible
+                if inv_prod_solde.disponible==0:
+                    sommes_valeur=0
+                    prix_valeur=0
+                else:
+                    sommes_valeur= stoc_valeur_enregistre
+                    prix_valeur=sommes_valeur/inv_prod_solde.disponible
                 insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,1, emballage_produit_inventaire, contenue_produit_inventaire]
                 donnees_produits.insert(0,insertion_des_donnees)
         else:
@@ -583,10 +654,14 @@ def inventaire_produit(id):
             emballage_produit_inventaire=inv_prod_solde.stock_produitboutique.emballage
             contenue_produit_inventaire=inv_prod_solde.stock_produitboutique.nombre_contenu
             #Stock disponible totale
-            inv_produit_anterieur=Stock.query.filter(Stock.datest.ilike(date_annee),Stock.produitboutique_id==pro_per_sel, Stock.solde==False, Stock.stockage==True).order_by(Stock.id.desc()).first()
+            inv_produit_anterieur=Stock.query.filter(Stock.datest.ilike(date_annee),Stock.produitboutique_id==pro_per_sel, Stock.stockage==True).order_by(Stock.id.desc()).first()
             disponible_totale=inv_prod_solde.disponible
-            sommes_valeur=float(inv_prod_solde.disponible) * float(inv_produit_anterieur.prix_unit)
-            prix_valeur= float(inv_produit_anterieur.prix_unit)
+            if disponible_totale==0:
+                sommes_valeur=0
+                prix_valeur=0
+            else:
+                sommes_valeur=float(inv_prod_solde.disponible) * float(inv_produit_anterieur.prix_unit)
+                prix_valeur= float(inv_produit_anterieur.prix_unit)
             insertion_des_donnees=[id_produit_inventaire, image_produit_inventaire,nom_produit_inventaire, disponible_totale,prix_valeur,sommes_valeur,0, emballage_produit_inventaire, contenue_produit_inventaire]
             donnees_produits.insert(0,insertion_des_donnees)
         else:
@@ -600,8 +675,6 @@ def inventaire_produit(id):
         b=i[5]
         sommes_totale_evaluation.insert(0,b)
     retour_somme=sum(sommes_totale_evaluation)
-
-    
 
     return render_template('inventaire/inventaire_produit.html',produits=les_produits_inventaire, date_in=date_an, listes=voir_operation, title=title, inventaire=donnees_produits, valeur=retour_somme)
 
@@ -1256,7 +1329,6 @@ def inventaire_produit_ma(id):
                 produits_anterieur.insert(0,i)
             #Vérification si les deux produit recement stock sont là
             if len(produits_anterieur) > 1 :
-                print('ici________________b________')
                 stc=Stock.query.filter_by(id=produits_anterieur[0]).first()
                 prix=stc.prix_unit
                 stock_mouvement=stc.quantite

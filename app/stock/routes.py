@@ -2,8 +2,11 @@ from flask import render_template, flash, url_for, redirect, request, session, g
 from .. import db, bcrypt
 from datetime import date, datetime
 from ..models import User, Boutique, Depot, Stock, Produit, Produitboutique
-from app.stock.forms import StockageForm, StockageErreurForm, BoutiqueRechForm, AnneeTransForm, MensuelTransForm
-from app.stock.utility import save_picture, verification_de_role, autorisation_magasinier
+from app.stock.forms import (RechercheFiltreAdminMaForm, RechercheFiltreAdminProForm, StockageForm, StockageErreurForm, 
+                             BoutiqueRechForm, AnneeTransForm, MensuelTransForm, RechercheFilProduiForm)
+from app.stock.utility import (save_picture, verification_de_role, autorisation_magasinier, stock_produit_boutique, 
+                               stock_produit_boutique_triage, stock_produit_magasin, stock_produit_magasin_triage, 
+                               pr_trie_gen)
 from flask_login import login_user, current_user, login_required
 from sqlalchemy import func
 
@@ -255,11 +258,11 @@ def transfertboutique():
                      nbre_conte_element=produit_id.nombre_contenu
 
                   qte_nouvelle_boutique=(quantite*nbre_conte_element)
-                  prix_nouvelle_boutique=float(val_op/qte_nouvelle_boutique)
+                  prix_nouvelle_boutique=float(produit_id.cout_d_achat/nbre_conte_element)
                   
             elif produit_id.emballage == "Vrac" or produit_id.emballage == "Sac" :
                qte_nouvelle_boutique=quantite
-               prix_nouvelle_boutique=prix_achat
+               prix_nouvelle_boutique=float(prix_achat/produit_id.nombre_contenu)
             #Valeur de l'operation en conversion
 
             val_con= float(qte_nouvelle_boutique*prix_nouvelle_boutique)
@@ -502,8 +505,6 @@ def stock_de_depot():
 
 #--------------------------------------------------- GESTION DE STOCK VENDEUR ---------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 #Liste de sockage du dépôt
 @stock.route('/boutique/disponible')
 @login_required
@@ -530,7 +531,294 @@ def boutique_stock():
     return render_template('stock/boutique_index.html',option_encours=option_encours, title=title, listes=list_stock, label=produit_dispo, series=serie_produit)
 
 
+#--------------------------------------------------- RAPPORT GERANT ---------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------
 
+@stock.route('/admin')
+@login_required
+def boutique_stock_admin():
+   #Le stock
+   title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+   #Activ stock
+   option_encours="stock"
+   #Variable de requte
+   produit_gen=pr_trie_gen(None)
+   label=[]
+   series=[]
+   
+   for i in produit_gen:
+      a=i[1]
+      b=i[2]
+      label.insert(0,a)
+      series.insert(0,b)
+      
+    
+    
+    
+    
+    
+    
+   return render_template('stock/optionadmin.html',option_encours=option_encours, title=title, label=label, series=series)
+
+
+@stock.route('/gen/admin')
+@login_required
+def boutique_stock_gen():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # La requete générale de produit
+    produit_gen=stock_produit_boutique()
+
+    return render_template('stock/stock_mens.html',option_encours=option_encours, title=title, produits=produit_gen)
+ 
+ 
+ 
+@stock.route('/gen/admin/imprimer')
+@login_required
+def boutique_stock_gen_imp():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # La requete générale de produit
+    produit_gen=stock_produit_boutique()
+
+    return render_template('stock/stock_mens_imprimer.html',option_encours=option_encours, title=title, produits=produit_gen)
+
+
+@stock.route('/gen/admin/trier', methods=['GET','POST'])
+@login_required
+def boutique_stock_trier():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # Produits et boutique les IDs
+    boutique_id_encours=None
+    produit_id_encours=None
+    nom_produit=None
+    nom_boutique_filtre=None
+    form=RechercheFiltreAdminProForm()
+    avant_filtrage=None
+    produit_gen=None
+    if form.validate_on_submit():
+       produit_sele=form.produit_triage.data
+       boutique_encours_stock=form.boutique_trie.data
+       avant_filtrage=True
+       #Vérification du choix d'au moin une option
+       if produit_sele is None and boutique_encours_stock is None:
+          flash("Le rapport général est sur cette page","danger")
+          return redirect(url_for('stock.boutique_stock_gen'))
+       #affectation et mise en session des variable
+       if produit_sele is not None:
+          produit_id_encours=produit_sele.nom_produit
+          session['produit_id_encours']=produit_id_encours
+       else:
+          session['produit_id_encours']=None
+          
+       if boutique_encours_stock is not None:
+          boutique_id_encours=boutique_encours_stock.id
+          session['boutique_id_encours']=boutique_id_encours
+          nom_boutique_filtre=boutique_encours_stock.nom_boutique
+          session['boutique_id_nom']=boutique_encours_stock.nom_boutique
+       else:
+          session['boutique_id_encours']=None
        
+       produit_gen=stock_produit_boutique_triage(boutique_id_encours,produit_id_encours)
+       
+    return render_template('stock/stock_mens_trier.html',nom_boutique=nom_boutique_filtre, nom_produit=produit_id_encours,  option_encours=option_encours, title=title, form=form, avant_filtrage=avant_filtrage, produits=produit_gen)
+ 
+ 
+ 
+@stock.route('/gen/admin/trier/imp', methods=['GET','POST'])
+@login_required
+def boutique_stock_trier_imp():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # Produits et boutique les IDs
+    boutique_id_encours=None
+    produit_id_encours=None
+    nom_produit=None
+    nom_boutique_filtre=None
+    produit_gen=None
+    
+    if 'produit_id_encours' in session:
+       nom_produit=session['produit_id_encours']
+   
+    if 'boutique_id_encours' in session:
+       boutique_id_encours=session['boutique_id_encours']
+       
+    if 'boutique_id_nom' in session:
+       nom_boutique_filtre=session['boutique_id_nom']
+    
+  
+    produit_gen=stock_produit_boutique_triage(boutique_id_encours,produit_id_encours)
+       
+    return render_template('stock/stock_mens_filter_imprimer.html',nom_boutique=nom_boutique_filtre, nom_produit=produit_id_encours,  option_encours=option_encours, title=title, produits=produit_gen)
+ 
+ 
+
+@stock.route('/gen/admin/mag')
+@login_required
+def magasin_stock_gen():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # La requete générale de produit
+    produit_gen=stock_produit_magasin()
+
+    return render_template('stock/stock_mens_magasin.html',option_encours=option_encours, title=title, produits=produit_gen)
+ 
+
+@stock.route('/gen/admin/mag/imp')
+@login_required
+def magasin_stock_gen_imp():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # La requete générale de produit
+    produit_gen=stock_produit_magasin()
+
+    return render_template('stock/stock_mens_imprimer_mag.html',option_encours=option_encours, title=title, produits=produit_gen)
        
 
+
+@stock.route('/gen/admin/mag/trier', methods=['GET','POST'])
+@login_required
+def magasin_stock_trier():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # Produits et magasin les IDs
+    magasin_id_encours=None
+    produit_id_encours=None
+    nom_magasin_filtre=None
+    form=RechercheFiltreAdminMaForm()
+    avant_filtrage=None
+    produit_gen=None
+    if form.validate_on_submit():
+       produit_sele=form.produit_triage.data
+       magasin_encours_stock=form.depot_trie.data
+       avant_filtrage=True
+       #Vérification du choix d'au moin une option
+       if produit_sele is None and magasin_encours_stock is None:
+          flash("Le rapport général est sur cette page","danger")
+          return redirect(url_for('stock.magasin_stock_gen'))
+       #affectation et mise en session des variable
+       if produit_sele is not None:
+          produit_id_encours=produit_sele.nom_produit
+          session['produit_id_encours']=produit_id_encours
+       else:
+          session['produit_id_encours']=None
+          
+       if magasin_encours_stock is not None:
+          magasin_id_encours=magasin_encours_stock.id
+          session['magasin_id_encours']=magasin_id_encours
+          nom_magasin_filtre=magasin_encours_stock.nom_depot
+          session['magasin_id_nom']=nom_magasin_filtre
+       else:
+          session['magasin_id_encours']=None
+       
+       produit_gen=stock_produit_magasin_triage(magasin_id_encours,produit_id_encours)
+       
+    return render_template('stock/stock_mens_trier_maga.html',nom_magasin=nom_magasin_filtre, nom_produit=produit_id_encours,  option_encours=option_encours, title=title, form=form, avant_filtrage=avant_filtrage, produits=produit_gen)
+
+
+
+@stock.route('/gen/admin/trier/imp/mag', methods=['GET','POST'])
+@login_required
+def magasin_stock_trier_imp():
+    #Le stock
+    title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+    #Activ stock
+    option_encours="stock"
+    # Produits et boutique les IDs
+    magasin_id_encours=None
+    produit_id_encours=None
+    nom_produit=None
+    nom_magasin_filtre=None
+    produit_gen=None
+    
+    if 'produit_id_encours' in session:
+       produit_id_encours=session['produit_id_encours']
+   
+    if 'magasin_id_encours' in session:
+       magasin_id_encours=session['magasin_id_encours']
+       
+    if 'magasin_id_nom' in session:
+       nom_magasin_filtre=session['magasin_id_nom']
+    
+  
+    produit_gen=stock_produit_magasin_triage(magasin_id_encours,produit_id_encours)
+       
+    return render_template('stock/stock_mens_filter_imprimer_mag.html',nom_magasin=nom_magasin_filtre, nom_produit=produit_id_encours,  option_encours=option_encours, title=title, produits=produit_gen)
+ 
+
+
+
+@stock.route('/produit/admin', methods=['GET','POST'])
+@login_required
+def general_stock_gerant():
+   #Le stock
+   title="Option admin | {} ".format(current_user.user_entreprise.denomination)
+   #Activ stock
+   option_encours="stock"
+   # Produits et boutique les IDs
+   produit_trie=None
+   produit_gen=pr_trie_gen(produit_trie)
+   form=RechercheFilProduiForm()
+   avant_filtrage=None
+
+   if form.validate_on_submit():
+      data=form.produit_triage.data
+      #Produit nom
+      if data is not None:
+         session['produi_nom_id']=data.nom_produit
+         session['avant_filtrage']=True
+         produit_trie=data.nom_produit
+      else:
+         produit_trie=None
+             
+      produit_gen=pr_trie_gen(produit_trie)
+      avant_filtrage=True
+
+      return render_template('stock/produit_gen_gerant.html',avant_filtrage=avant_filtrage, form=form, option_encours=option_encours, title=title, produits=produit_gen, produit_trie=produit_trie)
+             
+   return render_template('stock/produit_gen_gerant.html',avant_filtrage=avant_filtrage, form=form, option_encours=option_encours, title=title, produits=produit_gen, produit_trie=produit_trie)
+
+
+@stock.route('/produit/admin/impr', methods=['GET','POST'])
+@login_required
+def general_stock_gerant_imp():
+   #Le stock
+   title="Impression | {} ".format(current_user.user_entreprise.denomination)
+   #Activ stock
+   option_encours="stock"
+   # Produits et boutique les IDs
+   produit_trie=None
+   avant_filtrage=None
+   
+   if 'avant_filtrage' in session:
+      avant_filtrage=session['avant_filtrage']
+   else:
+      avant_filtrage=None
+   
+   if avant_filtrage is not None:
+      if 'produi_nom_id' in session:
+         produit_trie=session['produi_nom_id']
+         produit_gen=pr_trie_gen(produit_trie)
+         session.pop('produi_nom_id', None)  
+      else:
+         produit_gen=pr_trie_gen(produit_trie)
+   else:
+      produit_gen=pr_trie_gen(produit_trie)
+        
+   return render_template('stock/stock_triage_filter.html', option_encours=option_encours, title=title, produits=produit_gen, produit_trie=produit_trie)
+ 

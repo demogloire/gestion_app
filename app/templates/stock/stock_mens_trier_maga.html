@@ -1,0 +1,335 @@
+{% extends "layout/dashboard.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='dashboard/select2/select2.min.css')}} ">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+
+{% endblock  %}
+
+{% block sprincipal %}
+
+{% endblock  %}
+
+
+{% block topbar %}
+{% include'elements/include_style/topbar.html'%}
+{% endblock  %}
+
+{% block menusidebar %}
+{% include'elements/include_style/menusidebar.html'%}
+{% endblock  %}
+
+{% block body %}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12">
+                <h3 class="content-header-title">Rapport</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12 mb-4">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">  {{current_user.role}} </a>
+                            </li>
+                            <li class="breadcrumb-item active">Rapport de stock
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+
+            <div class="basic-inputs">
+                <div class="row match-height">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="card-body">
+                                    {% with messages= get_flashed_messages(with_categories=true) %}
+                                    {% if messages  %}
+                                    {% for category, message in messages %}
+                                    {%if category!="danger"%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-up"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%else%}
+                                    <div class="alert round bg-{{ category }} alert-icon-left alert-dismissible mb-2"
+                                        role="alert">
+                                        <span class="alert-icon">
+                                            <i class="ft-thumbs-down"></i>
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{ message }}!</strong>
+
+                                    </div>
+                                    {%endif%}
+
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+
+
+                                    <div class="card" style="zoom: 1;">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Rapport général du stock </h4>
+                                            <a class="heading-elements-toggle"><i
+                                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                                            <div class="heading-elements">
+                                                <ul class="list-inline mb-0">
+                                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-content collapse show">
+                                            <div class="card-body">
+                                                <div class="mb-2">
+                                                    <a href="{{url_for('stock.magasin_stock_gen')}} "
+                                                    class="btn btn-info"><i  class="la la la-area-chart"></i>Stock général
+                                                </a>
+                                                <a href="{{url_for('stock.magasin_stock_trier')}} "
+                                                    class="btn btn-light"><i  class="la la-filter"></i> Stock filtré
+                                                </a>
+                                                </div>
+                                            </div>
+                                            {%if avant_filtrage==True%}
+                                            <h5>Filtrer par : <b>
+                                                {%if nom_magasin != None%} 
+                                                    {{nom_magasin}} 
+                                                {%else%}
+                                                    - Tous les dépôts
+                                                {%endif%}
+
+                                                {%if nom_produit != None%} 
+                                                 - {{nom_produit}} 
+                                                {%else%}
+                                                - Tous les produits
+                                                {%endif%}
+                                                </b> 
+                                            </h5>
+                                            {%endif%}
+                                            
+                                            <fieldset class="scheduler-border">
+                                                <legend class="scheduler-border">Stock filtré:</legend>
+                                                <div>
+                                                    <div class="pull-left mb-2">
+                                                        <a href="" data-toggle="modal" data-target="#filtre"
+                                                            class="btn btn-sm btn-dark"><i  class="la la-filter"></i> Filtrer
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                {%if avant_filtrage==True%}
+                                                {%if produits|count() > 0%}
+                                                <div>
+                                                    <div class="pull-right mb-2">
+                                                        <a href=" {{url_for('stock.magasin_stock_trier_imp')}} " target="_blank" class="btn btn-sm btn-success"> <i class="la la-print"></i> </a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Avatar</th>
+                                                                <th scope="col">Produit</th>
+                                                                <th scope="col">Qté dispo.</th>
+                                                                <th scope="col">Valeur.</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+    
+                                                           {% for produit in produits %}
+                                                            <tr>
+                                                                
+                                                                <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(produit[0]))}} " height="40px" width="40px"></td>
+                                                                <td> {{produit[1]}}  </td>
+                                                                <td> 
+                                                                    {%if produit[4]=='Vrac'%}
+                                                                        {%if produit[2] > 1 %}
+                                                                            <b>{{produit[2] }}  Pièces</b>
+                                                                        {%else%}
+                                                                            <b>{{produit[2]}}  Pièce</b>
+                                                                        {%endif%}
+                                                                    {%else%}
+                                                                        {%if produit[2] >= 0  and produit[4]=="Box" %}
+                                                                            <b>{{produit[2]}}  Box </b>
+                                                                        {%elif produit[2]==1  and produit[4] =="Sac" %}
+                                                                            <b>{{produit[2]}} Sac </b>
+                                                                        {%elif produit[2]>1  and produit[4] =="Sac" %}
+                                                                            <b>{{produit[2]}} Sacs </b>
+                                                                        {%elif produit[2]>1  and produit[4] =="Carton" %}
+                                                                            <b>{{produit[2]}} Cartons </b>
+                                                                        {%elif produit[2]==1  and produit[4] =="Carton" %}
+                                                                            <b>{{produit[2]}} Carton </b>
+                                                                        {%endif%}
+                                                                    {%endif%}
+                                                                </td>
+                                                                <td> <b>$ {{produit[3]|round(2)}} </b> </td>
+                                                            </tr>
+                                            
+                                                            {% endfor %} 
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                {%else%}
+                                                <p class="text-center" style="margin-top:100px">
+                                                    <i class="la la-folder danger font-large-5 text-center"></i>
+                                                    <h4 class="text-center">AUCUN RAPPORT SUR LE STOCK DES PRODUITS</h4>
+                                                    <br><br><br><br><br><br>
+                                                </p>
+                                                {%endif%}
+
+                                                {%else%}
+                                                <p class="text-center" style="margin-top:100px">
+                                                    <i class="la la-filter danger font-large-5 text-center"></i>
+                                                    <h4 class="text-center">FILTRER D'ABORD</h4>
+                                                    <br><br><br><br><br><br>
+                                                </p>
+
+                                                {%endif%}
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+<div class="modal fade" id="filtre" role="dialog" style="margin-top: 100px;">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Trier par boutique et/ou produit</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+
+                    {{ form.csrf_token }}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Dépôt</label>
+                                {% if form.depot_trie.errors %}
+                                {{ form.depot_trie(class="form-control input-md is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.depot_trie.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ form.depot_trie(class="form-control input-md")}}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Produit</label>
+                                {% if form.produit_triage.errors %}
+                                {{ form.produit_triage(class="form-control input-md is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.produit_triage.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ form.produit_triage(class="form-control input-md")}}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <p><small>* Selectionner au moins une option</small></p>
+
+                    <div class="text-center mb-1">
+                        <button class="btn btn-dark btn-min-width mr-1 mb-1" id="submit"
+                             name="submit" type="submit">
+                            <i class="la la-filter"></i> Trier</button>
+                        <a data-dismiss="modal" class="btn btn-min-width mr-1 mb-1 btn-danger"><i class="la la-close"></i> Fermer </a>
+                    </div>
+
+                    
+
+
+                </form>
+
+                
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+{% block footer %}
+{% include'elements/include_style/footer.html'%}
+{% endblock  %}
+
+
+{% block pfooter %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
+
+
+{% endblock  %}

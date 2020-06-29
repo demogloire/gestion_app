@@ -168,7 +168,11 @@
                                                                                 <td></td>
                                                                                 <!-- colonne en stock -->
                                                                                 <td> {{liste.disponible}} </td>
+                                                                                {%if liste.disponible == 0%}
+                                                                                <td>0</td>
+                                                                                {%else%}
                                                                                 <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                {%endif%}
                                                                                 <td> {{liste.valeur_dispo|round(2)}} </td>
                                                                         {%elif liste.transfert==True %}
                                                                                 <td>Transfert vers {{liste.stock_boutique.nom_boutique}} </td>
@@ -233,7 +237,11 @@
                                                                                 <td> {{liste.valeur|round(2)}} </td>
                                                                                 <!-- colonne en stock -->
                                                                                 <td> {{liste.disponible}} </td>
-                                                                                <td> {{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                {%if liste.disponible == 0%}
+                                                                                <td>0</td>
+                                                                                {%else%}
+                                                                                <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                {%endif%}
                                                                                 <td> {{liste.valeur_dispo|round(2)}} </td>    
                                                                             {%elif liste.erreur==True %}
                                                                                 <td>Erreur de stockage</td>

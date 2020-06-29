@@ -303,7 +303,15 @@
                                             {%else%}
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12">
-
+                                                        <br>
+                                                        <div>
+                                                            <a href="{{url_for('vente.validation_acompte',type=0)}} "
+                                                                class="btn btn-sm btn-warning"><i  class="la la-cube"></i> Detaille
+                                                            </a>
+                                                            <a href="{{url_for('vente.validation_acompte',type=1)}} "
+                                                                class="btn btn-sm btn-info"><i  class="la la-cubes"></i> Gros
+                                                            </a>
+                                                        </div>
                                                         <p class="text-center" style="margin-top:100px">
                                                             <i class="la la-money success font-large-5 text-center"></i>
                                                             <h4 class="text-center">AUCUNE VENTE.</h4>

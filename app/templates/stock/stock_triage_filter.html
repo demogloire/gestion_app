@@ -1,0 +1,156 @@
+{% extends "layout/impression.html" %}
+
+{% block hprincipal %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/vendors.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard/css/app-lite.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/menu/menu-types/vertical-menu.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/core/colors/palette-gradient.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css')}} ">
+<link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='dashboard/css/pages/line-awesome.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+<script src="{{url_for('static', filename='html2pdf.bundle.min.js')}}"></script>
+<script>
+    function generatePDF() {
+
+        const element = document.getElementById("rapport");
+        html2pdf()
+            .set({ html2canvas: { scale: 4 }, jsPDF: { orientation: 'landscape' } })
+            .from(element)
+            .save();
+
+    }
+</script>
+{% endblock  %}
+
+{% block body %}
+<div class="col-lg-12 col-md-12 text-center">
+    <a onclick="generatePDF()" class="btn btn-sm btn-warning"><i class="la la-file-pdf-o"></i></a>
+</div>
+
+<div id="rapport" class="row">
+
+    <div class="col-lg-12 col-md-12">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 text-center" style="margin-top: 20px;">
+                <div>
+                    <strong>
+                        {%if current_user.user_entreprise !=None %}
+                        {{current_user.user_entreprise.denomination}}
+                        {%endif%}
+                    </strong>
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    {{current_user.user_entreprise.adresse}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    {{current_user.user_entreprise.siege_social}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    Phone:{{current_user.user_entreprise.telephone}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    E-mail:{{current_user.user_entreprise.email}}
+                    {%endif%}
+                </div>
+                <div>{%if current_user.user_entreprise !=None %}
+                    {{current_user.user_entreprise.personalite}}
+                    {%endif%}
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+
+                        <br><br>
+                        {%if produit_trie !=None%}
+                            <h2 class="text-center">Rapport du produit {{produit_trie}} </h2>
+                        {%else%}
+                            <h2 class="text-center">Rapport de tous les produits </h2>
+                        {%endif%}
+                       
+                    </div>
+                </div>
+                <div>
+                    <br>
+
+                    {%if produits|count() > 0%}
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Avatar</th>
+                                    <th scope="col">Produit</th>
+                                    <th scope="col">Qté dispo.</th>
+                                    <th scope="col">Valeur.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                               {% for produit in produits %}
+                                <tr>
+                                    
+                                    <td><img class="rounded" src=" {{url_for('static', filename='produit/{}'.format(produit[0]))}} " height="40px" width="40px"></td>
+                                    <td> {{produit[1]}}  </td>
+                                    <td> 
+                                        {%if produit[4]=='Vrac'%}
+                                            {%if produit[2] > 1 %}
+                                                <b>{{produit[2] }}  Pièces</b>
+                                            {%else%}
+                                                <b>{{produit[2]}}  Pièce</b>
+                                            {%endif%}
+                                        {%else%}
+                                            {%if produit[2] >= 0  and produit[4]=="Box" %}
+                                                <b>{{produit[2]}}  Box </b>
+                                            {%elif produit[2]==1  and produit[4] =="Sac" %}
+                                                <b>{{produit[2]}} Sac </b>
+                                            {%elif produit[2]>1  and produit[4] =="Sac" %}
+                                                <b>{{produit[2]}} Sacs </b>
+                                            {%elif produit[2]>1  and produit[4] =="Carton" %}
+                                                <b>{{produit[2]}} Cartons </b>
+                                            {%elif produit[2]==1  and produit[4] =="Carton" %}
+                                                <b>{{produit[2]}} Carton </b>
+                                            {%endif%}
+                                        {%endif%}
+                                    </td>
+                                    <td> <b>$ {{produit[3]|round(2)}} </b> </td>
+                                </tr>
+                
+                                {% endfor %} 
+                            </tbody>
+                        </table>
+                    </div>
+                    {%else%}
+                    <p class="text-center" style="margin-top:100px">
+                        <i class="la la-folder danger font-large-5 text-center"></i>
+                        <h4 class="text-center">AUCUN RAPPORT SUR LE STOCK DES PRODUITS</h4>
+                        <br><br><br><br><br><br>
+                    </p>
+                    {%endif%}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock  %}
+
+
+    {% block pfooter %}
+
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='dashboard/vendors/js/vendors.min.js')}}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='dashboard/vendors/js/charts/chart.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-menu-lite.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/core/app-lite.js')}}"></script>
+
+    {% endblock  %}

@@ -169,7 +169,7 @@
                                                                                 <td></td>
                                                                                 <!-- colonne en stock -->
                                                                                 <td> {{liste.disponible}} </td>
-                                                                                <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                <td>{{(liste.valeur_dispo /liste.disponible) | round(2) }}</td>
                                                                                 <td> {{liste.valeur_dispo|round(2)}} </td>
                                                                             {%elif liste.facture_annule==True %}
                                                                                 <td>Facture annulée</td>
@@ -183,7 +183,11 @@
                                                                                 <td></td>
                                                                                 <!-- colonne en stock -->
                                                                                 <td> {{liste.disponible}} </td>
+                                                                                {%if liste.disponible == 0%}
+                                                                                <td>0</td>
+                                                                                {%else%}
                                                                                 <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                {%endif%}
                                                                                 <td> {{liste.valeur_dispo|round(2)}} </td>
 
                                                                             {%endif%}
@@ -199,7 +203,11 @@
                                                                                 <td> {{liste.valeur|round(2)}} </td>
                                                                                 <!-- colonne en stock -->
                                                                                 <td> {{liste.disponible}} </td>
-                                                                                <td> {{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                {%if liste.disponible == 0%}
+                                                                                <td>0</td>
+                                                                                {%else%}
+                                                                                <td>{{(liste.valeur_dispo/liste.disponible) | round(2) }}</td>
+                                                                                {%endif%}
                                                                                 <td> {{liste.valeur_dispo|round(2)}} </td>
                                                                         {%endif%}
                                                                     </tr>

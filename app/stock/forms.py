@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, Length,Email, EqualTo, ValidationEr
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 
-from ..models import Fournisseur, Produit, Boutique
+from ..models import Fournisseur, Produit, Boutique, Depot
 
 
 def rech_produit():
@@ -16,7 +16,10 @@ def rech_fournisseur():
     return Fournisseur.query.all()
 
 def rech_boutique():
-    return Boutique.query.all()
+    return Boutique.query.filter(Boutique.nom_boutique !='Aucun')
+
+def rech_depot():
+    return Depot.query.filter(Depot.nom_depot !='Aucun')
 
 class StockageForm(FlaskForm):
     quantite= IntegerField('quantité', validators=[DataRequired("Completer la quantité")])
@@ -128,4 +131,26 @@ class MensuelTransForm(FlaskForm):
             pass
         else:
             raise ValidationError("La date doit respectée cette format jj-mm-aaaa")
+
+
+class RechercheFiltreAdminProForm(FlaskForm):
+    boutique_trie=QuerySelectField(query_factory=rech_boutique, get_label='nom_boutique', allow_blank=True, blank_text="Choisir une boutique ou pas")
+    produit_triage=QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=True, blank_text="Choisir un produit ou pas")
+
+    submit = SubmitField('Trier')
+
+
+class RechercheFiltreAdminMaForm(FlaskForm):
+    depot_trie=QuerySelectField(query_factory=rech_depot, get_label='nom_depot', allow_blank=True, blank_text="Choisir un depôt ou pas")
+    produit_triage=QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=True, blank_text="Choisir un produit ou pas")
+    submit = SubmitField('Trier')
+    
+
+class RechercheFilProduiForm(FlaskForm):
+    produit_triage=QuerySelectField(query_factory=rech_produit, get_label='nom_produit', allow_blank=True, blank_text="Choisir un produit ou pas")
+    submit = SubmitField('Trier')
+    
+    
+    
+
 

@@ -12,9 +12,9 @@
         <!-- Gérant -->
         {%if  current_user.role=='Gérant'%}
         <li class=" {%if option_encours=='das'%}active{%endif%}"><a href="{{url_for('main.index')}}"><i class="ft-home"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
-        <li class="{%if option_encours=='vente'%}active{%endif%} nav-item"><a href="{{url_for('vente.index')}}"><i class="la la-shopping-cart"></i><span class="menu-title" data-i18n="">Ventes</span></a>
+        <li class="{%if option_encours=='vente'%}active{%endif%} nav-item"><a href="{{url_for('vente.admin_venteindex')}}"><i class="la la-shopping-cart"></i><span class="menu-title" data-i18n="">Ventes</span></a>
           </li>
-        <li class=" {%if option_encours=='stock'%}active{%endif%} nav-item"><a href="{{url_for('stock.index')}}"><i class="la la-area-chart"></i><span class="menu-title" data-i18n="">Stocks</span></a>
+        <li class=" {%if option_encours=='stock'%}active{%endif%} nav-item"><a href="{{url_for('stock.boutique_stock_admin')}}"><i class="la la-area-chart"></i><span class="menu-title" data-i18n="">Stocks</span></a>
         </li>
         <li class=" nav-item"><a href="cards.html"><i class="la la-money"></i><span class="menu-title" data-i18n="">Dépenses</span></a>
         </li>
