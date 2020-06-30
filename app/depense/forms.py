@@ -17,7 +17,7 @@ def rech_ma_rubrique():
 class CompteForm(FlaskForm):
     rubrique=StringField('rubrique', validators=[DataRequired("Completer nom de la rubrique"),  Length(min=4, max=60, 
                     message="Veuillez respecter la longeur de 4 à 60")])
-    branche_depense=SelectField('Branche',choices=[('Dépôt', 'Dépôt'), ('Boutique', 'Boutique')])
+    branche_depense=SelectField('Branche',choices=[('Dépôt', 'Dépôt'), ('Boutique', 'Boutique'), ('Administration', 'Administration')])
                     
     submit= SubmitField('Enregister')
 
